@@ -6,4 +6,3 @@ INCLUDE(gpu_sonar_simulationBase)
 
 # FIND_PACKAGE(KDL)
 # FIND_PACKAGE(OCL)
-
