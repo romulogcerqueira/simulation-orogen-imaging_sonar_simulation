@@ -1,6 +1,7 @@
 name "gpu_sonar_simulation"
 
 # include rock drivers
+using_library "opencv"
 using_library "gpu_sonar_simulation"
 using_library "vizkit3d_normal_depth_map"
 

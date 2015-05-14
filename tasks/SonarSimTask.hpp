@@ -12,6 +12,10 @@
 #include <vizkit3d_normal_depth_map/ImageViewerCaptureTool.hpp>
 
 using namespace vizkit3d_normal_depth_map;
+using namespace gpu_sonar_simulation;
+using namespace osg;
+using namespace cv;
+
 
 namespace gpu_sonar_simulation {
 
@@ -125,9 +129,9 @@ namespace gpu_sonar_simulation {
 
         osg::ref_ptr<osg::Group> _root;
         ImageViewerCaptureTool _capture;
+        osg::Matrix _m;
 
     };
 }
 
 #endif
-

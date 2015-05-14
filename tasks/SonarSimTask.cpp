@@ -6,13 +6,12 @@
 #include <osg/Group>
 #include <osg/ShapeDrawable>
 
+#include <osgDB/WriteFile>
+
 #include <opencv/cv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-using namespace gpu_sonar_simulation;
-using namespace cv;
 
 SonarSimTask::SonarSimTask(std::string const& name) :
 		SonarSimTaskBase(name) {
@@ -89,10 +88,16 @@ void SonarSimTask::initScene(double range)
 	ImageViewerCaptureTool capture(width, height);
 	capture.setBackgroundColor(osg::Vec4d(0, 0, 0, 0));
 
-	osg::ref_ptr<osg::Group> root = new osg::Group();
-	makeSampleScene(root);
+	// create the scene
+	_root = new osg::Group();
+	makeSampleScene(_root);
 
-	_root = normal_depth_map.applyShaderNormalDepthMap(root);
+	// correct the view
+	_m = capture.getViewMatrix();
+	_m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::X_AXIS)));
+	capture.setViewMatrix(_m);
+
+	_root = normal_depth_map.applyShaderNormalDepthMap(_root);
 	_capture = capture;
 }
 
@@ -130,6 +135,11 @@ void SonarSimTask::updateHook() {
 	// decode raw image
 	cv::Mat raw_intensity = sim.decodeRawImage(shader_image);
 	std::vector<uint8_t> data = sim.getPingIntensity(raw_intensity);
+
+//	shader_image *= 255;
+//	cv::imshow("teste", shader_image);
+//	cv::waitKey(0);
+
 
 	// simulate beam
 	base::samples::SonarBeam beam = sim.simulateSonarBeam(data);
