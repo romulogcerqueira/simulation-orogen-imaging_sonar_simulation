@@ -12,7 +12,7 @@ Orocos.initialize
 #gui_beam = Vizkit.default_loader.SonarView
 
 ## Execute the task ##
-Orocos.run 'gpu_sonar_simulation::SonarSimTask' => 'sonar_sim' do
+Orocos.run 'gpu_sonar_simulation::ScanningSonarTask' => 'sonar_sim' do
 
     ## Get the specific task context ##
     sonar_sim = Orocos.name_service.get 'sonar_sim'

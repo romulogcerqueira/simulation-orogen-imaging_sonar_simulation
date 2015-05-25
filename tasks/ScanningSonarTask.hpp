@@ -1,25 +1,24 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
-#ifndef GPU_SONAR_SIMULATION_SONARSIMTASK_TASK_HPP
-#define GPU_SONAR_SIMULATION_SONARSIMTASK_TASK_HPP
+#ifndef GPU_SONAR_SIMULATION_SCANNINGSONARTASK_TASK_HPP
+#define GPU_SONAR_SIMULATION_SCANNINGSONARTASK_TASK_HPP
 
-#include "gpu_sonar_simulation/SonarSimTaskBase.hpp"
+#include "gpu_sonar_simulation/ScanningSonarTaskBase.hpp"
 
-#include <gpu_sonar_simulation/ScanningSonar.hpp>
-#include <gpu_sonar_simulation/SonarConfig.hpp>
+#include <gpu_sonar_simulation/ScanSonar.hpp>
 #include <gpu_sonar_simulation/SonarUtils.hpp>
+
 #include <vizkit3d_normal_depth_map/NormalDepthMap.hpp>
 #include <vizkit3d_normal_depth_map/ImageViewerCaptureTool.hpp>
 
-using namespace vizkit3d_normal_depth_map;
-using namespace gpu_sonar_simulation;
-using namespace osg;
 using namespace cv;
-
+using namespace osg;
+using namespace gpu_sonar_simulation;
+using namespace vizkit3d_normal_depth_map;
 
 namespace gpu_sonar_simulation {
 
-    /*! \class SonarSimTask 
+    /*! \class ScanningSonarTask 
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
      * Essential interfaces are operations, data flow ports and properties. These interfaces have been defined using the oroGen specification.
      * In order to modify the interfaces you should (re)use oroGen and rely on the associated workflow.
@@ -28,35 +27,35 @@ namespace gpu_sonar_simulation {
      * The name of a TaskContext is primarily defined via:
      \verbatim
      deployment 'deployment_name'
-         task('custom_task_name','gpu_sonar_simulation::SonarSimTask')
+         task('custom_task_name','gpu_sonar_simulation::ScanningSonarTask')
      end
      \endverbatim
      *  It can be dynamically adapted when the deployment is called with a prefix argument. 
      */
-    class SonarSimTask : public SonarSimTaskBase
+    class ScanningSonarTask : public ScanningSonarTaskBase
     {
-	friend class SonarSimTaskBase;
+	friend class ScanningSonarTaskBase;
     protected:
 
 
 
     public:
-        /** TaskContext constructor for SonarSimTask
+        /** TaskContext constructor for ScanningSonarTask
          * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.
          * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
          */
-        SonarSimTask(std::string const& name = "gpu_sonar_simulation::SonarSimTask");
+        ScanningSonarTask(std::string const& name = "gpu_sonar_simulation::ScanningSonarTask");
 
-        /** TaskContext constructor for SonarSimTask 
+        /** TaskContext constructor for ScanningSonarTask 
          * \param name Name of the task. This name needs to be unique to make it identifiable for nameservices. 
          * \param engine The RTT Execution engine to be used for this task, which serialises the execution of all commands, programs, state machines and incoming events for a task. 
          * 
          */
-        SonarSimTask(std::string const& name, RTT::ExecutionEngine* engine);
+        ScanningSonarTask(std::string const& name, RTT::ExecutionEngine* engine);
 
-        /** Default deconstructor of SonarSimTask
+        /** Default deconstructor of ScanningSonarTask
          */
-        ~SonarSimTask();
+        ~ScanningSonarTask();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -116,22 +115,18 @@ namespace gpu_sonar_simulation {
          */
         void cleanupHook();
 
-
-        void makeSampleScene(osg::ref_ptr<osg::Group> root);
-        void initScene(double range);
-
-        cv::Mat getFrame(double range, double degree);
-
-    private:
-        gpu_sonar_simulation::ScanningSonar sim;
-        base::samples::SonarScan scan;
+        void initSampleScene();
 
 
+private:
         osg::ref_ptr<osg::Group> _root;
-        ImageViewerCaptureTool _capture;
-        osg::Matrix _m;
 
+        NormalDepthMap _normal_depth_map;
+        ImageViewerCaptureTool _capture;
+
+        ScanSonar _scan_sonar;
     };
 }
 
 #endif
+

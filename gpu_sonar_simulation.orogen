@@ -7,16 +7,10 @@ using_library "vizkit3d_normal_depth_map"
 
 import_types_from "base"
 
-task_context "SonarSimTask" do
+task_context "ScanningSonarTask" do
     needs_configuration
 
-    # Input data (RigidBodyState and Joints)
-	input_port("dynamic_transformations", "base::samples::RigidBodyState");
-	input_port("joint_samples", "base::samples::Joints");
-	
-
 	# Output data (Sonar beams)
-   	output_port("sonar_samples","base::samples::SonarScan");
    	output_port("beam_samples", "base::samples::SonarBeam");
-   	periodic 0.01
+   	periodic 0.1
 end
