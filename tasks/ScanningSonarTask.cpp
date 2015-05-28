@@ -66,7 +66,6 @@ void ScanningSonarTask::updateHook()
     osg::Matrix m = _capture.getViewMatrix();
     m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(-step_angle), osg::Z_AXIS)));
     _capture.setViewMatrix(m);
-
 }
 void ScanningSonarTask::errorHook()
 {
@@ -83,11 +82,12 @@ void ScanningSonarTask::cleanupHook()
 
 void ScanningSonarTask::initSampleScene()
 {
-	uint width = 640, height = 480;
+	double fovX = 3.0, fovY = 35.0;
+	uint resolution = 600;
 	float range = 50.0;
 
 	NormalDepthMap normal_depth_map(range);
-	ImageViewerCaptureTool capture(width, height);
+	ImageViewerCaptureTool capture(fovY, fovX, resolution);
 	capture.setBackgroundColor(osg::Vec4d(0, 0, 0, 0));
 
 	// create sample scene
