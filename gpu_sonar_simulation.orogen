@@ -13,4 +13,25 @@ task_context "ScanningSonarTask" do
 	# Output data (Sonar beams)
    	output_port("beam_samples", "base::samples::SonarBeam");
    	periodic 0.1
+   	
+   	# Range of the sonar
+   	property("range", "double", 50.0).
+   		dynamic
+   	
+	# Enable/disable ping pong scanning mode
+   	property("ping_pong_mode", "bool", false).
+   		dynamic
+   	
+   	# Left limit angle
+   	property("limit_angle_left", "double", 0.0).
+   		dynamic
+   	
+   	# Right limit angle
+   	property("limit_angle_right", "double", 360.0).
+   		dynamic
+   	
+   	# Step angle size
+ 	property("step_angle", "double", 1.8).
+ 		dynamic
+   	  	
 end

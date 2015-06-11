@@ -3,8 +3,16 @@
 #include "ScanningSonarTask.hpp"
 
 #include <osg/Geode>
+#include <osg/Geometry>
 #include <osg/Group>
+#include <osg/MatrixTransform>
 #include <osg/ShapeDrawable>
+
+#include <osgDB/ReadFile>
+
+#include <math.h>
+
+
 
 using namespace gpu_sonar_simulation;
 
@@ -44,9 +52,10 @@ bool ScanningSonarTask::startHook()
 }
 void ScanningSonarTask::updateHook()
 {
+
     ScanningSonarTaskBase::updateHook();
 
-    float step_angle = 1.8;
+	float step_angle = _scan_sonar.getStepAngle();
 
     // receive shader image
     osg::ref_ptr<osg::Image> osg_image = _capture.grabImage(_normal_depth_map.getNormalDepthMapNode());
@@ -59,13 +68,19 @@ void ScanningSonarTask::updateHook()
     std::vector<uint8_t> sonar_data = _scan_sonar.getPingData(raw_intensity);
 
     // write in beam_samples port
-    base::samples::SonarBeam sonar_beam = _scan_sonar.simulateSonarBeam(sonar_data, step_angle);
+    base::samples::SonarBeam sonar_beam = _scan_sonar.simulateSonarBeam(sonar_data);
     _beam_samples.write(sonar_beam);
 
     // rotate the sonar
     osg::Matrix m = _capture.getViewMatrix();
-    m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(-step_angle), osg::Z_AXIS)));
+
+    if(_scan_sonar.isReverseScan())
+    	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians( step_angle), osg::Z_AXIS)));
+    else
+    	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(-step_angle), osg::Z_AXIS)));
+
     _capture.setViewMatrix(m);
+
 }
 void ScanningSonarTask::errorHook()
 {
@@ -82,13 +97,15 @@ void ScanningSonarTask::cleanupHook()
 
 void ScanningSonarTask::initSampleScene()
 {
-	double fovX = 3.0, fovY = 35.0;
-	uint resolution = 600;
-	float range = 50.0;
+	float fovY = 35.0f, fovX = 3.0f;
+	int resolution = 800;
 
-	NormalDepthMap normal_depth_map(range);
+	NormalDepthMap normal_depth_map(_scan_sonar.getRange());
 	ImageViewerCaptureTool capture(fovY, fovX, resolution);
 	capture.setBackgroundColor(osg::Vec4d(0, 0, 0, 0));
+
+	// create sample scene
+	_root = new osg::Group();
 
 	// create sample scene
 	_root = new osg::Group();
@@ -102,14 +119,90 @@ void ScanningSonarTask::initSampleScene()
 
 	_root->addChild(object);
 	normal_depth_map.addNodeChild(_root);
+	_normal_depth_map = normal_depth_map;
 
 	// correct the view
 	osg::Matrix m = capture.getViewMatrix();
 	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::X_AXIS)));
 	capture.setViewMatrix(m);
 
-	_normal_depth_map = normal_depth_map;
 	_capture = capture;
 }
 
+void ScanningSonarTask::initSampleScene2()
+{
+
+	float fovY = 35.0f, fovX = 3.0f;
+	int resolution = 800;
+
+	NormalDepthMap normal_depth_map(_scan_sonar.getRange());
+	ImageViewerCaptureTool capture(fovY, fovX, resolution);
+
+	// create sample scene
+	_root = new osg::Group();
+
+	// load and scale objects
+	osg::Node* manifold = osgDB::readNodeFile("resources/manifold.dae");
+
+	osg::Matrix mat;
+	mat.preMult(osg::Matrix::scale(0.01f, 0.01f, 0.01f));
+
+	osg::MatrixTransform *pTransform = new osg::MatrixTransform();
+	pTransform->setMatrix(mat);
+	pTransform->addChild(manifold);
+
+	// add object to main node
+	_root->addChild(pTransform);
+	normal_depth_map.addNodeChild(_root);
+	_normal_depth_map = normal_depth_map;
+
+	// correct the view
+	osg::Matrix m = capture.getViewMatrix();
+	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::X_AXIS)));
+	capture.setViewMatrix(m);
+
+	_capture = capture;
+}
+
+bool ScanningSonarTask::setRange(double value)
+{
+	if(value < _scan_sonar.min_range)
+		value = _scan_sonar.min_range;
+
+	else if(value > _scan_sonar.max_range)
+		value = _scan_sonar.max_range;
+
+	_normal_depth_map.setMaxRange(value);
+	_scan_sonar.setRange(value);
+
+	 return gpu_sonar_simulation::ScanningSonarTaskBase::setRange(value);
+}
+
+bool ScanningSonarTask::setPing_pong_mode(bool value)
+{
+	_scan_sonar.setPingPongMode(value);
+
+	 return gpu_sonar_simulation::ScanningSonarTaskBase::setPing_pong_mode(value);
+}
+
+bool ScanningSonarTask::setLimit_angle_left(double value)
+{
+	_scan_sonar.setLeftLimit(value);
+
+	 return gpu_sonar_simulation::ScanningSonarTaskBase::setLimit_angle_left(value);
+}
+
+bool ScanningSonarTask::setLimit_angle_right(double value)
+{
+	_scan_sonar.setRightLimit(value);
+
+	 return gpu_sonar_simulation::ScanningSonarTaskBase::setLimit_angle_right(value);
+}
+
+bool ScanningSonarTask::setStep_angle(double value)
+{
+	_scan_sonar.setStepAngle(value);
+
+	 return gpu_sonar_simulation::ScanningSonarTaskBase::setStep_angle(value);
+}
 

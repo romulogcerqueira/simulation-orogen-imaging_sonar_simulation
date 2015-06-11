@@ -1,5 +1,6 @@
 templates/*
 .orogen/*
+resources/*
 *~
 .*.swp
 build/*
