@@ -132,6 +132,8 @@ private:
         NormalDepthMap _normal_depth_map;
         ImageViewerCaptureTool _capture;
         ScanSonar _scan_sonar;
+
+        double _transX, _transY, _transZ, _rotZ;
     };
 }
 

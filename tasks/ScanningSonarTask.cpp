@@ -46,7 +46,13 @@ bool ScanningSonarTask::startHook()
     if (! ScanningSonarTaskBase::startHook())
         return false;
 
-    initSampleScene();
+    initSampleScene2();
+
+    // these variables need to be updated after by RigidBodyState
+    _transX = -14.0f;
+    _transY = -4.0f;
+    _transZ = 2.0f;
+    _rotZ = 0.0f;
 
     return true;
 }
@@ -55,7 +61,23 @@ void ScanningSonarTask::updateHook()
 
     ScanningSonarTaskBase::updateHook();
 
-	float step_angle = _scan_sonar.getStepAngle();
+    // convert OSG (Z-forward) to RoCK coordinate system (X-forward)
+	osg::Matrixd rock_coordinate_matrix =
+			osg::Matrixd::rotate(-M_PI_2, osg::Vec3(0, 0, -1)) *
+			osg::Matrixd::rotate(-M_PI_2, osg::Vec3(1, 0, 0));
+
+	// transformation matrixes multiplication
+	osg::Matrixd matrix;
+	matrix.setTrans(osg::Vec3(_transX, _transY, _transZ));
+	matrix.setRotate(osg::Quat(_rotZ, osg::Vec3(0, 0, 1)));
+	matrix.invert(matrix);
+
+	// correct coordinate system and apply geometric transformations
+	osg::Matrixd m = matrix * rock_coordinate_matrix;
+
+	osg::Vec3 eye, center, up;
+	m.getLookAt(eye, center, up);
+	_capture.setCameraPosition(eye, center, up);
 
     // receive shader image
     osg::ref_ptr<osg::Image> osg_image = _capture.grabImage(_normal_depth_map.getNormalDepthMapNode());
@@ -72,14 +94,10 @@ void ScanningSonarTask::updateHook()
     _beam_samples.write(sonar_beam);
 
     // rotate the sonar
-    osg::Matrix m = _capture.getViewMatrix();
-
     if(_scan_sonar.isReverseScan())
-    	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians( step_angle), osg::Z_AXIS)));
+    	_rotZ += osg::DegreesToRadians(_scan_sonar.getStepAngle());
     else
-    	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(-step_angle), osg::Z_AXIS)));
-
-    _capture.setViewMatrix(m);
+    	_rotZ -= osg::DegreesToRadians(_scan_sonar.getStepAngle());
 
 }
 void ScanningSonarTask::errorHook()
@@ -121,10 +139,6 @@ void ScanningSonarTask::initSampleScene()
 	normal_depth_map.addNodeChild(_root);
 	_normal_depth_map = normal_depth_map;
 
-	// correct the view
-	osg::Matrix m = capture.getViewMatrix();
-	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::X_AXIS)));
-	capture.setViewMatrix(m);
 
 	_capture = capture;
 }
@@ -146,6 +160,7 @@ void ScanningSonarTask::initSampleScene2()
 
 	osg::Matrix mat;
 	mat.preMult(osg::Matrix::scale(0.01f, 0.01f, 0.01f));
+	mat.preMult(osg::Matrix::rotate(-90, osg::Vec3(0,0,1)));
 
 	osg::MatrixTransform *pTransform = new osg::MatrixTransform();
 	pTransform->setMatrix(mat);
@@ -155,11 +170,6 @@ void ScanningSonarTask::initSampleScene2()
 	_root->addChild(pTransform);
 	normal_depth_map.addNodeChild(_root);
 	_normal_depth_map = normal_depth_map;
-
-	// correct the view
-	osg::Matrix m = capture.getViewMatrix();
-	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::X_AXIS)));
-	capture.setViewMatrix(m);
 
 	_capture = capture;
 }
