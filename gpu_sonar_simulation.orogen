@@ -23,11 +23,11 @@ task_context "ScanningSonarTask" do
    		dynamic
    	
    	# Left limit angle
-   	property("limit_angle_left", "double", 0.0).
+   	property("start_angle", "double", 0.0).
    		dynamic
    	
    	# Right limit angle
-   	property("limit_angle_right", "double", 360.0).
+   	property("end_angle", "double", 360.0).
    		dynamic
    	
    	# Step angle size
