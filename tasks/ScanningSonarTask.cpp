@@ -48,6 +48,12 @@ bool ScanningSonarTask::startHook()
 
     initSampleScene();
 
+    // these variables need to be updated after by RigidBodyState
+    _transX = 0.0f;
+    _transY = 0.0f;
+    _transZ = 0.0f;
+    _rotZ = 0.0f;
+
     return true;
 }
 void ScanningSonarTask::updateHook()
@@ -55,11 +61,31 @@ void ScanningSonarTask::updateHook()
 
     ScanningSonarTaskBase::updateHook();
 
-	float step_angle = _scan_sonar.getStepAngle();
+    // convert OSG (Z-forward) to RoCK coordinate system (X-forward)
+	osg::Matrixd rock_coordinate_matrix =
+			osg::Matrixd::rotate( M_PI_2, osg::Vec3(0, 0, 1)) *
+			osg::Matrixd::rotate(-M_PI_2, osg::Vec3(1, 0, 0));
+
+	// transformation matrixes multiplication
+	osg::Matrixd matrix;
+	matrix.setTrans(osg::Vec3(_transX, _transY, _transZ));
+	matrix.setRotate(osg::Quat(_rotZ, osg::Vec3(0, 0, 1)));
+	matrix.invert(matrix);
+
+	// correct coordinate system and apply geometric transformations
+	osg::Matrixd m = matrix * rock_coordinate_matrix;
+
+	osg::Vec3 eye, center, up;
+	m.getLookAt(eye, center, up);
+	_capture.setCameraPosition(eye, center, up);
 
     // receive shader image
     osg::ref_ptr<osg::Image> osg_image = _capture.grabImage(_normal_depth_map.getNormalDepthMapNode());
     cv::Mat cv_image = convertShaderOSG2CV(osg_image);
+
+    cv::imshow("teste", cv_image);
+    cv::waitKey(30);
+
 
     // decode shader image
     cv::Mat raw_intensity = _scan_sonar.decodeShaderImage(cv_image);
@@ -72,14 +98,10 @@ void ScanningSonarTask::updateHook()
     _beam_samples.write(sonar_beam);
 
     // rotate the sonar
-    osg::Matrix m = _capture.getViewMatrix();
-
     if(_scan_sonar.isReverseScan())
-    	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians( step_angle), osg::Z_AXIS)));
+    	_rotZ += osg::DegreesToRadians(_scan_sonar.getStepAngle());
     else
-    	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(-step_angle), osg::Z_AXIS)));
-
-    _capture.setViewMatrix(m);
+    	_rotZ -= osg::DegreesToRadians(_scan_sonar.getStepAngle());
 
 }
 void ScanningSonarTask::errorHook()
@@ -98,42 +120,7 @@ void ScanningSonarTask::cleanupHook()
 void ScanningSonarTask::initSampleScene()
 {
 	float fovY = 35.0f, fovX = 3.0f;
-	int resolution = 800;
-
-	NormalDepthMap normal_depth_map(_scan_sonar.getRange());
-	ImageViewerCaptureTool capture(fovY, fovX, resolution);
-	capture.setBackgroundColor(osg::Vec4d(0, 0, 0, 0));
-
-	// create sample scene
-	_root = new osg::Group();
-
-	// create sample scene
-	_root = new osg::Group();
-
-	osg::Geode *object = new osg::Geode();
-
-	object->addDrawable(new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(0,-10,0), 1)));
-	object->addDrawable(new osg::ShapeDrawable(new osg::Cylinder(osg::Vec3( 20,0,0), 1, 1)));
-	object->addDrawable(new osg::ShapeDrawable(new osg::Sphere(osg::Vec3( 0,30,0), 1)));
-	object->addDrawable(new osg::ShapeDrawable(new osg::Cylinder(osg::Vec3(-40,0,0), 1, 1)));
-
-	_root->addChild(object);
-	normal_depth_map.addNodeChild(_root);
-	_normal_depth_map = normal_depth_map;
-
-	// correct the view
-	osg::Matrix m = capture.getViewMatrix();
-	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::X_AXIS)));
-	capture.setViewMatrix(m);
-
-	_capture = capture;
-}
-
-void ScanningSonarTask::initSampleScene2()
-{
-
-	float fovY = 35.0f, fovX = 3.0f;
-	int resolution = 800;
+	int resolution = 1000;
 
 	NormalDepthMap normal_depth_map(_scan_sonar.getRange());
 	ImageViewerCaptureTool capture(fovY, fovX, resolution);
@@ -141,28 +128,52 @@ void ScanningSonarTask::initSampleScene2()
 	// create sample scene
 	_root = new osg::Group();
 
-	// load and scale objects
-	osg::Node* manifold = osgDB::readNodeFile("resources/manifold.dae");
 
-	osg::Matrix mat;
-	mat.preMult(osg::Matrix::scale(0.01f, 0.01f, 0.01f));
+	// load manifold 3d model
+	osg::Node* manifold_model = osgDB::readNodeFile("resources/manifold.dae");
+	osg::Matrix mat1;
+	mat1.preMult(osg::Matrix::translate(10, 0, -2.0));
+	mat1.preMult(osg::Matrix::scale(0.01f,0.01f,0.01f));
+	mat1.preMult(osg::Matrix::rotate(-90, osg::Vec3(0,0,1)));
+	osg::MatrixTransform *manifold_transf = new osg::MatrixTransform();
+	manifold_transf->setMatrix(mat1);
+	manifold_transf->addChild(manifold_model);
 
-	osg::MatrixTransform *pTransform = new osg::MatrixTransform();
-	pTransform->setMatrix(mat);
-	pTransform->addChild(manifold);
 
-	// add object to main node
-	_root->addChild(pTransform);
+	// load flatfish 3D model
+	osg::Node* flatfish_model = osgDB::readNodeFile("resources/flatfish_02.dae");
+	osg::Matrix mat2;
+	mat2.preMult(osg::Matrix::translate(-15, -5, 2.5));
+	mat2.preMult(osg::Matrix::rotate(-90, osg::Vec3(0,0,1)));
+	osg::MatrixTransform *flatfish_transf = new osg::MatrixTransform();
+	flatfish_transf->setMatrix(mat2);
+	flatfish_transf->addChild(flatfish_model);
+
+
+	// load flatfish 3D model
+	osg::Node* oilrig_model = osgDB::readNodeFile("resources/oil_rig_manifold.dae");
+	osg::Matrix mat3;
+	mat3.preMult(osg::Matrix::translate(0, 13, 0));
+	mat3.preMult(osg::Matrix::scale(0.1f,0.1f,0.1f));
+	mat3.preMult(osg::Matrix::rotate(-90, osg::Vec3(0,0,1)));
+	osg::MatrixTransform *oilrig_transf = new osg::MatrixTransform();
+	oilrig_transf->setMatrix(mat3);
+	oilrig_transf->addChild(oilrig_model);
+
+
+
+
+	// add objects to main node
+	_root->addChild(manifold_transf);
+	_root->addChild(flatfish_transf);
+	_root->addChild(oilrig_transf);
+
 	normal_depth_map.addNodeChild(_root);
 	_normal_depth_map = normal_depth_map;
 
-	// correct the view
-	osg::Matrix m = capture.getViewMatrix();
-	m.preMult(osg::Matrix::rotate(osg::Quat(osg::DegreesToRadians(90.0), osg::X_AXIS)));
-	capture.setViewMatrix(m);
-
 	_capture = capture;
 }
+
 
 bool ScanningSonarTask::setRange(double value)
 {
@@ -185,18 +196,18 @@ bool ScanningSonarTask::setPing_pong_mode(bool value)
 	 return gpu_sonar_simulation::ScanningSonarTaskBase::setPing_pong_mode(value);
 }
 
-bool ScanningSonarTask::setLimit_angle_left(double value)
+bool ScanningSonarTask::setStart_angle(double value)
 {
-	_scan_sonar.setLeftLimit(value);
+	_scan_sonar.setStartAngle(value);
 
-	 return gpu_sonar_simulation::ScanningSonarTaskBase::setLimit_angle_left(value);
+	 return gpu_sonar_simulation::ScanningSonarTaskBase::setStart_angle(value);
 }
 
-bool ScanningSonarTask::setLimit_angle_right(double value)
+bool ScanningSonarTask::setEnd_angle(double value)
 {
-	_scan_sonar.setRightLimit(value);
+	_scan_sonar.setEndAngle(value);
 
-	 return gpu_sonar_simulation::ScanningSonarTaskBase::setLimit_angle_right(value);
+	 return gpu_sonar_simulation::ScanningSonarTaskBase::setEnd_angle(value);
 }
 
 bool ScanningSonarTask::setStep_angle(double value)

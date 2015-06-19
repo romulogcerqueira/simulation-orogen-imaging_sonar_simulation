@@ -116,14 +116,13 @@ namespace gpu_sonar_simulation {
         void cleanupHook();
 
         void initSampleScene();
-        void initSampleScene2();
 
 
         // Dynamic Properties
         bool setRange(double value);
         bool setPing_pong_mode(bool value);
-        bool setLimit_angle_left(double value);
-        bool setLimit_angle_right(double value);
+        bool setStart_angle(double value);
+        bool setEnd_angle(double value);
         bool setStep_angle(double value);
 
 
@@ -132,6 +131,8 @@ private:
         NormalDepthMap _normal_depth_map;
         ImageViewerCaptureTool _capture;
         ScanSonar _scan_sonar;
+
+        double _transX, _transY, _transZ, _rotZ;
     };
 }
 
