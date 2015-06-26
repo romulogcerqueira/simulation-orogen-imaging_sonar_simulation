@@ -1,43 +1,41 @@
+# In this sample test we send an array with the model state
+# updateHook read this information and update the model joints and positions
+#
 require 'orocos'
-require 'readline'
-#require 'vizkit'
+require 'sdf'
+require 'vizkit'
+require 'io/console'
 
 include Orocos
-
-## Initialize orocos ##
 Orocos.initialize
 
+model_path = File.join(Dir.pwd, 'test_data', 'models')
 
-#sonar_widget = Vizkit.default_loader.SonarWidget
-#gui_beam = Vizkit.default_loader.SonarView
+world_path = File.join(Dir.pwd, 'test_data', 'test.world')
+
+SDF::XML.model_path << model_path
+sdf = SDF::Root.load(world_path)
 
 ## Execute the task ##
-Orocos.run 'gpu_sonar_simulation::ScanningSonarTask' => 'sonar_sim' do
+Orocos.run 'imaging_sonar_simulation::ScanningSonarTask' => 'sonar_sim' do
 
     ## Get the specific task context ##
     sonar_sim = Orocos.name_service.get 'sonar_sim'
+
+    #set an array with model paths
+    sonar_sim.model_paths = [model_path]
+    #path to world file
+    sonar_sim.world_file_path = world_path
+    #show gui
+    sonar_sim.show_gui = true
 
     ## Configure the tasks ##
     sonar_sim.configure
 
     ## Start the tasks ##
     sonar_sim.start
-    
-    ## Connect with Sonar Widget
-    #sonar_sim.sonar_samples.connect_to sonar_widget
-    #sonar_sim.beam_samples.connect_to gui_beam
-    
-    #sonar_widget.connect SIGNAL("rangeChanged(int)") do |range|
-    #  sonar_sim.sonar_range = range
-    #end
-    
-    #sonar_widget.connect SIGNAL("gainChanged(int)") do |gain|
-    #  sonar_sim.sonar_gain = gain
-    #end
-    
-    #Vizkit.exec
    
     Readline::readline("Press Enter to exit\n") do
     end
-end
 
+end

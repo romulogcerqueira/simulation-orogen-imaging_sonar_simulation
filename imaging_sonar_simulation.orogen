@@ -1,0 +1,41 @@
+name "imaging_sonar_simulation"
+
+# include rock drivers
+using_library "opencv"
+using_library "gpu_sonar_simulation"
+using_library "vizkit3d_normal_depth_map"
+using_library "vizkit3d_world"
+
+using_task_library "vizkit3d_world"
+
+import_types_from "base"
+
+task_context "ScanningSonarTask" do
+    subclasses "vizkit3d_world::Task"
+    needs_configuration
+
+    # Output data (Sonar beams)
+    output_port("beam_samples", "base::samples::SonarBeam");
+    periodic 0.1
+
+    #
+    # set the scanning sonar pose using a RigidBodyState structure
+    #
+    input_port("scanning_sonar_pose_cmd", "base::samples::RigidBodyState");
+
+    # Range of the sonar
+    property("range", "double", 50.0).dynamic
+
+    # Enable/disable ping pong scanning mode
+    property("ping_pong_mode", "bool", false).dynamic
+
+    # Left limit angle
+    property("start_angle", "double", 0.0).dynamic
+
+    # Right limit angle
+    property("end_angle", "double", 360.0).dynamic
+
+    # Step angle size
+    property("step_angle", "double", 1.8).dynamic
+
+end
