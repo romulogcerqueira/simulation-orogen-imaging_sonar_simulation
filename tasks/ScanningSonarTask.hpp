@@ -1,9 +1,11 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
-#ifndef GPU_SONAR_SIMULATION_SCANNINGSONARTASK_TASK_HPP
-#define GPU_SONAR_SIMULATION_SCANNINGSONARTASK_TASK_HPP
+#ifndef IMAGING_SONAR_SIMULATION_SCANNINGSONARTASK_TASK_HPP
+#define IMAGING_SONAR_SIMULATION_SCANNINGSONARTASK_TASK_HPP
 
-#include "gpu_sonar_simulation/ScanningSonarTaskBase.hpp"
+#include "imaging_sonar_simulation/ScanningSonarTaskBase.hpp"
+
+#include <base/samples/RigidBodyState.hpp>
 
 #include <gpu_sonar_simulation/ScanSonar.hpp>
 #include <gpu_sonar_simulation/SonarUtils.hpp>
@@ -11,12 +13,7 @@
 #include <vizkit3d_normal_depth_map/NormalDepthMap.hpp>
 #include <vizkit3d_normal_depth_map/ImageViewerCaptureTool.hpp>
 
-using namespace cv;
-using namespace osg;
-using namespace gpu_sonar_simulation;
-using namespace vizkit3d_normal_depth_map;
-
-namespace gpu_sonar_simulation {
+namespace imaging_sonar_simulation {
 
     /*! \class ScanningSonarTask 
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
@@ -27,7 +24,7 @@ namespace gpu_sonar_simulation {
      * The name of a TaskContext is primarily defined via:
      \verbatim
      deployment 'deployment_name'
-         task('custom_task_name','gpu_sonar_simulation::ScanningSonarTask')
+         task('custom_task_name','imaging_sonar_simulation::ScanningSonarTask')
      end
      \endverbatim
      *  It can be dynamically adapted when the deployment is called with a prefix argument. 
@@ -35,16 +32,34 @@ namespace gpu_sonar_simulation {
     class ScanningSonarTask : public ScanningSonarTaskBase
     {
 	friend class ScanningSonarTaskBase;
+    private:
+        osg::ref_ptr<osg::Group> _root;
+        vizkit3d_normal_depth_map::NormalDepthMap _normal_depth_map;
+        vizkit3d_normal_depth_map::ImageViewerCaptureTool _capture;
+        gpu_sonar_simulation::ScanSonar _scan_sonar;
+
+        double _rotZ;
+
+        base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
+
     protected:
 
+        virtual bool setEnd_angle(double value);
 
+        virtual bool setPing_pong_mode(bool value);
+
+        virtual bool setRange(double value);
+
+        virtual bool setStart_angle(double value);
+
+        virtual bool setStep_angle(double value);
 
     public:
         /** TaskContext constructor for ScanningSonarTask
          * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.
          * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
          */
-        ScanningSonarTask(std::string const& name = "gpu_sonar_simulation::ScanningSonarTask");
+        ScanningSonarTask(std::string const& name = "imaging_sonar_simulation::ScanningSonarTask");
 
         /** TaskContext constructor for ScanningSonarTask 
          * \param name Name of the task. This name needs to be unique to make it identifiable for nameservices. 
@@ -55,7 +70,7 @@ namespace gpu_sonar_simulation {
 
         /** Default deconstructor of ScanningSonarTask
          */
-        ~ScanningSonarTask();
+	~ScanningSonarTask();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -115,24 +130,10 @@ namespace gpu_sonar_simulation {
          */
         void cleanupHook();
 
-        void initSampleScene();
+        void updateCameraPose(base::samples::RigidBodyState pose);
 
+        void updateScanningSonarPose(base::samples::RigidBodyState pose);
 
-        // Dynamic Properties
-        bool setRange(double value);
-        bool setPing_pong_mode(bool value);
-        bool setStart_angle(double value);
-        bool setEnd_angle(double value);
-        bool setStep_angle(double value);
-
-
-private:
-        osg::ref_ptr<osg::Group> _root;
-        NormalDepthMap _normal_depth_map;
-        ImageViewerCaptureTool _capture;
-        ScanSonar _scan_sonar;
-
-        double _transX, _transY, _transZ, _rotZ;
     };
 }
 

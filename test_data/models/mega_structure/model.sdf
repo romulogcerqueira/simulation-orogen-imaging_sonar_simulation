@@ -1,0 +1,3635 @@
+<sdf version='1.5'>
+	<model name='mega_structure'>
+		<static>true</static>
+        <pose>5 0 0 0 0 0</pose>
+		<link name='simple_structure::structure_body_01'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>5 0 0 0 -0 0</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_02'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>-5 0 0 0 -0 0</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_03'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>2.5 2.5 0 0 -0 1.5707</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_04'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>-2.5 2.5 0 0 -0 1.5707</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_05'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>2.5 -2.5 0 0 -0 1.5707</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_06'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>-2.5 -2.5 0 0 -0 1.5707</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_07'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>5 0 -2.5 0 -0 0</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_08'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>-5 0 -2.5 0 -0 0</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_09'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>2.5 2.5 -2.5 0 -0 1.5707</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_10'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>-2.5 2.5 -2.5 0 -0 1.5707</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_11'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>2.5 -2.5 -2.5 0 -0 1.5707</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_12'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>-2.5 -2.5 -2.5 0 -0 1.5707</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_13'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>-2.5 0 -10 0 1.5707 0</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_14'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>0 0 -10 0 1.5707 0</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+		<static>true</static>
+		<link name='simple_structure::structure_body_15'>
+			<visual name='visual01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision01'>
+				<pose>0 0 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision02'>
+				<pose>0 -2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision03'>
+				<pose>0 2 0 0 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision04'>
+				<pose>0 1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision05'>
+				<pose>0 -1 0 0.75 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision06'>
+				<pose>0 0 1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<visual name='visual07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>5</length>
+						<radius>0.15</radius>
+					</cylinder>
+				</geometry>
+				<material>
+					<ambient>1 0 0 1</ambient>
+					<diffuse>1 0 0 1</diffuse>
+					<specular>0 0 0 0</specular>
+				</material>
+			</visual>
+			<collision name='collision07'>
+				<pose>0 0 -1 1.5707 -0 0</pose>
+				<geometry>
+					<cylinder>
+						<length>2.5</length>
+						<radius>0.1</radius>
+					</cylinder>
+				</geometry>
+				<max_contacts>10</max_contacts>
+				<surface>
+					<contact>
+						<ode />
+					</contact>
+					<bounce />
+					<friction>
+						<ode />
+					</friction>
+				</surface>
+			</collision>
+			<velocity_decay>
+				<linear>0</linear>
+				<angular>0</angular>
+			</velocity_decay>
+			<pose>2.5 0 -10 0 1.5707 0</pose>
+			<self_collide>0</self_collide>
+			<kinematic>0</kinematic>
+			<gravity>1</gravity>
+		</link>
+	</model>
+</sdf>
