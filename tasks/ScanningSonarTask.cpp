@@ -2,6 +2,7 @@
 
 #include "ScanningSonarTask.hpp"
 
+
 using namespace imaging_sonar_simulation;
 
 ScanningSonarTask::ScanningSonarTask(std::string const& name) :
@@ -142,7 +143,6 @@ void ScanningSonarTask::updateHook() {
 
     ScanningSonarTaskBase::updateHook();
 
-
     base::samples::RigidBodyState linkPose;
 
     if (_scanning_sonar_pose_cmd.read(linkPose) == RTT::NewData) {
@@ -157,11 +157,15 @@ void ScanningSonarTask::updateHook() {
         updateScanningSonarPose(scanningSonarPose);
     }
 
-    if (_scan_sonar.isReverseScan())
+    if (_scan_sonar.isReverseScan()){
         _rotZ += base::Angle::deg2Rad(_scan_sonar.getStepAngle());
-    else
+    	if(_rotZ >= base::Angle::deg2Rad(_scan_sonar.getEndAngle()))
+    		_rotZ = base::Angle::deg2Rad(_scan_sonar.getStartAngle());}
+    else{
         _rotZ -= base::Angle::deg2Rad(_scan_sonar.getStepAngle());
-
+        if(_rotZ <= base::Angle::deg2Rad(_scan_sonar.getStartAngle()))
+			_rotZ = base::Angle::deg2Rad(_scan_sonar.getEndAngle());
+    }
 
 }
 
