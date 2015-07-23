@@ -2,6 +2,7 @@
 
 #include "ScanningSonarTask.hpp"
 
+
 using namespace imaging_sonar_simulation;
 
 ScanningSonarTask::ScanningSonarTask(std::string const& name) :
@@ -69,23 +70,22 @@ bool ScanningSonarTask::startHook() {
     if (!ScanningSonarTaskBase::startHook())
         return false;
 
-    float fovY = 35.0f, fovX = 3.0f;
+    // set shader parameters
+    float fovX = _scan_sonar.getBeamwidthHorizontal();
+    float fovY = _scan_sonar.getBeamwidthVertical();
     int resolution = 1000;
 
+    // set vizkit3d_world
     vizkit3dWorld->setCameraParams(320, 240, 45, 0.1, 100.0);
     vizkit3dWorld->getWidget()->setTransformer(false);
     vizkit3dWorld->getWidget()->setAxes(false);
     vizkit3dWorld->getWidget()->setAxesLabels(false);
 
-    vizkit3d_normal_depth_map::NormalDepthMap normal_depth_map(_scan_sonar.getRange());
-    vizkit3d_normal_depth_map::ImageViewerCaptureTool capture(fovY, fovX, resolution);
-
-    // create sample scene
+    // generate shader world
+    _normal_depth_map = vizkit3d_normal_depth_map::NormalDepthMap(_scan_sonar.getRange());
+    _capture = vizkit3d_normal_depth_map::ImageViewerCaptureTool(fovY, fovX, resolution);
     _root = vizkit3dWorld->getWidget()->getRootNode();
-    normal_depth_map.addNodeChild(_root);
-    _normal_depth_map = normal_depth_map;
-
-    _capture = capture;
+    _normal_depth_map.addNodeChild(_root);
     _rotZ = 0.0f;
 
     return true;
@@ -142,7 +142,6 @@ void ScanningSonarTask::updateHook() {
 
     ScanningSonarTaskBase::updateHook();
 
-
     base::samples::RigidBodyState linkPose;
 
     if (_scanning_sonar_pose_cmd.read(linkPose) == RTT::NewData) {
@@ -157,11 +156,15 @@ void ScanningSonarTask::updateHook() {
         updateScanningSonarPose(scanningSonarPose);
     }
 
-    if (_scan_sonar.isReverseScan())
+    if (_scan_sonar.isReverseScan()){
         _rotZ += base::Angle::deg2Rad(_scan_sonar.getStepAngle());
-    else
+    	if(_rotZ >= base::Angle::deg2Rad(_scan_sonar.getEndAngle()))
+    		_rotZ = base::Angle::deg2Rad(_scan_sonar.getStartAngle());}
+    else{
         _rotZ -= base::Angle::deg2Rad(_scan_sonar.getStepAngle());
-
+        if(_rotZ <= base::Angle::deg2Rad(_scan_sonar.getStartAngle()))
+			_rotZ = base::Angle::deg2Rad(_scan_sonar.getEndAngle());
+    }
 
 }
 
