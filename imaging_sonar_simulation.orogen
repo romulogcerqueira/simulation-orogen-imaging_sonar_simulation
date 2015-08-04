@@ -10,21 +10,28 @@ using_task_library "vizkit3d_world"
 
 import_types_from "base"
 
-task_context "ScanningSonarTask" do
+task_context "Task" do
+
     subclasses "vizkit3d_world::Task"
-    needs_configuration
 
-    # Output data (Sonar beams)
-    output_port("beam_samples", "base::samples::SonarBeam");
-    periodic 0.1
-
-    #
-    # set the scanning sonar pose using a RigidBodyState structure
-    #
-    input_port("scanning_sonar_pose_cmd", "base::samples::RigidBodyState");
+    # set the sonar pose using a RigidBodyState structure
+    input_port("sonar_pose_cmd", "base::samples::RigidBodyState");
 
     # Range of the sonar
     property("range", "double", 50.0).dynamic
+
+    # Number of Bins
+    property("number_of_bins", "int", 500).dynamic
+
+end
+
+task_context "ScanningSonarTask" do
+
+    subclasses "imaging_sonar_simulation::Task"
+
+    # Output data (SonarBeam)
+    output_port("beam_samples", "base::samples::SonarBeam");
+    periodic 0.1
 
     # Enable/disable ping pong scanning mode
     property("ping_pong_mode", "bool", false).dynamic
@@ -38,4 +45,16 @@ task_context "ScanningSonarTask" do
     # Step angle size
     property("step_angle", "double", 1.8).dynamic
 
+end
+
+task_context "MultibeamSonarTask" do
+
+    subclasses "imaging_sonar_simulation::Task"
+
+    # Output data (SonarScan)
+    output_port("sonar_samples", "base::samples::SonarScan");
+    periodic 0.1
+
+    # Number of Beams
+    property("number_of_beams", "int", 256).dynamic
 end
