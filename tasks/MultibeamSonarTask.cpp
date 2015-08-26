@@ -95,17 +95,8 @@ void MultibeamSonarTask::updateHook() {
 	MultibeamSonarTaskBase::updateHook();
 
 	base::samples::RigidBodyState linkPose;
-
 	if (_sonar_pose_cmd.read(linkPose) == RTT::NewData) {
-
-		base::samples::RigidBodyState multibeamSonarPose = linkPose;
-
-		if (_show_gui.get()) {
-			updateCameraPose(multibeamSonarPose);
-		}
-
-		vizkit3dWorld->notifyEvents();
-		updateMultibeamSonarPose(multibeamSonarPose);
+		updateMultibeamSonarPose(linkPose);
 	}
 }
 void MultibeamSonarTask::errorHook() {

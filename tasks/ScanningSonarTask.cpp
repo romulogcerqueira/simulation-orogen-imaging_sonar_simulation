@@ -125,12 +125,6 @@ void ScanningSonarTask::updateHook() {
 	if (_sonar_pose_cmd.read(linkPose) == RTT::NewData) {
 
 		base::samples::RigidBodyState scanningSonarPose = rotatePose(linkPose);
-
-		if (_show_gui.get()) {
-			updateCameraPose(scanningSonarPose);
-		}
-
-		vizkit3dWorld->notifyEvents();
 		updateScanningSonarPose(scanningSonarPose);
 	}
 
