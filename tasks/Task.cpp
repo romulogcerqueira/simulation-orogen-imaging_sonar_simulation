@@ -15,18 +15,6 @@ Task::Task(std::string const& name, RTT::ExecutionEngine* engine) :
 Task::~Task() {
 }
 
-bool Task::setNumber_of_bins(boost::int32_t value) {
-	return (imaging_sonar_simulation::TaskBase::setNumber_of_bins(value));
-}
-
-bool Task::setRange(double value) {
-	return (imaging_sonar_simulation::TaskBase::setRange(value));
-}
-
-/// The following lines are template definitions for the various state machine
-// hooks defined by Orocos::RTT. See Task.hpp for more detailed
-// documentation about them.
-
 bool Task::configureHook() {
 	if (!TaskBase::configureHook())
 		return false;
@@ -50,7 +38,7 @@ void Task::cleanupHook() {
 	TaskBase::cleanupHook();
 }
 
-void Task::init(float fovX, float fovY, uint value, float range, bool isHeight) {
+void Task::init(float degX, float degY, uint value, float range, bool isHeight) {
 
 	// set vizkit3d_world
 	vizkit3dWorld->setCameraParams(320, 240, 45, 0.1, 100.0);
@@ -59,15 +47,13 @@ void Task::init(float fovX, float fovY, uint value, float range, bool isHeight) 
 	vizkit3dWorld->getWidget()->setAxesLabels(false);
 
 	// init shader
-	_normal_depth_map = vizkit3d_normal_depth_map::NormalDepthMap(range);
-	_capture = vizkit3d_normal_depth_map::ImageViewerCaptureTool(fovY, fovX, value, isHeight);
+	float radX = degX * (M_PI / 180.0) * 0.5;
+	float radY = degY * (M_PI / 180.0) * 0.5;
+	_normal_depth_map = vizkit3d_normal_depth_map::NormalDepthMap(range, radX, radY);
+	_capture = vizkit3d_normal_depth_map::ImageViewerCaptureTool(degY, degX, value, isHeight);
+	_capture.setBackgroundColor(osg::Vec4d(0.0, 0.0, 0.0, 1.0));
 	_root = vizkit3dWorld->getWidget()->getRootNode();
 	_normal_depth_map.addNodeChild(_root);
-}
-
-void Task::updateCameraPose(base::samples::RigidBodyState cameraPose) {
-	vizkit3dWorld->setTransformation(cameraPose);
-	vizkit3dWorld->setCameraPose(cameraPose);
 }
 
 void Task::updateSonarPose(base::samples::RigidBodyState pose) {

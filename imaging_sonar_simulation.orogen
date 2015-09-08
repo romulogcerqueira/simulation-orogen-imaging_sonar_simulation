@@ -5,6 +5,7 @@ using_library "opencv"
 using_library "gpu_sonar_simulation"
 using_library "vizkit3d_normal_depth_map"
 using_library "vizkit3d_world"
+using_library "frame_helper"
 
 using_task_library "vizkit3d_world"
 
@@ -17,12 +18,20 @@ task_context "Task" do
     # set the sonar pose using a RigidBodyState structure
     input_port("sonar_pose_cmd", "base::samples::RigidBodyState");
 
+    # New Sonar Viewer
+    output_port("sonar_viewer", "base::samples::frame::Frame");
+
+	# Shader Viewer
+    output_port("shader_viewer", "base::samples::frame::Frame");
+
     # Range of the sonar
     property("range", "double", 50.0).dynamic
-
+    
+    # Gain of the sonar
+    property("gain", "int", 50).dynamic
+    
     # Number of Bins
     property("number_of_bins", "int", 500).dynamic
-
 end
 
 task_context "ScanningSonarTask" do
@@ -44,7 +53,6 @@ task_context "ScanningSonarTask" do
 
     # Step angle size
     property("step_angle", "double", 1.8).dynamic
-
 end
 
 task_context "MultibeamSonarTask" do
@@ -54,7 +62,13 @@ task_context "MultibeamSonarTask" do
     # Output data (SonarScan)
     output_port("sonar_samples", "base::samples::SonarScan");
     periodic 0.1
-
+    
     # Number of Beams
     property("number_of_beams", "int", 256).dynamic
+    
+    # Angular Resolution
+    property("angular_resolution", "double", 1.0).dynamic
+    
+    # Start Bearing
+    property("start_bearing", "double", -60.0).dynamic
 end
