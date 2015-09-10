@@ -34,7 +34,7 @@ protected:
 
 	virtual bool setPing_pong_mode(bool value);
 	virtual bool setRange(double value);
-	virtual bool setGain(int value);
+	virtual bool setGain(double value);
 	virtual bool setStart_angle(double value);
 	virtual bool setEnd_angle(double value);
 	virtual bool setStep_angle(double value);

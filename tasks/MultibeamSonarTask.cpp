@@ -5,8 +5,8 @@
 #include <frame_helper/FrameHelper.h>
 #include <opencv2/contrib/contrib.hpp>
 
-
 using namespace imaging_sonar_simulation;
+using namespace base::samples::frame;
 
 MultibeamSonarTask::MultibeamSonarTask(std::string const& name) :
 		MultibeamSonarTaskBase(name) {
@@ -26,7 +26,7 @@ bool MultibeamSonarTask::setRange(double value) {
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setRange(value));
 }
 
-bool MultibeamSonarTask::setGain(int value) {
+bool MultibeamSonarTask::setGain(double value) {
 	_msonar.setGain(value);
 
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setGain(value));
@@ -107,16 +107,17 @@ void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState 
 	base::samples::SonarScan packet = _msonar.simulateSonarScan(sonar_data);
 
 	// display sonar viewer
-	base::samples::frame::Frame frame;
-	_msonar.plotSonarData(packet, _msonar.getRange(), _msonar.getGain());
-	frame_helper::FrameHelper::copyMatToFrame(_msonar.getViewer(), frame);
-	_sonar_viewer.write(frame);
+	std::auto_ptr<Frame> frame1(new Frame());
+	_cv_sonar = gpu_sonar_simulation::plotSonarData(packet, _msonar.getRange(), _msonar.getGain());
+	frame_helper::FrameHelper::copyMatToFrame(_cv_sonar, *frame1.get());
+	_sonar_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame1.release()));
 
 	// display shader image
+	std::auto_ptr<Frame> frame2(new Frame());
 	cv::Mat cv_shader;
 	cv_image.convertTo(cv_shader, CV_8UC3, 255);
-	frame_helper::FrameHelper::copyMatToFrame(cv_shader, frame);
-	_shader_viewer.write(frame);
+	frame_helper::FrameHelper::copyMatToFrame(cv_shader, *frame2.get());
+	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame2.release()));
 }
 
 void MultibeamSonarTask::errorHook() {

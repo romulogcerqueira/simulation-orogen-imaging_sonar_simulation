@@ -38,6 +38,7 @@ namespace imaging_sonar_simulation{
 		osg::ref_ptr<osg::Group> _root;
 		vizkit3d_normal_depth_map::NormalDepthMap _normal_depth_map;
 		vizkit3d_normal_depth_map::ImageViewerCaptureTool _capture;
+		cv::Mat _cv_sonar;
 
     public:
         /** TaskContext constructor for Task

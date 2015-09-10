@@ -5,6 +5,7 @@
 #include <frame_helper/FrameHelper.h>
 
 using namespace imaging_sonar_simulation;
+using namespace base::samples::frame;
 
 ScanningSonarTask::ScanningSonarTask(std::string const& name) :
 		ScanningSonarTaskBase(name) {
@@ -30,7 +31,7 @@ bool ScanningSonarTask::setRange(double value) {
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setRange(value));
 }
 
-bool ScanningSonarTask::setGain(int value) {
+bool ScanningSonarTask::setGain(double value) {
 	_ssonar.setGain(value);
 
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setGain(value));
@@ -85,7 +86,9 @@ bool ScanningSonarTask::startHook() {
 
 	// generate shader world
 	Task::init(fovX, fovY, height, range, true);
-	_rotZ = 0.0f;
+	_rotZ = 0.0;
+	_cv_sonar = cv::Mat(500 * 2 + 10, 500 * 2 + 10, CV_8UC3);
+
 
 	return true;
 }
@@ -108,23 +111,24 @@ void ScanningSonarTask::updateScanningSonarPose(base::samples::RigidBodyState po
 	base::samples::SonarBeam sonar_beam = _ssonar.simulateSonarBeam(sonar_data);
 
 	// display sonar viewer
-	base::samples::frame::Frame frame;
-	_ssonar.plotSonarData(sonar_beam, _ssonar.getRange(), _ssonar.getGain());
-	frame_helper::FrameHelper::copyMatToFrame(_ssonar.getViewer(), frame);
-	_sonar_viewer.write(frame);
+	std::auto_ptr<Frame> frame1(new Frame());
+	cv::Mat output = gpu_sonar_simulation::plotSonarData(sonar_beam, _ssonar.getRange(), _ssonar.getGain(), _cv_sonar, _ssonar.getStepAngle());
+	frame_helper::FrameHelper::copyMatToFrame(output, *frame1.get());
+	_sonar_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame1.release()));
 
 	// display shader image
+	std::auto_ptr<Frame> frame2(new Frame());
 	cv::Mat cv_shader;
 	cv_image.convertTo(cv_shader, CV_8UC3, 255);
-	frame_helper::FrameHelper::copyMatToFrame(cv_shader, frame);
-	_shader_viewer.write(frame);
+	frame_helper::FrameHelper::copyMatToFrame(cv_shader, *frame2.get());
+	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame2.release()));
 }
 
 base::samples::RigidBodyState ScanningSonarTask::rotatePose(base::samples::RigidBodyState pose) {
 
 	base::samples::RigidBodyState new_pose;
 	new_pose.position = pose.position;
-	new_pose.orientation = pose.orientation * Eigen::AngleAxisd(_rotZ * M_PI / 180.0, Eigen::Vector3d::UnitZ());
+	new_pose.orientation = pose.orientation * Eigen::AngleAxisd(_rotZ, Eigen::Vector3d::UnitZ());
 	return new_pose;
 
 }
