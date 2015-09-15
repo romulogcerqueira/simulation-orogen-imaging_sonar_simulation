@@ -28,7 +28,7 @@ task_context "Task" do
     property("range", "double", 50.0).dynamic
     
     # Gain of the sonar
-    property("gain", "double", 75.0).dynamic
+    property("gain", "double", 0.7).dynamic
     
     # Number of Bins
     property("number_of_bins", "int", 500).dynamic
@@ -49,10 +49,10 @@ task_context "ScanningSonarTask" do
     property("start_angle", "double", 0.0).dynamic
 
     # Right limit angle
-    property("end_angle", "double", 6.28318531).dynamic
+    property("end_angle", "double", 2 * Math::PI).dynamic
 
     # Step angle size
-    property("step_angle", "double", 0.0314159265).dynamic
+    property("step_angle", "double", Math::PI / 180 * 1.8).dynamic
 end
 
 task_context "MultibeamSonarTask" do
@@ -67,8 +67,8 @@ task_context "MultibeamSonarTask" do
     property("number_of_beams", "int", 256).dynamic
     
     # Angular Resolution
-    property("angular_resolution", "double", 0.0174532925).dynamic
+    property("angular_resolution", "double", Math::PI / 180).dynamic
     
     # Start Bearing
-    property("start_bearing", "double", -1.04719755).dynamic
+    property("start_bearing", "double", - Math::PI / 3).dynamic
 end
