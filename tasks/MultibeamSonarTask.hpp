@@ -28,15 +28,19 @@ namespace imaging_sonar_simulation{
 	friend class MultibeamSonarTaskBase;
 
     private:
-		gpu_sonar_simulation::MultibeamSonar _multibeam_sonar;
+		gpu_sonar_simulation::MultibeamSonar _msonar;
 
 		base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
 
     protected:
 
-        virtual bool setRange(double value);
+		virtual bool setRange(double value);
+		virtual bool setGain(double value);
         virtual bool setNumber_of_beams(int value);
         virtual bool setNumber_of_bins(int value);
+        virtual bool setAngular_resolution(double value);
+        virtual bool setStart_bearing(double value);
+
 
     public:
         /** TaskContext constructor for MultibeamSonarTask

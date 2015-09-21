@@ -7,10 +7,12 @@
 
 #include <base/samples/RigidBodyState.hpp>
 
-#include <gpu_sonar_simulation/SonarUtils.hpp>
+#include <gpu_sonar_simulation/Utils.hpp>
 
 #include <vizkit3d_normal_depth_map/NormalDepthMap.hpp>
 #include <vizkit3d_normal_depth_map/ImageViewerCaptureTool.hpp>
+
+#include <frame_helper/FrameHelper.h>
 
 namespace imaging_sonar_simulation{
 
@@ -36,9 +38,7 @@ namespace imaging_sonar_simulation{
 		osg::ref_ptr<osg::Group> _root;
 		vizkit3d_normal_depth_map::NormalDepthMap _normal_depth_map;
 		vizkit3d_normal_depth_map::ImageViewerCaptureTool _capture;
-
-        virtual bool setNumber_of_bins(boost::int32_t value);
-        virtual bool setRange(double value);
+		cv::Mat _cv_sonar;
 
     public:
         /** TaskContext constructor for Task
@@ -116,7 +116,6 @@ namespace imaging_sonar_simulation{
          */
         void cleanupHook();
         void init(float fovX, float fovY, uint value, float range, bool isHeight = true);
-        void updateCameraPose(base::samples::RigidBodyState pose);
         void updateSonarPose(base::samples::RigidBodyState pose);
     };
 }
