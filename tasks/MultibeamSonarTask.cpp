@@ -102,6 +102,7 @@ void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState 
 	// simulate sonar data
 	std::vector<uint8_t> sonar_data = _msonar.codeSonarData(cv_image);
 	base::samples::SonarScan packet = _msonar.simulateSonarScan(sonar_data);
+	_sonar_samples.write(packet);
 
 	// display sonar viewer
 	std::auto_ptr<Frame> frame1(new Frame());
