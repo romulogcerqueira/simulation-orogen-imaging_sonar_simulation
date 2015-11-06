@@ -30,8 +30,6 @@ namespace imaging_sonar_simulation{
     private:
 		gpu_sonar_simulation::MultibeamSonar _msonar;
 
-		base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
-
     protected:
 
 		virtual bool setRange(double value);
@@ -39,7 +37,6 @@ namespace imaging_sonar_simulation{
         virtual bool setNumber_of_beams(int value);
         virtual bool setNumber_of_bins(int value);
         virtual bool setStart_bearing(double value);
-
 
     public:
         /** TaskContext constructor for MultibeamSonarTask
@@ -118,7 +115,6 @@ namespace imaging_sonar_simulation{
         void cleanupHook();
 
         void updateMultibeamSonarPose(base::samples::RigidBodyState pose);
-
     };
 }
 

@@ -1,7 +1,6 @@
 name "imaging_sonar_simulation"
 
 # include rock drivers
-using_library "opencv"
 using_library "gpu_sonar_simulation"
 using_library "vizkit3d_normal_depth_map"
 using_library "vizkit3d_world"
@@ -24,7 +23,7 @@ task_context "Task" do
     # Range of the sonar in meters (1.0 - 150.0)
     property("range", "double", 50.0).dynamic
     
-    # Gain of the sonar in percentage (0.0 - 1.0)
+    # Gain of the sonar (0.0 - 1.0)
     property("gain", "double", 0.5).dynamic
 
     # Number of Bins
@@ -35,7 +34,7 @@ task_context "ScanningSonarTask" do
 
     subclasses "imaging_sonar_simulation::Task"
 
-    # Output data (SonarBeam)
+    # Output sonar data (SonarBeam)
     output_port("beam_samples", "base::samples::SonarBeam");
 
     # Enable/disable ping pong scanning mode
@@ -57,7 +56,7 @@ task_context "MultibeamSonarTask" do
 
     subclasses "imaging_sonar_simulation::Task"
 
-    # Output data (SonarScan)
+    # Output sonar data (SonarScan)
     output_port("sonar_samples", "base::samples::SonarScan");
     
     # Number of Beams

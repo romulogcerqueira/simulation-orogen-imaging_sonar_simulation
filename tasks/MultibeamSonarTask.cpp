@@ -1,7 +1,6 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 #include "MultibeamSonarTask.hpp"
-#include <base/samples/Frame.hpp>
 #include <frame_helper/FrameHelper.h>
 
 using namespace imaging_sonar_simulation;
@@ -21,31 +20,26 @@ MultibeamSonarTask::~MultibeamSonarTask() {
 bool MultibeamSonarTask::setRange(double value) {
 	_normal_depth_map.setMaxRange(value);
 	_msonar.setRange(value);
-
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setRange(value));
 }
 
 bool MultibeamSonarTask::setGain(double value) {
     _msonar.setGain(value);
-
     return (imaging_sonar_simulation::MultibeamSonarTaskBase::setGain(value));
 }
 
 bool MultibeamSonarTask::setNumber_of_bins(int value) {
 	_msonar.setNumberOfBins(value);
-
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_bins(value));
 }
 
 bool MultibeamSonarTask::setNumber_of_beams(int value) {
 	_msonar.setNumberOfBeams(value);
-
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_beams(value));
 }
 
 bool MultibeamSonarTask::setStart_bearing(double value) {
 	_msonar.setStartBearing(value);
-
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setStart_bearing(value));
 }
 
@@ -74,13 +68,12 @@ bool MultibeamSonarTask::startHook() {
 	return true;
 }
 
-
 void MultibeamSonarTask::updateHook() {
 	MultibeamSonarTaskBase::updateHook();
 
 	base::samples::RigidBodyState linkPose;
 
-	while (_sonar_pose_cmd.read(linkPose) == RTT::NewData)
+	if (_sonar_pose_cmd.read(linkPose) == RTT::NewData)
 		updateMultibeamSonarPose(linkPose);
 }
 
@@ -95,11 +88,11 @@ void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState 
 	// simulate sonar data
 	std::vector<uint8_t> sonar_data = _msonar.codeSonarData(cv_image);
 
-    // apply the "gain"
-    double gain_factor = _msonar.getGain() / 0.5;
-    std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<double>(), gain_factor));
+	// apply the "gain" (in this case, it is a light intensity change)
+	double gain_factor = _msonar.getGain() / 0.5;
+	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<double>(), gain_factor));
 
-    // simulate sonar data
+	// simulate sonar data
 	base::samples::SonarScan sonar_scan = _msonar.simulateSonarScan(sonar_data);
 
 	// display sonar viewer
