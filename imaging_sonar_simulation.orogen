@@ -1,7 +1,6 @@
 name "imaging_sonar_simulation"
 
 # include rock drivers
-using_library "opencv"
 using_library "gpu_sonar_simulation"
 using_library "vizkit3d_normal_depth_map"
 using_library "vizkit3d_world"
@@ -18,18 +17,15 @@ task_context "Task" do
     # set the sonar pose using a RigidBodyState structure
     input_port("sonar_pose_cmd", "base::samples::RigidBodyState");
 
-    # New Sonar Viewer
-    output_port("sonar_viewer", ro_ptr("/base/samples/frame/Frame"));
-
-	# Shader Viewer
+    # Shader Viewer
     output_port("shader_viewer", ro_ptr("/base/samples/frame/Frame"));
 
-    # Range of the sonar
+    # Range of the sonar in meters (1.0 - 150.0)
     property("range", "double", 50.0).dynamic
     
-    # Gain of the sonar
-    property("gain", "double", 0.7).dynamic
-    
+    # Gain of the sonar (0.0 - 1.0)
+    property("gain", "double", 0.5).dynamic
+
     # Number of Bins
     property("number_of_bins", "int", 500).dynamic
 end
@@ -38,9 +34,8 @@ task_context "ScanningSonarTask" do
 
     subclasses "imaging_sonar_simulation::Task"
 
-    # Output data (SonarBeam)
+    # Output sonar data (SonarBeam)
     output_port("beam_samples", "base::samples::SonarBeam");
-    periodic 0.1
 
     # Enable/disable ping pong scanning mode
     property("ping_pong_mode", "bool", false).dynamic
@@ -53,22 +48,22 @@ task_context "ScanningSonarTask" do
 
     # Step angle size
     property("step_angle", "double", Math::PI / 180 * 1.8).dynamic
+
+    periodic 0.1
 end
 
 task_context "MultibeamSonarTask" do
 
     subclasses "imaging_sonar_simulation::Task"
 
-    # Output data (SonarScan)
+    # Output sonar data (SonarScan)
     output_port("sonar_samples", "base::samples::SonarScan");
-    periodic 0.1
     
     # Number of Beams
     property("number_of_beams", "int", 256).dynamic
     
-    # Angular Resolution
-    property("angular_resolution", "double", Math::PI / 180).dynamic
-    
     # Start Bearing
-    property("start_bearing", "double", - Math::PI / 3).dynamic
+    property("start_bearing", "double", - Math::PI / 180 * 55).dynamic
+
+    periodic 0.1
 end

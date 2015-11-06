@@ -1,9 +1,7 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 #include "MultibeamSonarTask.hpp"
-#include <base/samples/Frame.hpp>
 #include <frame_helper/FrameHelper.h>
-#include <opencv2/contrib/contrib.hpp>
 
 using namespace imaging_sonar_simulation;
 using namespace base::samples::frame;
@@ -22,37 +20,26 @@ MultibeamSonarTask::~MultibeamSonarTask() {
 bool MultibeamSonarTask::setRange(double value) {
 	_normal_depth_map.setMaxRange(value);
 	_msonar.setRange(value);
-
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setRange(value));
 }
 
 bool MultibeamSonarTask::setGain(double value) {
-	_msonar.setGain(value);
-
-	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setGain(value));
+    _msonar.setGain(value);
+    return (imaging_sonar_simulation::MultibeamSonarTaskBase::setGain(value));
 }
 
 bool MultibeamSonarTask::setNumber_of_bins(int value) {
 	_msonar.setNumberOfBins(value);
-
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_bins(value));
 }
 
 bool MultibeamSonarTask::setNumber_of_beams(int value) {
 	_msonar.setNumberOfBeams(value);
-
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_beams(value));
-}
-
-bool MultibeamSonarTask::setAngular_resolution(double value) {
-	_msonar.setAngularResolution(value);
-
-	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setAngular_resolution(value));
 }
 
 bool MultibeamSonarTask::setStart_bearing(double value) {
 	_msonar.setStartBearing(value);
-
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setStart_bearing(value));
 }
 
@@ -81,7 +68,6 @@ bool MultibeamSonarTask::startHook() {
 	return true;
 }
 
-
 void MultibeamSonarTask::updateHook() {
 	MultibeamSonarTaskBase::updateHook();
 
@@ -101,21 +87,23 @@ void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState 
 
 	// simulate sonar data
 	std::vector<uint8_t> sonar_data = _msonar.codeSonarData(cv_image);
-	base::samples::SonarScan packet = _msonar.simulateSonarScan(sonar_data);
-	_sonar_samples.write(packet);
+
+	// apply the "gain" (in this case, it is a light intensity change)
+	double gain_factor = _msonar.getGain() / 0.5;
+	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<double>(), gain_factor));
+
+	// simulate sonar data
+	base::samples::SonarScan sonar_scan = _msonar.simulateSonarScan(sonar_data);
 
 	// display sonar viewer
-	std::auto_ptr<Frame> frame1(new Frame());
-	_cv_sonar = gpu_sonar_simulation::plotSonarData(packet, _msonar.getRange(), _msonar.getGain());
-	frame_helper::FrameHelper::copyMatToFrame(_cv_sonar, *frame1.get());
-	_sonar_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame1.release()));
+	_sonar_samples.write(sonar_scan);
 
 	// display shader image
-	std::auto_ptr<Frame> frame2(new Frame());
+	std::auto_ptr<Frame> frame(new Frame());
 	cv::Mat cv_shader;
 	cv_image.convertTo(cv_shader, CV_8UC3, 255);
-	frame_helper::FrameHelper::copyMatToFrame(cv_shader, *frame2.get());
-	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame2.release()));
+	frame_helper::FrameHelper::copyMatToFrame(cv_shader, *frame.get());
+	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
 }
 
 void MultibeamSonarTask::errorHook() {
