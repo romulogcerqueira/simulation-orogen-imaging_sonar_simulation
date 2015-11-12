@@ -11,7 +11,7 @@ using_task_library "vizkit3d_world"
 import_types_from "base"
 
 task_context "Task" do
-
+    abstract
     subclasses "vizkit3d_world::Task"
 
     # set the sonar pose using a RigidBodyState structure
