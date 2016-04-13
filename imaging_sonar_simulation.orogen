@@ -59,8 +59,5 @@ task_context "MultibeamSonarTask" do
     # Number of Beams
     property("number_of_beams", "int", 256).dynamic
     
-    # Start Bearing
-    property("start_bearing", "double", - Math::PI / 180 * 55).dynamic
-
     periodic 0.1
 end

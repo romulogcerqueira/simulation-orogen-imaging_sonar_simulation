@@ -38,11 +38,6 @@ bool MultibeamSonarTask::setNumber_of_beams(int value) {
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_beams(value));
 }
 
-bool MultibeamSonarTask::setStart_bearing(double value) {
-	_msonar.setStartBearing(value);
-	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setStart_bearing(value));
-}
-
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See MultibeamSonarTask.hpp for more detailed
 // documentation about them.

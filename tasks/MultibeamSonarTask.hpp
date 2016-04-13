@@ -36,7 +36,6 @@ namespace imaging_sonar_simulation{
 		virtual bool setGain(double value);
         virtual bool setNumber_of_beams(int value);
         virtual bool setNumber_of_bins(int value);
-        virtual bool setStart_bearing(double value);
 
     public:
         /** TaskContext constructor for MultibeamSonarTask
