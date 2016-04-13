@@ -28,14 +28,14 @@ task_context "Task" do
 
     # Number of Bins
     property("number_of_bins", "int", 500).dynamic
+
+    # Output sonar data (Sonar)
+    output_port("sonar_samples", "base::samples::Sonar");
 end
 
 task_context "ScanningSonarTask" do
 
     subclasses "imaging_sonar_simulation::Task"
-
-    # Output sonar data (SonarBeam)
-    output_port("beam_samples", "base::samples::SonarBeam");
 
     # Enable/disable ping pong scanning mode
     property("ping_pong_mode", "bool", false).dynamic
@@ -47,7 +47,7 @@ task_context "ScanningSonarTask" do
     property("end_angle", "double", 2 * Math::PI).dynamic
 
     # Step angle size
-    property("step_angle", "double", Math::PI / 180 * 1.8).dynamic
+    property("step_angle", "double", 0.9 * Math::PI / 180).dynamic
 
     periodic 0.1
 end
@@ -56,9 +56,6 @@ task_context "MultibeamSonarTask" do
 
     subclasses "imaging_sonar_simulation::Task"
 
-    # Output sonar data (SonarScan)
-    output_port("sonar_samples", "base::samples::SonarScan");
-    
     # Number of Beams
     property("number_of_beams", "int", 256).dynamic
     

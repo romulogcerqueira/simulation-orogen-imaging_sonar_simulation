@@ -94,9 +94,10 @@ void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState 
 
 	// simulate sonar data
 	base::samples::SonarScan sonar_scan = _msonar.simulateSonarScan(sonar_data);
+	base::samples::Sonar sonar(sonar_scan);
 
 	// display sonar viewer
-	_sonar_samples.write(sonar_scan);
+	_sonar_samples.write(sonar);
 
 	// display shader image
 	std::auto_ptr<Frame> frame(new Frame());

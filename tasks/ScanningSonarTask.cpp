@@ -100,9 +100,10 @@ void ScanningSonarTask::updateScanningSonarPose(base::samples::RigidBodyState po
 
 	// simulate sonar data
 	base::samples::SonarBeam sonar_beam = _ssonar.simulateSonarBeam(sonar_data);
+	base::samples::Sonar sonar(sonar_beam);
 
 	// display sonar viewer
-	_beam_samples.write(sonar_beam);
+	_sonar_samples.write(sonar);
 
 	// display shader image
 	std::auto_ptr<Frame> frame(new Frame());
@@ -112,15 +113,7 @@ void ScanningSonarTask::updateScanningSonarPose(base::samples::RigidBodyState po
 	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
 
 	// rotate sonar
-    if (_ssonar.isReverseScan()) {
-        _rotZ += _ssonar.getStepAngle();
-        if (_rotZ >= _ssonar.getEndAngle())
-            _rotZ = _ssonar.getStartAngle();
-    } else {
-        _rotZ -= _ssonar.getStepAngle();
-        if (_rotZ <= _ssonar.getStartAngle())
-            _rotZ = _ssonar.getEndAngle();
-    }
+	_rotZ = _ssonar.getBearing();
 }
 
 base::samples::RigidBodyState ScanningSonarTask::rotatePose(base::samples::RigidBodyState pose) {
