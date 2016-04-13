@@ -29,7 +29,7 @@ bool ScanningSonarTask::setRange(double value) {
 }
 
 bool ScanningSonarTask::setGain(double value) {
-    _ssonar.setGain(value / 100);
+    _ssonar.setGain(value);
     return (imaging_sonar_simulation::ScanningSonarTaskBase::setGain(value));
 }
 
