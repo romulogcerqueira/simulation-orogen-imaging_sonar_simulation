@@ -81,14 +81,14 @@ bool ScanningSonarTask::configureHook() {
 	if (!ScanningSonarTaskBase::configureHook())
 		return false;
 
-	_ssonar.setRange(_range.value());
+    _ssonar.setRange(_range.value());
     _normal_depth_map.setMaxRange(_range.value());
-	_ssonar.setGain(_gain.value());
-	_ssonar.setNumberOfBins(_number_of_bins.value());
-	_ssonar.setPingPongMode(_ping_pong_mode.value());
-	_ssonar.setStartAngle(base::Angle::fromRad(_start_angle.value()));
-	_ssonar.setEndAngle(base::Angle::fromRad(_end_angle.value()));
-	_ssonar.setStepAngle(base::Angle::fromRad(_step_angle.value()));
+    _ssonar.setGain(_gain.value());
+    _ssonar.setNumberOfBins(_number_of_bins.value());
+    _ssonar.setPingPongMode(_ping_pong_mode.value());
+    _ssonar.setStartAngle(base::Angle::fromRad(_start_angle.value()));
+    _ssonar.setEndAngle(base::Angle::fromRad(_end_angle.value()));
+    _ssonar.setStepAngle(base::Angle::fromRad(_step_angle.value()));
 
     if (_ssonar.getRange() < 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
@@ -157,9 +157,9 @@ void ScanningSonarTask::updateScanningSonarPose(base::samples::RigidBodyState po
 	frame_helper::FrameHelper::copyMatToFrame(cv_shader, *frame.get());
 	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
 
-	// rotate sonar
-	_rotZ = _ssonar.getBearing().rad;
-	_ssonar.moveHeadPosition();
+    // rotate sonar
+    _rotZ = _ssonar.getBearing().rad;
+    _ssonar.moveHeadPosition();
 }
 
 base::samples::RigidBodyState ScanningSonarTask::rotatePose(base::samples::RigidBodyState pose) {

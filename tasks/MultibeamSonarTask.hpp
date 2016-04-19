@@ -32,8 +32,8 @@ namespace imaging_sonar_simulation{
 
     protected:
 
-		virtual bool setRange(double value);
-		virtual bool setGain(double value);
+        virtual bool setRange(double value);
+        virtual bool setGain(double value);
         virtual bool setNumber_of_bins(int value);
 
     public:
