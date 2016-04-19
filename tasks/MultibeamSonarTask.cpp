@@ -18,17 +18,32 @@ MultibeamSonarTask::~MultibeamSonarTask() {
 }
 
 bool MultibeamSonarTask::setRange(double value) {
+    if (value < 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
+
 	_normal_depth_map.setMaxRange(value);
 	_msonar.setRange(value);
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setRange(value));
 }
 
 bool MultibeamSonarTask::setGain(double value) {
+    if (value < 0 || value > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+
     _msonar.setGain(value);
     return (imaging_sonar_simulation::MultibeamSonarTaskBase::setGain(value));
 }
 
 bool MultibeamSonarTask::setNumber_of_bins(int value) {
+    if (value < 0) {
+        RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
+        return false;
+    }
+
 	_msonar.setNumberOfBins(value);
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_bins(value));
 }
@@ -40,6 +55,33 @@ bool MultibeamSonarTask::setNumber_of_bins(int value) {
 bool MultibeamSonarTask::configureHook() {
 	if (!MultibeamSonarTaskBase::configureHook())
 		return false;
+
+    _msonar.setRange(_range.value());
+    _normal_depth_map.setMaxRange(_range.value());
+    _msonar.setGain(_gain.value());
+    _msonar.setNumberOfBins(_number_of_bins.value());
+    _msonar.setNumberOfBeams(_number_of_beams.value());
+
+    if (_msonar.getRange() < 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
+
+    if (_msonar.getGain() < 0 || _msonar.getGain() > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+
+    if (_msonar.getNumberOfBins() < 0) {
+        RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
+        return false;
+    }
+
+    if (_msonar.getNumberOfBeams() < 64 || _msonar.getNumberOfBeams() > 512) {
+        RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
+        return false;
+    }
+
 	return true;
 }
 
