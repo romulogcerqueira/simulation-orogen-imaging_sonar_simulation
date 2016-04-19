@@ -34,17 +34,17 @@ bool ScanningSonarTask::setGain(double value) {
 }
 
 bool ScanningSonarTask::setStart_angle(double value) {
-	_ssonar.setStartAngle(value);
+	_ssonar.setStartAngle(base::Angle::fromRad(value));
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setStart_angle(value));
 }
 
 bool ScanningSonarTask::setEnd_angle(double value) {
-	_ssonar.setEndAngle(value);
+	_ssonar.setEndAngle(base::Angle::fromRad(value));
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setEnd_angle(value));
 }
 
 bool ScanningSonarTask::setStep_angle(double value) {
-	_ssonar.setStepAngle(value);
+	_ssonar.setStepAngle(base::Angle::fromRad(value));
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setStep_angle(value));
 }
 
@@ -68,8 +68,8 @@ bool ScanningSonarTask::startHook() {
 		return false;
 
 	// set shader parameters
-	float fovX = _ssonar.getBeamwidthHorizontal();
-	float fovY = _ssonar.getBeamwidthVertical();
+	float fovX = _ssonar.getBeamWidth().getDeg();
+	float fovY = _ssonar.getBeamHeight().getDeg();
 	int height = 500;
 	float range = _ssonar.getRange();
 
@@ -89,20 +89,15 @@ void ScanningSonarTask::updateScanningSonarPose(base::samples::RigidBodyState po
 	cv::Mat3f cv_image = gpu_sonar_simulation::convertShaderOSG2CV(osg_image);
 
 	// decode shader image
-	std::vector<double> raw_intensity = _ssonar.decodeShaderImage(cv_image);
-
-	// get ping data
-	std::vector<uint8_t> sonar_data = _ssonar.getPingData(raw_intensity);
+	std::vector<float> sonar_data = _ssonar.decodeShaderImage(cv_image);
 
 	// apply the "gain" (in this case, it is a light intensity change)
-	double gain_factor = _ssonar.getGain() / 0.5;
-	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<double>(), gain_factor));
+	float gain_factor = _ssonar.getGain() / 0.5;
+	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<float>(), gain_factor));
+	std::replace_if(sonar_data.begin(), sonar_data.end(), bind2nd(greater<float>(), 1.0), 1.0);
 
 	// simulate sonar data
-	base::samples::SonarBeam sonar_beam = _ssonar.simulateSonarBeam(sonar_data);
-	base::samples::Sonar sonar(sonar_beam);
-
-	// display sonar viewer
+	base::samples::Sonar sonar = _ssonar.simulateSingleBeam(sonar_data);
 	_sonar_samples.write(sonar);
 
 	// display shader image
@@ -113,7 +108,8 @@ void ScanningSonarTask::updateScanningSonarPose(base::samples::RigidBodyState po
 	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
 
 	// rotate sonar
-	_rotZ = _ssonar.getBearing();
+	_rotZ = _ssonar.getBearing().rad;
+	_ssonar.moveHeadPosition();
 }
 
 base::samples::RigidBodyState ScanningSonarTask::rotatePose(base::samples::RigidBodyState pose) {

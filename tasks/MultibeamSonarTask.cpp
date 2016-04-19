@@ -53,8 +53,8 @@ bool MultibeamSonarTask::startHook() {
 		return false;
 
 	// set shader image parameters
-	float fovX = _msonar.getBeamwidthHorizontal();
-	float fovY = _msonar.getBeamwidthVertical();
+	float fovX = _msonar.getBeamWidth().getDeg();
+	float fovY = _msonar.getBeamHeight().getDeg();
 	uint width = _msonar.getNumberOfBeams() * _msonar.getPixelsPerBeam();
 	float range = _msonar.getRange();
 
@@ -81,17 +81,15 @@ void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState 
 	cv::Mat3f cv_image = gpu_sonar_simulation::convertShaderOSG2CV(osg_image);
 
 	// simulate sonar data
-	std::vector<uint8_t> sonar_data = _msonar.codeSonarData(cv_image);
+	std::vector<float> sonar_data = _msonar.codeSonarData(cv_image);
 
 	// apply the "gain" (in this case, it is a light intensity change)
-	double gain_factor = _msonar.getGain() / 0.5;
-	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<double>(), gain_factor));
+	float gain_factor = _msonar.getGain() / 0.5;
+	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<float>(), gain_factor));
+	std::replace_if(sonar_data.begin(), sonar_data.end(), bind2nd(greater<float>(), 1.0), 1.0);
 
 	// simulate sonar data
-	base::samples::SonarScan sonar_scan = _msonar.simulateSonarScan(sonar_data);
-	base::samples::Sonar sonar(sonar_scan);
-
-	// display sonar viewer
+	base::samples::Sonar sonar = _msonar.simulateMultiBeam(sonar_data);
 	_sonar_samples.write(sonar);
 
 	// display shader image
