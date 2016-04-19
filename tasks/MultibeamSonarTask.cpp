@@ -18,29 +18,34 @@ MultibeamSonarTask::~MultibeamSonarTask() {
 }
 
 bool MultibeamSonarTask::setRange(double value) {
+    if (value < 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
+
 	_normal_depth_map.setMaxRange(value);
 	_msonar.setRange(value);
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setRange(value));
 }
 
 bool MultibeamSonarTask::setGain(double value) {
+    if (value < 0 || value > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+
     _msonar.setGain(value);
     return (imaging_sonar_simulation::MultibeamSonarTaskBase::setGain(value));
 }
 
 bool MultibeamSonarTask::setNumber_of_bins(int value) {
+    if (value < 0) {
+        RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
+        return false;
+    }
+
 	_msonar.setNumberOfBins(value);
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_bins(value));
-}
-
-bool MultibeamSonarTask::setNumber_of_beams(int value) {
-	_msonar.setNumberOfBeams(value);
-	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_beams(value));
-}
-
-bool MultibeamSonarTask::setStart_bearing(double value) {
-	_msonar.setStartBearing(value);
-	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setStart_bearing(value));
 }
 
 /// The following lines are template definitions for the various state machine
@@ -50,6 +55,33 @@ bool MultibeamSonarTask::setStart_bearing(double value) {
 bool MultibeamSonarTask::configureHook() {
 	if (!MultibeamSonarTaskBase::configureHook())
 		return false;
+
+    _msonar.setRange(_range.value());
+    _normal_depth_map.setMaxRange(_range.value());
+    _msonar.setGain(_gain.value());
+    _msonar.setNumberOfBins(_number_of_bins.value());
+    _msonar.setNumberOfBeams(_number_of_beams.value());
+
+    if (_msonar.getRange() < 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
+
+    if (_msonar.getGain() < 0 || _msonar.getGain() > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+
+    if (_msonar.getNumberOfBins() < 0) {
+        RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
+        return false;
+    }
+
+    if (_msonar.getNumberOfBeams() < 64 || _msonar.getNumberOfBeams() > 512) {
+        RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
+        return false;
+    }
+
 	return true;
 }
 
@@ -58,8 +90,8 @@ bool MultibeamSonarTask::startHook() {
 		return false;
 
 	// set shader image parameters
-	float fovX = _msonar.getBeamwidthHorizontal();
-	float fovY = _msonar.getBeamwidthVertical();
+	float fovX = _msonar.getBeamWidth().getDeg();
+	float fovY = _msonar.getBeamHeight().getDeg();
 	uint width = _msonar.getNumberOfBeams() * _msonar.getPixelsPerBeam();
 	float range = _msonar.getRange();
 
@@ -86,17 +118,16 @@ void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState 
 	cv::Mat3f cv_image = gpu_sonar_simulation::convertShaderOSG2CV(osg_image);
 
 	// simulate sonar data
-	std::vector<uint8_t> sonar_data = _msonar.codeSonarData(cv_image);
+	std::vector<float> sonar_data = _msonar.codeSonarData(cv_image);
 
 	// apply the "gain" (in this case, it is a light intensity change)
-	double gain_factor = _msonar.getGain() / 0.5;
-	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<double>(), gain_factor));
+	float gain_factor = _msonar.getGain() / 0.5;
+	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<float>(), gain_factor));
+	std::replace_if(sonar_data.begin(), sonar_data.end(), bind2nd(greater<float>(), 1.0), 1.0);
 
 	// simulate sonar data
-	base::samples::SonarScan sonar_scan = _msonar.simulateSonarScan(sonar_data);
-
-	// display sonar viewer
-	_sonar_samples.write(sonar_scan);
+	base::samples::Sonar sonar = _msonar.simulateMultiBeam(sonar_data);
+	_sonar_samples.write(sonar);
 
 	// display shader image
 	std::auto_ptr<Frame> frame(new Frame());

@@ -23,32 +23,52 @@ bool ScanningSonarTask::setPing_pong_mode(bool value) {
 }
 
 bool ScanningSonarTask::setRange(double value) {
+    if (value < 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
+
 	_normal_depth_map.setMaxRange(value);
 	_ssonar.setRange(value);
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setRange(value));
 }
 
 bool ScanningSonarTask::setGain(double value) {
-    _ssonar.setGain(value / 100);
+    if (value < 0 || value > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+
+    _ssonar.setGain(value);
     return (imaging_sonar_simulation::ScanningSonarTaskBase::setGain(value));
 }
 
 bool ScanningSonarTask::setStart_angle(double value) {
-	_ssonar.setStartAngle(value);
+	_ssonar.setStartAngle(base::Angle::fromRad(value));
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setStart_angle(value));
 }
 
 bool ScanningSonarTask::setEnd_angle(double value) {
-	_ssonar.setEndAngle(value);
+	_ssonar.setEndAngle(base::Angle::fromRad(value));
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setEnd_angle(value));
 }
 
 bool ScanningSonarTask::setStep_angle(double value) {
-	_ssonar.setStepAngle(value);
+    if (value < 0) {
+        RTT::log(RTT::Error) << "The step angle value must be positive." << RTT::endlog();
+        return false;
+    }
+
+	_ssonar.setStepAngle(base::Angle::fromRad(value));
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setStep_angle(value));
 }
 
 bool ScanningSonarTask::setNumber_of_bins(int value) {
+    if (value < 0 || value > 1500) {
+        RTT::log(RTT::Error) << "The number of bins must be positive and less or equal than 1500." << RTT::endlog();
+        return false;
+    }
+
 	_ssonar.setNumberOfBins(value);
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setNumber_of_bins(value));
 }
@@ -60,6 +80,36 @@ bool ScanningSonarTask::setNumber_of_bins(int value) {
 bool ScanningSonarTask::configureHook() {
 	if (!ScanningSonarTaskBase::configureHook())
 		return false;
+
+    _ssonar.setRange(_range.value());
+    _normal_depth_map.setMaxRange(_range.value());
+    _ssonar.setGain(_gain.value());
+    _ssonar.setNumberOfBins(_number_of_bins.value());
+    _ssonar.setPingPongMode(_ping_pong_mode.value());
+    _ssonar.setStartAngle(base::Angle::fromRad(_start_angle.value()));
+    _ssonar.setEndAngle(base::Angle::fromRad(_end_angle.value()));
+    _ssonar.setStepAngle(base::Angle::fromRad(_step_angle.value()));
+
+    if (_ssonar.getRange() < 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
+
+    if (_ssonar.getGain() < 0 || _ssonar.getGain() > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+
+    if (_ssonar.getNumberOfBins() < 0 || _ssonar.getNumberOfBins() > 1500) {
+        RTT::log(RTT::Error) << "The number of bins must be positive and less or equal than 1500." << RTT::endlog();
+        return false;
+    }
+
+    if (_ssonar.getStepAngle().rad < 0) {
+        RTT::log(RTT::Error) << "The step angle value must be positive." << RTT::endlog();
+        return false;
+    }
+
 	return true;
 }
 
@@ -68,8 +118,8 @@ bool ScanningSonarTask::startHook() {
 		return false;
 
 	// set shader parameters
-	float fovX = _ssonar.getBeamwidthHorizontal();
-	float fovY = _ssonar.getBeamwidthVertical();
+	float fovX = _ssonar.getBeamWidth().getDeg();
+	float fovY = _ssonar.getBeamHeight().getDeg();
 	int height = 500;
 	float range = _ssonar.getRange();
 
@@ -89,20 +139,16 @@ void ScanningSonarTask::updateScanningSonarPose(base::samples::RigidBodyState po
 	cv::Mat3f cv_image = gpu_sonar_simulation::convertShaderOSG2CV(osg_image);
 
 	// decode shader image
-	std::vector<double> raw_intensity = _ssonar.decodeShaderImage(cv_image);
-
-	// get ping data
-	std::vector<uint8_t> sonar_data = _ssonar.getPingData(raw_intensity);
+	std::vector<float> sonar_data = _ssonar.decodeShaderImage(cv_image);
 
 	// apply the "gain" (in this case, it is a light intensity change)
-	double gain_factor = _ssonar.getGain() / 0.5;
-	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<double>(), gain_factor));
+	float gain_factor = _ssonar.getGain() / 0.5;
+	std::transform(sonar_data.begin(), sonar_data.end(), sonar_data.begin(), std::bind1st(std::multiplies<float>(), gain_factor));
+	std::replace_if(sonar_data.begin(), sonar_data.end(), bind2nd(greater<float>(), 1.0), 1.0);
 
 	// simulate sonar data
-	base::samples::SonarBeam sonar_beam = _ssonar.simulateSonarBeam(sonar_data);
-
-	// display sonar viewer
-	_beam_samples.write(sonar_beam);
+	base::samples::Sonar sonar = _ssonar.simulateSingleBeam(sonar_data);
+	_sonar_samples.write(sonar);
 
 	// display shader image
 	std::auto_ptr<Frame> frame(new Frame());
@@ -111,16 +157,9 @@ void ScanningSonarTask::updateScanningSonarPose(base::samples::RigidBodyState po
 	frame_helper::FrameHelper::copyMatToFrame(cv_shader, *frame.get());
 	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
 
-	// rotate sonar
-    if (_ssonar.isReverseScan()) {
-        _rotZ += _ssonar.getStepAngle();
-        if (_rotZ >= _ssonar.getEndAngle())
-            _rotZ = _ssonar.getStartAngle();
-    } else {
-        _rotZ -= _ssonar.getStepAngle();
-        if (_rotZ <= _ssonar.getStartAngle())
-            _rotZ = _ssonar.getEndAngle();
-    }
+    // rotate sonar
+    _rotZ = _ssonar.getBearing().rad;
+    _ssonar.moveHeadPosition();
 }
 
 base::samples::RigidBodyState ScanningSonarTask::rotatePose(base::samples::RigidBodyState pose) {

@@ -6,6 +6,7 @@
 #include "imaging_sonar_simulation/TaskBase.hpp"
 
 #include <base/samples/RigidBodyState.hpp>
+#include <base/samples/Sonar.hpp>
 
 #include <gpu_sonar_simulation/Utils.hpp>
 
