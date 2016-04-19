@@ -57,7 +57,7 @@ task_context "MultibeamSonarTask" do
     subclasses "imaging_sonar_simulation::Task"
 
     # Number of Beams
-    property("number_of_beams", "int", 256).dynamic
+    property("number_of_beams", "int", 256)
     
     periodic 0.1
 end
