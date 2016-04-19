@@ -23,12 +23,22 @@ bool ScanningSonarTask::setPing_pong_mode(bool value) {
 }
 
 bool ScanningSonarTask::setRange(double value) {
+    if (value < 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
+
 	_normal_depth_map.setMaxRange(value);
 	_ssonar.setRange(value);
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setRange(value));
 }
 
 bool ScanningSonarTask::setGain(double value) {
+    if (value < 0 || value > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+
     _ssonar.setGain(value);
     return (imaging_sonar_simulation::ScanningSonarTaskBase::setGain(value));
 }
@@ -44,11 +54,21 @@ bool ScanningSonarTask::setEnd_angle(double value) {
 }
 
 bool ScanningSonarTask::setStep_angle(double value) {
+    if (value < 0) {
+        RTT::log(RTT::Error) << "The step angle value must be positive." << RTT::endlog();
+        return false;
+    }
+
 	_ssonar.setStepAngle(base::Angle::fromRad(value));
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setStep_angle(value));
 }
 
 bool ScanningSonarTask::setNumber_of_bins(int value) {
+    if (value < 0 || value > 1500) {
+        RTT::log(RTT::Error) << "The number of bins must be positive and less or equal than 1500." << RTT::endlog();
+        return false;
+    }
+
 	_ssonar.setNumberOfBins(value);
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setNumber_of_bins(value));
 }
@@ -60,6 +80,36 @@ bool ScanningSonarTask::setNumber_of_bins(int value) {
 bool ScanningSonarTask::configureHook() {
 	if (!ScanningSonarTaskBase::configureHook())
 		return false;
+
+	_ssonar.setRange(_range.value());
+    _normal_depth_map.setMaxRange(_range.value());
+	_ssonar.setGain(_gain.value());
+	_ssonar.setNumberOfBins(_number_of_bins.value());
+	_ssonar.setPingPongMode(_ping_pong_mode.value());
+	_ssonar.setStartAngle(base::Angle::fromRad(_start_angle.value()));
+	_ssonar.setEndAngle(base::Angle::fromRad(_end_angle.value()));
+	_ssonar.setStepAngle(base::Angle::fromRad(_step_angle.value()));
+
+    if (_ssonar.getRange() < 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
+
+    if (_ssonar.getGain() < 0 || _ssonar.getGain() > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+
+    if (_ssonar.getNumberOfBins() < 0 || _ssonar.getNumberOfBins() > 1500) {
+        RTT::log(RTT::Error) << "The number of bins must be positive and less or equal than 1500." << RTT::endlog();
+        return false;
+    }
+
+    if (_ssonar.getStepAngle().rad < 0) {
+        RTT::log(RTT::Error) << "The step angle value must be positive." << RTT::endlog();
+        return false;
+    }
+
 	return true;
 }
 
