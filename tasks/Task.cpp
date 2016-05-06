@@ -40,12 +40,6 @@ void Task::cleanupHook() {
 
 void Task::init(float degX, float degY, uint value, float range, bool isHeight) {
 
-	// set vizkit3d_world
-	vizkit3dWorld->setCameraParams(320, 240, 45, 0.1, 100.0);
-	vizkit3dWorld->getWidget()->setTransformer(false);
-	vizkit3dWorld->getWidget()->setAxes(false);
-	vizkit3dWorld->getWidget()->setAxesLabels(false);
-
 	// init shader
 	float radX = degX * (M_PI / 180.0) * 0.5;
 	float radY = degY * (M_PI / 180.0) * 0.5;

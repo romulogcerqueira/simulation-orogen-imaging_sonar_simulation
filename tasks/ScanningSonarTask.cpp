@@ -89,6 +89,8 @@ bool ScanningSonarTask::configureHook() {
     _ssonar.setStartAngle(base::Angle::fromRad(_start_angle.value()));
     _ssonar.setEndAngle(base::Angle::fromRad(_end_angle.value()));
     _ssonar.setStepAngle(base::Angle::fromRad(_step_angle.value()));
+    _ssonar.setBeamWidth(base::Angle::fromRad(_beam_width.value()));
+    _ssonar.setBeamHeight(base::Angle::fromRad(_beam_height.value()));
 
     if (_ssonar.getRange() < 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
@@ -105,11 +107,15 @@ bool ScanningSonarTask::configureHook() {
         return false;
     }
 
-    if (_ssonar.getStepAngle().rad < 0) {
+    if (_ssonar.getStepAngle().rad <= 0) {
         RTT::log(RTT::Error) << "The step angle value must be positive." << RTT::endlog();
         return false;
     }
 
+    if (_ssonar.getBeamHeight().rad <= 0 || _ssonar.getBeamWidth().rad <= 0) {
+        RTT::log(RTT::Error) << "The sonar opening angles must be positives." << RTT::endlog();
+        return false;
+    }
 	return true;
 }
 

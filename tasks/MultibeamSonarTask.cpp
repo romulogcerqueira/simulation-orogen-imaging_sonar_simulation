@@ -61,6 +61,8 @@ bool MultibeamSonarTask::configureHook() {
     _msonar.setGain(_gain.value());
     _msonar.setNumberOfBins(_number_of_bins.value());
     _msonar.setNumberOfBeams(_number_of_beams.value());
+    _msonar.setBeamWidth(base::Angle::fromRad(_beam_width.value()));
+    _msonar.setBeamHeight(base::Angle::fromRad(_beam_height.value()));
 
     if (_msonar.getRange() < 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
@@ -79,6 +81,11 @@ bool MultibeamSonarTask::configureHook() {
 
     if (_msonar.getNumberOfBeams() < 64 || _msonar.getNumberOfBeams() > 512) {
         RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
+        return false;
+    }
+
+    if (_msonar.getBeamHeight().rad <= 0 || _msonar.getBeamWidth().rad <= 0) {
+        RTT::log(RTT::Error) << "The sonar opening angles must be positives." << RTT::endlog();
         return false;
     }
 

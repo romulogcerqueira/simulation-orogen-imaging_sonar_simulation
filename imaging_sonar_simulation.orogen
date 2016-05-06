@@ -29,6 +29,12 @@ task_context "Task" do
     # Number of Bins
     property("number_of_bins", "int", 500).dynamic
 
+    # Opening of the beam orthogonal to the device's Z direction
+    property("beam_width", "double")
+
+    # Opening of the beam along the device's Z direction
+    property("beam_height", "double")
+
     # Output sonar data (Sonar)
     output_port("sonar_samples", "base::samples::Sonar");
 end
