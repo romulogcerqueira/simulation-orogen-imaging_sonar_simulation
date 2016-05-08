@@ -9,6 +9,7 @@ using_library "frame_helper"
 using_task_library "vizkit3d_world"
 
 import_types_from "base"
+import_types_from "imaging_sonar_simulationTypes.hpp"
 
 task_context "Task" do
     abstract
@@ -65,5 +66,8 @@ task_context "MultibeamSonarTask" do
     # Number of Beams
     property("number_of_beams", "int", 256)
     
+    # Multibeam sonar orientation
+    property("orientation", "imaging_sonar_simulation/orientation/Type", :Horizontal).dynamic
+
     periodic 0.1
 end
