@@ -115,7 +115,7 @@ namespace imaging_sonar_simulation{
          * before calling start() again.
          */
         void cleanupHook();
-        void init(float fovX, float fovY, uint value, float range, bool isHeight = true);
+        void init(const base::Angle& fovX, const base::Angle& fovY, uint value, float range, bool isHeight = true);
         void updateSonarPose(base::samples::RigidBodyState pose);
     };
 }

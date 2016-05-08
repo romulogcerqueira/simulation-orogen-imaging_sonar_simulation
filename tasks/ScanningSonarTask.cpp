@@ -43,23 +43,23 @@ bool ScanningSonarTask::setGain(double value) {
     return (imaging_sonar_simulation::ScanningSonarTaskBase::setGain(value));
 }
 
-bool ScanningSonarTask::setStart_angle(double value) {
-	_ssonar.setStartAngle(base::Angle::fromRad(value));
+bool ScanningSonarTask::setStart_angle(base::Angle value) {
+	_ssonar.setStartAngle(value);
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setStart_angle(value));
 }
 
-bool ScanningSonarTask::setEnd_angle(double value) {
-	_ssonar.setEndAngle(base::Angle::fromRad(value));
+bool ScanningSonarTask::setEnd_angle(base::Angle value) {
+	_ssonar.setEndAngle(value);
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setEnd_angle(value));
 }
 
-bool ScanningSonarTask::setStep_angle(double value) {
-    if (value < 0) {
+bool ScanningSonarTask::setStep_angle(base::Angle value) {
+    if (value.rad <= 0) {
         RTT::log(RTT::Error) << "The step angle value must be positive." << RTT::endlog();
         return false;
     }
 
-	_ssonar.setStepAngle(base::Angle::fromRad(value));
+	_ssonar.setStepAngle(value);
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setStep_angle(value));
 }
 
@@ -86,11 +86,11 @@ bool ScanningSonarTask::configureHook() {
     _ssonar.setGain(_gain.value());
     _ssonar.setNumberOfBins(_number_of_bins.value());
     _ssonar.setPingPongMode(_ping_pong_mode.value());
-    _ssonar.setStartAngle(base::Angle::fromRad(_start_angle.value()));
-    _ssonar.setEndAngle(base::Angle::fromRad(_end_angle.value()));
-    _ssonar.setStepAngle(base::Angle::fromRad(_step_angle.value()));
-    _ssonar.setBeamWidth(base::Angle::fromRad(_beam_width.value()));
-    _ssonar.setBeamHeight(base::Angle::fromRad(_beam_height.value()));
+    _ssonar.setStartAngle(_start_angle.value());
+    _ssonar.setEndAngle(_end_angle.value());
+    _ssonar.setStepAngle(_step_angle.value());
+    _ssonar.setBeamWidth(_beam_width.value());
+    _ssonar.setBeamHeight(_beam_height.value());
 
     if (_ssonar.getRange() < 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
@@ -123,14 +123,9 @@ bool ScanningSonarTask::startHook() {
 	if (!ScanningSonarTaskBase::startHook())
 		return false;
 
-	// set shader parameters
-	float fovX = _ssonar.getBeamWidth().getDeg();
-	float fovY = _ssonar.getBeamHeight().getDeg();
-	int height = 500;
-	float range = _ssonar.getRange();
-
 	// generate shader world
-	Task::init(fovX, fovY, height, range, true);
+	int height = 500;
+	Task::init(_ssonar.getBeamWidth(), _ssonar.getBeamHeight(), height, _ssonar.getRange(), true);
 	_rotZ = 0.0;
 
 	return true;

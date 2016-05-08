@@ -61,8 +61,8 @@ bool MultibeamSonarTask::configureHook() {
     _msonar.setGain(_gain.value());
     _msonar.setNumberOfBins(_number_of_bins.value());
     _msonar.setNumberOfBeams(_number_of_beams.value());
-    _msonar.setBeamWidth(base::Angle::fromRad(_beam_width.value()));
-    _msonar.setBeamHeight(base::Angle::fromRad(_beam_height.value()));
+    _msonar.setBeamWidth(_beam_width.value());
+    _msonar.setBeamHeight(_beam_height.value());
 
     if (_msonar.getRange() < 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
@@ -97,12 +97,8 @@ bool MultibeamSonarTask::startHook() {
 		return false;
 
 	// set shader image parameters
-	float fovX = _msonar.getBeamWidth().getDeg();
-	float fovY = _msonar.getBeamHeight().getDeg();
 	uint width = _msonar.getNumberOfBeams() * _msonar.getPixelsPerBeam();
-	float range = _msonar.getRange();
-
-	Task::init(fovX, fovY, width, range, false);
+	Task::init(_msonar.getBeamWidth(), _msonar.getBeamHeight(), width, _msonar.getRange(), false);
 
 	return true;
 }

@@ -30,10 +30,10 @@ task_context "Task" do
     property("number_of_bins", "int", 500).dynamic
 
     # Opening of the beam orthogonal to the device's Z direction
-    property("beam_width", "double")
+    property("beam_width", "base/Angle")
 
     # Opening of the beam along the device's Z direction
-    property("beam_height", "double")
+    property("beam_height", "base/Angle")
 
     # Output sonar data (Sonar)
     output_port("sonar_samples", "base::samples::Sonar");
@@ -47,13 +47,13 @@ task_context "ScanningSonarTask" do
     property("ping_pong_mode", "bool", false).dynamic
 
     # Left limit angle
-    property("start_angle", "double", -Math::PI).dynamic
+    property("start_angle", "base/Angle").dynamic
 
     # Right limit angle
-    property("end_angle", "double", Math::PI).dynamic
+    property("end_angle", "base/Angle").dynamic
 
     # Step angle size
-    property("step_angle", "double", 0.9 * Math::PI / 180).dynamic
+    property("step_angle", "base/Angle").dynamic
 
     periodic 0.1
 end
