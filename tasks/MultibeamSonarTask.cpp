@@ -164,9 +164,9 @@ base::samples::RigidBodyState MultibeamSonarTask::rotatePose(base::samples::Rigi
     new_pose.position = pose.position;
 
     if (_current_orientation == imaging_sonar_simulation::orientation::Horizontal)
-        new_pose.orientation = pose.orientation * Eigen::AngleAxisd(0, Eigen::Vector3d::UnitZ());
+        new_pose.orientation = pose.orientation * Eigen::AngleAxisd(0, Eigen::Vector3d::UnitX());
     else
-        new_pose.orientation = pose.orientation * Eigen::AngleAxisd(-90, Eigen::Vector3d::UnitZ());
+        new_pose.orientation = pose.orientation * Eigen::AngleAxisd(-90, Eigen::Vector3d::UnitX());
 
     return new_pose;
 }
