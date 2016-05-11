@@ -38,14 +38,14 @@ bool MultibeamSonarTask::setGain(double value) {
     return (imaging_sonar_simulation::MultibeamSonarTaskBase::setGain(value));
 }
 
-bool MultibeamSonarTask::setNumber_of_bins(int value) {
+bool MultibeamSonarTask::setBin_count(int value) {
     if (value < 0) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
         return false;
     }
 
-	_msonar.setNumberOfBins(value);
-	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_bins(value));
+	_msonar.setBinCount(value);
+	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setBin_count(value));
 }
 
 bool MultibeamSonarTask::setOrientation(::imaging_sonar_simulation::orientation::Type const & value) {
@@ -75,8 +75,8 @@ bool MultibeamSonarTask::configureHook() {
     _msonar.setRange(_range.value());
     _normal_depth_map.setMaxRange(_range.value());
     _msonar.setGain(_gain.value());
-    _msonar.setNumberOfBins(_number_of_bins.value());
-    _msonar.setNumberOfBeams(_number_of_beams.value());
+    _msonar.setBinCount(_bin_count.value());
+    _msonar.setBeamCount(_beam_count.value());
     _msonar.setBeamWidth(_beam_width.value());
     _msonar.setBeamHeight(_beam_height.value());
     _current_orientation = _orientation.value();
@@ -91,12 +91,12 @@ bool MultibeamSonarTask::configureHook() {
         return false;
     }
 
-    if (_msonar.getNumberOfBins() < 0) {
+    if (_msonar.getBinCount() < 0 || _msonar.getBinCount() > 1500) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
         return false;
     }
 
-    if (_msonar.getNumberOfBeams() < 64 || _msonar.getNumberOfBeams() > 512) {
+    if (_msonar.getBeamCount() < 64 || _msonar.getBeamCount() > 512) {
         RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
         return false;
     }

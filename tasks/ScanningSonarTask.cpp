@@ -63,14 +63,14 @@ bool ScanningSonarTask::setStep_angle(base::Angle value) {
 	return (imaging_sonar_simulation::ScanningSonarTaskBase::setStep_angle(value));
 }
 
-bool ScanningSonarTask::setNumber_of_bins(int value) {
+bool ScanningSonarTask::setBin_count(int value) {
     if (value < 0 || value > 1500) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less or equal than 1500." << RTT::endlog();
         return false;
     }
 
-	_ssonar.setNumberOfBins(value);
-	return (imaging_sonar_simulation::ScanningSonarTaskBase::setNumber_of_bins(value));
+	_ssonar.setBinCount(value);
+	return (imaging_sonar_simulation::ScanningSonarTaskBase::setBin_count(value));
 }
 
 /// The following lines are template definitions for the various state machine
@@ -84,7 +84,7 @@ bool ScanningSonarTask::configureHook() {
     _ssonar.setRange(_range.value());
     _normal_depth_map.setMaxRange(_range.value());
     _ssonar.setGain(_gain.value());
-    _ssonar.setNumberOfBins(_number_of_bins.value());
+    _ssonar.setBinCount(_bin_count.value());
     _ssonar.setPingPongMode(_ping_pong_mode.value());
     _ssonar.setStartAngle(_start_angle.value());
     _ssonar.setEndAngle(_end_angle.value());
@@ -102,7 +102,7 @@ bool ScanningSonarTask::configureHook() {
         return false;
     }
 
-    if (_ssonar.getNumberOfBins() < 0 || _ssonar.getNumberOfBins() > 1500) {
+    if (_ssonar.getBinCount() < 0 || _ssonar.getBinCount() > 1500) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less or equal than 1500." << RTT::endlog();
         return false;
     }

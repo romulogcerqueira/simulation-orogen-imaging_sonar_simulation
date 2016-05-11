@@ -38,7 +38,7 @@ protected:
 	virtual bool setStart_angle(base::Angle angle);
 	virtual bool setEnd_angle(base::Angle angle);
 	virtual bool setStep_angle(base::Angle angle);
-	virtual bool setNumber_of_bins(int value);
+	virtual bool setBin_count(int value);
 
 public:
 	/** TaskContext constructor for ScanningSonarTask

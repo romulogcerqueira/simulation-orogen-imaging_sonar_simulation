@@ -28,7 +28,7 @@ task_context "Task" do
     property("gain", "double", 0.5).dynamic
 
     # Number of Bins
-    property("number_of_bins", "int", 500).dynamic
+    property("bin_count", "int", 500).dynamic
 
     # Opening of the beam orthogonal to the device's Z direction
     property("beam_width", "base/Angle")
@@ -64,7 +64,7 @@ task_context "MultibeamSonarTask" do
     subclasses "imaging_sonar_simulation::Task"
 
     # Number of Beams
-    property("number_of_beams", "int", 256)
+    property("beam_count", "int", 256)
     
     # Multibeam sonar orientation
     property("orientation", "imaging_sonar_simulation/orientation/Type", :Horizontal).dynamic
