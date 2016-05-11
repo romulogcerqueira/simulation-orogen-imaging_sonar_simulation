@@ -114,7 +114,7 @@ bool MultibeamSonarTask::startHook() {
 		return false;
 
 	// set shader image parameters
-	uint width = _msonar.getNumberOfBeams() * _msonar.getPixelsPerBeam();
+	uint width = 1536;
 	Task::init(_msonar.getBeamWidth(), _msonar.getBeamHeight(), width, _msonar.getRange(), false);
 
 	return true;
