@@ -41,8 +41,8 @@ void Task::cleanupHook() {
 void Task::init(const base::Angle& fovX, const base::Angle& fovY, uint value, float range, bool isHeight) {
 
 	// init shader
-	_normal_depth_map = vizkit3d_normal_depth_map::NormalDepthMap(range, fovX.rad * 0.5, fovY.rad * 0.5);
-	_capture = vizkit3d_normal_depth_map::ImageViewerCaptureTool(fovY.getDeg(), fovX.getDeg(), value, isHeight);
+	_normal_depth_map = vizkit3d_normal_depth_map::NormalDepthMap(range, fovX.getRad() * 0.5, fovY.getRad() * 0.5);
+	_capture = vizkit3d_normal_depth_map::ImageViewerCaptureTool(fovY.getRad(), fovX.getRad(), value, isHeight);
 	_capture.setBackgroundColor(osg::Vec4d(0.0, 0.0, 0.0, 1.0));
 	_root = vizkit3dWorld->getWidget()->getRootNode();
 	_normal_depth_map.addNodeChild(_root);
