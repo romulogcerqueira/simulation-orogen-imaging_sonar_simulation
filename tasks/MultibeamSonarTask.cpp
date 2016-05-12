@@ -38,15 +38,31 @@ bool MultibeamSonarTask::setGain(double value) {
     return (imaging_sonar_simulation::MultibeamSonarTaskBase::setGain(value));
 }
 
-bool MultibeamSonarTask::setNumber_of_bins(int value) {
+bool MultibeamSonarTask::setBin_count(int value) {
     if (value < 0) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
         return false;
     }
 
-	_msonar.setNumberOfBins(value);
-	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setNumber_of_bins(value));
+	_msonar.setBinCount(value);
+	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setBin_count(value));
 }
+
+bool MultibeamSonarTask::setOrientation(::imaging_sonar_simulation::orientation::Type const & value) {
+    switch (value) {
+        case imaging_sonar_simulation::orientation::Horizontal:
+            _current_orientation = imaging_sonar_simulation::orientation::Horizontal;
+            break;
+        case imaging_sonar_simulation::orientation::Vertical:
+            _current_orientation = imaging_sonar_simulation::orientation::Vertical;
+            break;
+        default:
+            throw std::invalid_argument("Orientation parameter does not match a known enum value");
+    }
+
+    return (imaging_sonar_simulation::MultibeamSonarTaskBase::setOrientation(value));
+}
+
 
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See MultibeamSonarTask.hpp for more detailed
@@ -59,8 +75,11 @@ bool MultibeamSonarTask::configureHook() {
     _msonar.setRange(_range.value());
     _normal_depth_map.setMaxRange(_range.value());
     _msonar.setGain(_gain.value());
-    _msonar.setNumberOfBins(_number_of_bins.value());
-    _msonar.setNumberOfBeams(_number_of_beams.value());
+    _msonar.setBinCount(_bin_count.value());
+    _msonar.setBeamCount(_beam_count.value());
+    _msonar.setBeamWidth(_beam_width.value());
+    _msonar.setBeamHeight(_beam_height.value());
+    _current_orientation = _orientation.value();
 
     if (_msonar.getRange() < 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
@@ -72,13 +91,18 @@ bool MultibeamSonarTask::configureHook() {
         return false;
     }
 
-    if (_msonar.getNumberOfBins() < 0) {
+    if (_msonar.getBinCount() < 0 || _msonar.getBinCount() > 1500) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
         return false;
     }
 
-    if (_msonar.getNumberOfBeams() < 64 || _msonar.getNumberOfBeams() > 512) {
+    if (_msonar.getBeamCount() < 64 || _msonar.getBeamCount() > 512) {
         RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
+        return false;
+    }
+
+    if (_msonar.getBeamHeight().rad <= 0 || _msonar.getBeamWidth().rad <= 0) {
+        RTT::log(RTT::Error) << "The sonar opening angles must be positives." << RTT::endlog();
         return false;
     }
 
@@ -90,12 +114,8 @@ bool MultibeamSonarTask::startHook() {
 		return false;
 
 	// set shader image parameters
-	float fovX = _msonar.getBeamWidth().getDeg();
-	float fovY = _msonar.getBeamHeight().getDeg();
-	uint width = _msonar.getNumberOfBeams() * _msonar.getPixelsPerBeam();
-	float range = _msonar.getRange();
-
-	Task::init(fovX, fovY, width, range, false);
+	uint width = 1536;
+	Task::init(_msonar.getBeamWidth(), _msonar.getBeamHeight(), width, _msonar.getRange(), false);
 
 	return true;
 }
@@ -105,8 +125,10 @@ void MultibeamSonarTask::updateHook() {
 
 	base::samples::RigidBodyState linkPose;
 
-	if (_sonar_pose_cmd.read(linkPose) == RTT::NewData)
-		updateMultibeamSonarPose(linkPose);
+	if (_sonar_pose_cmd.read(linkPose) == RTT::NewData) {
+	    base::samples::RigidBodyState multibeamSonarPose = rotatePose(linkPose);
+		updateMultibeamSonarPose(multibeamSonarPose);
+	}
 }
 
 void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState pose) {
@@ -135,6 +157,18 @@ void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState 
 	cv_image.convertTo(cv_shader, CV_8UC3, 255);
 	frame_helper::FrameHelper::copyMatToFrame(cv_shader, *frame.get());
 	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
+}
+
+base::samples::RigidBodyState MultibeamSonarTask::rotatePose(base::samples::RigidBodyState pose) {
+    base::samples::RigidBodyState new_pose;
+    new_pose.position = pose.position;
+
+    if (_current_orientation == imaging_sonar_simulation::orientation::Horizontal)
+        new_pose.orientation = pose.orientation * Eigen::AngleAxisd(0, Eigen::Vector3d::UnitX());
+    else
+        new_pose.orientation = pose.orientation * Eigen::AngleAxisd(-90, Eigen::Vector3d::UnitX());
+
+    return new_pose;
 }
 
 void MultibeamSonarTask::errorHook() {

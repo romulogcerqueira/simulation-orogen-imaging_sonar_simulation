@@ -9,6 +9,7 @@ using_library "frame_helper"
 using_task_library "vizkit3d_world"
 
 import_types_from "base"
+import_types_from "imaging_sonar_simulationTypes.hpp"
 
 task_context "Task" do
     abstract
@@ -27,7 +28,13 @@ task_context "Task" do
     property("gain", "double", 0.5).dynamic
 
     # Number of Bins
-    property("number_of_bins", "int", 500).dynamic
+    property("bin_count", "int", 500).dynamic
+
+    # Opening of the beam orthogonal to the device's Z direction
+    property("beam_width", "base/Angle")
+
+    # Opening of the beam along the device's Z direction
+    property("beam_height", "base/Angle")
 
     # Output sonar data (Sonar)
     output_port("sonar_samples", "base::samples::Sonar");
@@ -41,13 +48,13 @@ task_context "ScanningSonarTask" do
     property("ping_pong_mode", "bool", false).dynamic
 
     # Left limit angle
-    property("start_angle", "double", -Math::PI).dynamic
+    property("start_angle", "base/Angle").dynamic
 
     # Right limit angle
-    property("end_angle", "double", Math::PI).dynamic
+    property("end_angle", "base/Angle").dynamic
 
     # Step angle size
-    property("step_angle", "double", 0.9 * Math::PI / 180).dynamic
+    property("step_angle", "base/Angle").dynamic
 
     periodic 0.1
 end
@@ -57,7 +64,10 @@ task_context "MultibeamSonarTask" do
     subclasses "imaging_sonar_simulation::Task"
 
     # Number of Beams
-    property("number_of_beams", "int", 256)
+    property("beam_count", "int", 256)
     
+    # Multibeam sonar orientation
+    property("orientation", "imaging_sonar_simulation/orientation/Type", :Horizontal).dynamic
+
     periodic 0.1
 end

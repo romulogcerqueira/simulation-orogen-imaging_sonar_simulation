@@ -38,19 +38,11 @@ void Task::cleanupHook() {
 	TaskBase::cleanupHook();
 }
 
-void Task::init(float degX, float degY, uint value, float range, bool isHeight) {
-
-	// set vizkit3d_world
-	vizkit3dWorld->setCameraParams(320, 240, 45, 0.1, 100.0);
-	vizkit3dWorld->getWidget()->setTransformer(false);
-	vizkit3dWorld->getWidget()->setAxes(false);
-	vizkit3dWorld->getWidget()->setAxesLabels(false);
+void Task::init(const base::Angle& fovX, const base::Angle& fovY, uint value, float range, bool isHeight) {
 
 	// init shader
-	float radX = degX * (M_PI / 180.0) * 0.5;
-	float radY = degY * (M_PI / 180.0) * 0.5;
-	_normal_depth_map = vizkit3d_normal_depth_map::NormalDepthMap(range, radX, radY);
-	_capture = vizkit3d_normal_depth_map::ImageViewerCaptureTool(degY, degX, value, isHeight);
+	_normal_depth_map = vizkit3d_normal_depth_map::NormalDepthMap(range, fovX.getRad() * 0.5, fovY.getRad() * 0.5);
+	_capture = vizkit3d_normal_depth_map::ImageViewerCaptureTool(fovY.getRad(), fovX.getRad(), value, isHeight);
 	_capture.setBackgroundColor(osg::Vec4d(0.0, 0.0, 0.0, 1.0));
 	_root = vizkit3dWorld->getWidget()->getRootNode();
 	_normal_depth_map.addNodeChild(_root);

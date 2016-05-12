@@ -28,13 +28,15 @@ namespace imaging_sonar_simulation{
 	friend class MultibeamSonarTaskBase;
 
     private:
-		gpu_sonar_simulation::MultibeamSonar _msonar;
+        gpu_sonar_simulation::MultibeamSonar _msonar;
+        imaging_sonar_simulation::orientation::Type _current_orientation;
 
     protected:
 
         virtual bool setRange(double value);
         virtual bool setGain(double value);
-        virtual bool setNumber_of_bins(int value);
+        virtual bool setBin_count(int value);
+        virtual bool setOrientation(::imaging_sonar_simulation::orientation::Type const & value);
 
     public:
         /** TaskContext constructor for MultibeamSonarTask
@@ -113,6 +115,7 @@ namespace imaging_sonar_simulation{
         void cleanupHook();
 
         void updateMultibeamSonarPose(base::samples::RigidBodyState pose);
+        base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
     };
 }
 
