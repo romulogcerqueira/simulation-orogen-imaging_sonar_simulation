@@ -1,0 +1,28 @@
+--- name:default
+# Opening of the beam along the device's Z direction
+beam_height:
+  rad: 0.610865
+# Opening of the beam orthogonal to the device's Z direction
+beam_width:
+  rad: 0.0523599
+# Right limit angle
+end_angle:
+  rad: 3.141592653589793
+# Gain of the sonar (0.0 - 1.0)
+gain: 0.7
+# Paths to resolve the model:// URIs in the world file.
+model_paths: []
+# Number of Bins
+bin_count: 500
+# Enable/disable ping pong scanning mode
+ping_pong_mode: false
+# Range of the sonar in meters (1.0 - 150.0)
+range: 40.0
+# Left limit angle
+start_angle:
+  rad: -3.141592653589793
+# Step angle size
+step_angle:
+  rad: 0.0314159
+# path to the world_file_path.
+world_file_path: ''
