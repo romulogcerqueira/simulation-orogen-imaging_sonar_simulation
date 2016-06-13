@@ -1,0 +1,33 @@
+--- name:default
+# Number of Beams
+beam_count: 256
+# Number of Bins
+bin_count: 500
+# Gain of the sonar
+gain: 0.7
+# Paths to resolve the model:// URIs in the world file.
+model_paths: []
+# Range of the sonar
+range: 50.0
+# path to the world_file_path.
+world_file_path: ''
+
+--- name:gemini
+# Opening of the beam along the device's Z direction
+beam_height:
+  rad: 0.349066
+# Opening of the beam orthogonal to the device's Z direction
+beam_width:
+  rad: 2.0944
+# Multibeam sonar orientation
+orientation: :Horizontal
+
+--- name:blueview
+# Opening of the beam along the device's Z direction
+beam_height:
+  rad: 0.0174533
+# Opening of the beam orthogonal to the device's Z direction
+beam_width:
+  rad: 0.785398
+# Multibeam sonar orientation
+orientation: :Horizontal
