@@ -8,17 +8,21 @@ using namespace base::samples::frame;
 
 MultibeamSonarTask::MultibeamSonarTask(std::string const& name) :
 		MultibeamSonarTaskBase(name) {
+	_beam_width.set(base::Angle::fromDeg(120.0));
+	_beam_height.set(base::Angle::fromDeg(20.0));
 }
 
 MultibeamSonarTask::MultibeamSonarTask(std::string const& name, RTT::ExecutionEngine* engine) :
 		MultibeamSonarTaskBase(name, engine) {
+	_beam_width.set(base::Angle::fromDeg(120.0));
+	_beam_height.set(base::Angle::fromDeg(20.0));
 }
 
 MultibeamSonarTask::~MultibeamSonarTask() {
 }
 
 bool MultibeamSonarTask::setRange(double value) {
-    if (value < 0) {
+    if (value <= 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
         return false;
     }
@@ -39,7 +43,7 @@ bool MultibeamSonarTask::setGain(double value) {
 }
 
 bool MultibeamSonarTask::setBin_count(int value) {
-    if (value < 0) {
+    if (value <= 0) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
         return false;
     }
@@ -81,7 +85,7 @@ bool MultibeamSonarTask::configureHook() {
     _msonar.setBeamHeight(_beam_height.value());
     _current_orientation = _orientation.value();
 
-    if (_msonar.getRange() < 0) {
+    if (_msonar.getRange() <= 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
         return false;
     }
@@ -91,7 +95,7 @@ bool MultibeamSonarTask::configureHook() {
         return false;
     }
 
-    if (_msonar.getBinCount() < 0 || _msonar.getBinCount() > 1500) {
+    if (_msonar.getBinCount() <= 0 || _msonar.getBinCount() > 1500) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
         return false;
     }
@@ -101,7 +105,7 @@ bool MultibeamSonarTask::configureHook() {
         return false;
     }
 
-    if (_msonar.getBeamHeight().rad <= 0 || _msonar.getBeamWidth().rad <= 0) {
+    if (_msonar.getBeamHeight().getRad() <= 0 || _msonar.getBeamWidth().getRad() <= 0) {
         RTT::log(RTT::Error) << "The sonar opening angles must be positives." << RTT::endlog();
         return false;
     }

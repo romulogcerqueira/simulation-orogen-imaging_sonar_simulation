@@ -8,10 +8,20 @@ using namespace base::samples::frame;
 
 ScanningSonarTask::ScanningSonarTask(std::string const& name) :
 		ScanningSonarTaskBase(name) {
+	_start_angle.set(base::Angle::fromRad(-M_PI));
+	_end_angle.set(base::Angle::fromRad(M_PI));
+	_step_angle.set(base::Angle::fromDeg(1.8));
+	_beam_width.set(base::Angle::fromDeg(3.0));
+	_beam_height.set(base::Angle::fromDeg(35.0));
 }
 
 ScanningSonarTask::ScanningSonarTask(std::string const& name, RTT::ExecutionEngine* engine) :
 		ScanningSonarTaskBase(name, engine) {
+	_start_angle.set(base::Angle::fromRad(-M_PI));
+	_end_angle.set(base::Angle::fromRad(M_PI));
+	_step_angle.set(base::Angle::fromDeg(1.8));
+	_beam_width.set(base::Angle::fromDeg(3.0));
+	_beam_height.set(base::Angle::fromDeg(35.0));
 }
 
 ScanningSonarTask::~ScanningSonarTask() {
@@ -23,7 +33,7 @@ bool ScanningSonarTask::setPing_pong_mode(bool value) {
 }
 
 bool ScanningSonarTask::setRange(double value) {
-    if (value < 0) {
+    if (value <= 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
         return false;
     }
@@ -54,8 +64,8 @@ bool ScanningSonarTask::setEnd_angle(base::Angle value) {
 }
 
 bool ScanningSonarTask::setStep_angle(base::Angle value) {
-    if (value.rad <= 0) {
-        RTT::log(RTT::Error) << "The step angle value must be positive." << RTT::endlog();
+    if (value.getRad() <= 0 || value.getRad() > (3.6 * M_PI / 180.0)) {
+        RTT::log(RTT::Error) << "The step angle value must be positive and less or equal than 3.6 degrees." << RTT::endlog();
         return false;
     }
 
@@ -64,7 +74,7 @@ bool ScanningSonarTask::setStep_angle(base::Angle value) {
 }
 
 bool ScanningSonarTask::setBin_count(int value) {
-    if (value < 0 || value > 1500) {
+    if (value <= 0 || value > 1500) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less or equal than 1500." << RTT::endlog();
         return false;
     }
@@ -92,7 +102,7 @@ bool ScanningSonarTask::configureHook() {
     _ssonar.setBeamWidth(_beam_width.value());
     _ssonar.setBeamHeight(_beam_height.value());
 
-    if (_ssonar.getRange() < 0) {
+    if (_ssonar.getRange() <= 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
         return false;
     }
@@ -102,17 +112,17 @@ bool ScanningSonarTask::configureHook() {
         return false;
     }
 
-    if (_ssonar.getBinCount() < 0 || _ssonar.getBinCount() > 1500) {
+    if (_ssonar.getBinCount() <= 0 || _ssonar.getBinCount() > 1500) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less or equal than 1500." << RTT::endlog();
         return false;
     }
 
-    if (_ssonar.getStepAngle().rad <= 0) {
-        RTT::log(RTT::Error) << "The step angle value must be positive." << RTT::endlog();
+    if (_ssonar.getStepAngle().getRad() <= 0 || _ssonar.getStepAngle().getRad() > (3.6 * M_PI / 180.0)) {
+        RTT::log(RTT::Error) << "The step angle value must be positive and less or equal than 3.6 degrees." << RTT::endlog();
         return false;
     }
 
-    if (_ssonar.getBeamHeight().rad <= 0 || _ssonar.getBeamWidth().rad <= 0) {
+    if (_ssonar.getBeamHeight().getRad() <= 0 || _ssonar.getBeamWidth().getRad() <= 0) {
         RTT::log(RTT::Error) << "The sonar opening angles must be positives." << RTT::endlog();
         return false;
     }
@@ -159,7 +169,7 @@ void ScanningSonarTask::updateScanningSonarPose(base::samples::RigidBodyState po
 	_shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
 
     // rotate sonar
-    _rotZ = _ssonar.getBearing().rad;
+    _rotZ = _ssonar.getBearing().getRad();
     _ssonar.moveHeadPosition();
 }
 
