@@ -10,18 +10,18 @@ ScanningSonarTask::ScanningSonarTask(std::string const& name) :
 		ScanningSonarTaskBase(name) {
 	_start_angle.set(base::Angle::fromRad(-M_PI));
 	_end_angle.set(base::Angle::fromRad(M_PI));
-	_step_angle.set(base::Angle::fromRad(1.8 * M_PI / 180.0));
-	_beam_width.set(base::Angle::fromRad(3.0 * M_PI / 180.0));
-	_beam_height.set(base::Angle::fromRad(35.0 * M_PI / 180.0));
+	_step_angle.set(base::Angle::fromDeg(1.8));
+	_beam_width.set(base::Angle::fromDeg(3.0));
+	_beam_height.set(base::Angle::fromDeg(35.0));
 }
 
 ScanningSonarTask::ScanningSonarTask(std::string const& name, RTT::ExecutionEngine* engine) :
 		ScanningSonarTaskBase(name, engine) {
 	_start_angle.set(base::Angle::fromRad(-M_PI));
 	_end_angle.set(base::Angle::fromRad(M_PI));
-	_step_angle.set(base::Angle::fromRad(1.8 * M_PI / 180.0));
-	_beam_width.set(base::Angle::fromRad(3.0 * M_PI / 180.0));
-	_beam_height.set(base::Angle::fromRad(35.0 * M_PI / 180.0));
+	_step_angle.set(base::Angle::fromDeg(1.8));
+	_beam_width.set(base::Angle::fromDeg(3.0));
+	_beam_height.set(base::Angle::fromDeg(35.0));
 }
 
 ScanningSonarTask::~ScanningSonarTask() {

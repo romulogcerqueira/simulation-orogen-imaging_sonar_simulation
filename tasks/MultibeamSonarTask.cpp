@@ -8,14 +8,14 @@ using namespace base::samples::frame;
 
 MultibeamSonarTask::MultibeamSonarTask(std::string const& name) :
 		MultibeamSonarTaskBase(name) {
-	_beam_width.set(base::Angle::fromRad(120.0 * M_PI / 180.0));
-	_beam_height.set(base::Angle::fromRad(20.0 * M_PI / 180.0));
+	_beam_width.set(base::Angle::fromDeg(120.0));
+	_beam_height.set(base::Angle::fromDeg(20.0));
 }
 
 MultibeamSonarTask::MultibeamSonarTask(std::string const& name, RTT::ExecutionEngine* engine) :
 		MultibeamSonarTaskBase(name, engine) {
-	_beam_width.set(base::Angle::fromRad(120.0 * M_PI / 180.0));
-	_beam_height.set(base::Angle::fromRad(20.0 * M_PI / 180.0));
+	_beam_width.set(base::Angle::fromDeg(120.0));
+	_beam_height.set(base::Angle::fromDeg(20.0));
 }
 
 MultibeamSonarTask::~MultibeamSonarTask() {
