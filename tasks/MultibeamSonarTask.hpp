@@ -5,8 +5,6 @@
 
 #include "imaging_sonar_simulation/MultibeamSonarTaskBase.hpp"
 
-#include <gpu_sonar_simulation/MultibeamSonar.hpp>
-
 namespace imaging_sonar_simulation{
 
     /*! \class MultibeamSonarTask
@@ -26,15 +24,7 @@ namespace imaging_sonar_simulation{
     class MultibeamSonarTask : public MultibeamSonarTaskBase
     {
 	friend class MultibeamSonarTaskBase;
-
-    private:
-        gpu_sonar_simulation::MultibeamSonar _msonar;
-
     protected:
-
-        virtual bool setRange(double value);
-        virtual bool setGain(double value);
-        virtual bool setBin_count(int value);
 
     public:
         /** TaskContext constructor for MultibeamSonarTask
@@ -45,7 +35,7 @@ namespace imaging_sonar_simulation{
 
         /** TaskContext constructor for MultibeamSonarTask
          * \param name Name of the task. This name needs to be unique to make it identifiable for nameservices.
-         * \param engine The RTT Execution engine to be used for this task, which serialises the execution of all commands, programs, state machines and incoming events for a task. 
+         * \param engine The RTT Execution engine to be used for this task, which serialises the execution of all commands, programs, state machines and incoming events for a task.
          *
          */
         MultibeamSonarTask(std::string const& name, RTT::ExecutionEngine* engine);
@@ -111,11 +101,7 @@ namespace imaging_sonar_simulation{
          * before calling start() again.
          */
         void cleanupHook();
-
-        void updateMultibeamSonarPose(base::samples::RigidBodyState pose);
-        base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
     };
 }
 
 #endif
-

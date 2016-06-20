@@ -5,15 +5,13 @@
 
 #include "imaging_sonar_simulation/TaskBase.hpp"
 
+// Rock includes
 #include <base/samples/RigidBodyState.hpp>
-#include <base/samples/Sonar.hpp>
-
-#include <gpu_sonar_simulation/Utils.hpp>
-
+#include <gpu_sonar_simulation/Sonar.hpp>
 #include <vizkit3d_normal_depth_map/NormalDepthMap.hpp>
 #include <vizkit3d_normal_depth_map/ImageViewerCaptureTool.hpp>
 
-#include <frame_helper/FrameHelper.h>
+// using namespace gpu_sonar_simulation;
 
 namespace imaging_sonar_simulation{
 
@@ -36,9 +34,62 @@ namespace imaging_sonar_simulation{
 	friend class TaskBase;
     protected:
 
-		osg::ref_ptr<osg::Group> _root;
-		vizkit3d_normal_depth_map::NormalDepthMap _normal_depth_map;
-		vizkit3d_normal_depth_map::ImageViewerCaptureTool _capture;
+        /** Sonar simulator */
+        gpu_sonar_simulation::Sonar sonar_sim;
+
+        /** Range value used by sonar simulator (in meters) */
+        double range;
+
+        /** Additional gain value used by sonar simulator (0.0 - 1.0) */
+        double gain;
+
+        /** Normal and depth map from an osg scene. */
+        vizkit3d_normal_depth_map::NormalDepthMap normal_depth_map;
+
+        /** Capture the osg::Image from a node scene */
+        vizkit3d_normal_depth_map::ImageViewerCaptureTool capture;
+
+        /**
+         *  Initialize shader.
+         *  @param value: size of width/height of shader image in pixels
+         *  @param isHeight: if true, the value is related with image height
+         *                   otherwise, the vale is related with image width
+         */
+        void initShader(uint value, bool isHeight = true);
+
+        /**
+         *  Update sonar pose according to auv pose.
+         *  @param pose: pose of the auv
+         */
+        void updateSonarPose(base::samples::RigidBodyState pose);
+
+        /**
+         *  Process shader image in bins intensity.
+         *  @param osg_image: the shader image (normal, depth and angle informations) in osg::Image format
+         *  @param bins: the output simulated sonar data (all beams) in float
+         */
+        void processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>& bins);
+
+        /** Dynamically update sonar range
+         *
+         * @param value: desired range
+         * @return if the process is finished successfully
+         */
+        virtual bool setRange(double value);
+
+        /** Dynamically update sonar gain
+         *
+         * @param value: desired gain
+         * @return if the process is finished successfully
+         */
+        virtual bool setGain(double value);
+
+        /** Dynamically update the number of bins
+         *
+         * @param value: desired number of bins
+         * @return if the process is finished successfully
+         */
+        virtual bool setBin_count(int value);
 
     public:
         /** TaskContext constructor for Task
@@ -115,10 +166,7 @@ namespace imaging_sonar_simulation{
          * before calling start() again.
          */
         void cleanupHook();
-        void init(const base::Angle& fovX, const base::Angle& fovY, uint value, float range, bool isHeight = true);
-        void updateSonarPose(base::samples::RigidBodyState pose);
     };
 }
 
 #endif
-

@@ -5,8 +5,6 @@
 
 #include "imaging_sonar_simulation/ScanningSonarTaskBase.hpp"
 
-#include <gpu_sonar_simulation/ScanSonar.hpp>
-
 namespace imaging_sonar_simulation {
 
 /*! \class ScanningSonarTask
@@ -25,20 +23,65 @@ namespace imaging_sonar_simulation {
  */
 class ScanningSonarTask: public ScanningSonarTaskBase {
 	friend class ScanningSonarTaskBase;
-private:
-	gpu_sonar_simulation::ScanSonar _ssonar;
-	double _rotZ;
-	base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
 
 protected:
 
-	virtual bool setPing_pong_mode(bool value);
-	virtual bool setRange(double value);
-	virtual bool setGain(double value);
-	virtual bool setStart_angle(base::Angle angle);
-	virtual bool setEnd_angle(base::Angle angle);
-	virtual bool setStep_angle(base::Angle angle);
-	virtual bool setBin_count(int value);
+	/** The left limit angle of sonar reading */
+	base::Angle left_limit;
+
+	/** The right limit angle of sonar reading */
+	base::Angle right_limit;
+
+	/** Motor step angle */
+	base::Angle motor_step;
+
+	/** Current sonar orientation */
+	base::Angle current_bearing;
+
+	/** Sonar reading mode (continuous / sector) */
+	bool continuous;
+
+	/** Rotate direction of sonar head (normal / inverted)  */
+	bool invert;
+
+	/** Update the sonar position and orientation
+	 * @param pose: the auv pose
+	 * @return the updated pose of the sonar
+	 */
+	base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
+
+	/** Update the sonar head position
+	 */
+	void moveHeadPosition();
+
+	/** Dynamically update the left limit angle
+	 *
+	 * @param value: desired left limit angle
+	 * @return if the process is finished successfully
+	 */
+	 virtual bool setLeft_limit(::base::Angle const & value);
+
+	 /** Dynamically update the right limit angle
+	 *
+	 * @param value: desired right limit angle
+	 * @return if the process is finished successfully
+	 */
+	 virtual bool setRight_limit(::base::Angle const & value);
+
+	/** Dynamically update the motor step angle
+	 *
+	 * @param value: desired motor step angle
+	 * @return if the process is finished successfully
+	 */
+	 virtual bool setMotor_step(::base::Angle const & value);
+
+	/** Dynamically update the reading mode
+	 *
+	 * @param value: if true, the sonar head will rotate continually
+					 otherwise, it will rotate from left limit to right limit
+	 * @return if the process is finished successfully
+	 */
+	virtual bool setContinuous(bool value);
 
 public:
 	/** TaskContext constructor for ScanningSonarTask
@@ -115,10 +158,7 @@ public:
 	 * before calling start() again.
 	 */
 	void cleanupHook();
-
-	void updateScanningSonarPose(base::samples::RigidBodyState pose);
 };
 }
 
 #endif
-
