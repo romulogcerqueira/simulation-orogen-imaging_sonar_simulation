@@ -9,7 +9,6 @@ using_library "frame_helper"
 using_task_library "vizkit3d_world"
 
 import_types_from "base"
-import_types_from "imaging_sonar_simulationTypes.hpp"
 
 task_context "Task" do
     abstract
@@ -23,7 +22,7 @@ task_context "Task" do
 
     # Range of the sonar in meters (1.0 - 150.0)
     property("range", "double", 50.0).dynamic
-    
+
     # Gain of the sonar (0.0 - 1.0)
     property("gain", "double", 0.5).dynamic
 
@@ -65,9 +64,6 @@ task_context "MultibeamSonarTask" do
 
     # Number of Beams
     property("beam_count", "int", 256)
-    
-    # Multibeam sonar orientation
-    property("orientation", "imaging_sonar_simulation/orientation/Type", :Horizontal).dynamic
 
     periodic 0.1
 end

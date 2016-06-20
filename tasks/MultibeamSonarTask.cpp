@@ -52,22 +52,6 @@ bool MultibeamSonarTask::setBin_count(int value) {
 	return (imaging_sonar_simulation::MultibeamSonarTaskBase::setBin_count(value));
 }
 
-bool MultibeamSonarTask::setOrientation(::imaging_sonar_simulation::orientation::Type const & value) {
-    switch (value) {
-        case imaging_sonar_simulation::orientation::Horizontal:
-            _current_orientation = imaging_sonar_simulation::orientation::Horizontal;
-            break;
-        case imaging_sonar_simulation::orientation::Vertical:
-            _current_orientation = imaging_sonar_simulation::orientation::Vertical;
-            break;
-        default:
-            throw std::invalid_argument("Orientation parameter does not match a known enum value");
-    }
-
-    return (imaging_sonar_simulation::MultibeamSonarTaskBase::setOrientation(value));
-}
-
-
 /// The following lines are template definitions for the various state machine
 // hooks defined by Orocos::RTT. See MultibeamSonarTask.hpp for more detailed
 // documentation about them.
@@ -83,7 +67,6 @@ bool MultibeamSonarTask::configureHook() {
     _msonar.setBeamCount(_beam_count.value());
     _msonar.setBeamWidth(_beam_width.value());
     _msonar.setBeamHeight(_beam_height.value());
-    _current_orientation = _orientation.value();
 
     if (_msonar.getRange() <= 0) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
@@ -166,11 +149,6 @@ void MultibeamSonarTask::updateMultibeamSonarPose(base::samples::RigidBodyState 
 base::samples::RigidBodyState MultibeamSonarTask::rotatePose(base::samples::RigidBodyState pose) {
     base::samples::RigidBodyState new_pose;
     new_pose.position = pose.position;
-
-    if (_current_orientation == imaging_sonar_simulation::orientation::Horizontal)
-        new_pose.orientation = pose.orientation * Eigen::AngleAxisd(0, Eigen::Vector3d::UnitX());
-    else
-        new_pose.orientation = pose.orientation * Eigen::AngleAxisd(-90, Eigen::Vector3d::UnitX());
 
     return new_pose;
 }

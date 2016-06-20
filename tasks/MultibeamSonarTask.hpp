@@ -29,14 +29,12 @@ namespace imaging_sonar_simulation{
 
     private:
         gpu_sonar_simulation::MultibeamSonar _msonar;
-        imaging_sonar_simulation::orientation::Type _current_orientation;
 
     protected:
 
         virtual bool setRange(double value);
         virtual bool setGain(double value);
         virtual bool setBin_count(int value);
-        virtual bool setOrientation(::imaging_sonar_simulation::orientation::Type const & value);
 
     public:
         /** TaskContext constructor for MultibeamSonarTask
