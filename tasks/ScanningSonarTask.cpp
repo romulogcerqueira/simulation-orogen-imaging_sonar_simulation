@@ -84,10 +84,13 @@ void ScanningSonarTask::updateHook() {
 		Task::processShader(osg_image, bins);
 
 		// simulate sonar reading
-		base::samples::Sonar sonar;
-		std::vector<base::Angle> bearings;
-		bearings.push_back(current_bearing);
-		sonar_sim.simulateSonar(bins, sonar, bearings, range);
+		base::samples::Sonar sonar = sonar_sim.simulateSonar(bins, range);
+
+		// set the sonar bearing
+		sonar.bearings.push_back(current_bearing);
+
+		// write sonar sample in the output port
+		sonar.validate();
 		_sonar_samples.write(sonar);
 
 		// move the head position

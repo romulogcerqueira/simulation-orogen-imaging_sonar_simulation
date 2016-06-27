@@ -66,16 +66,16 @@ void MultibeamSonarTask::updateHook() {
 		std::vector<float> bins;
 		Task::processShader(osg_image, bins);
 
-		// calculate the sonar bearings
-		std::vector<base::Angle> bearings;
-		base::Angle angular_resolution = base::Angle::fromRad(sonar_sim.beam_width.getRad() / sonar_sim.beam_count);
-		base::Angle angle = base::Angle::fromRad(-sonar_sim.beam_width.getRad() / 2);
-		for (unsigned int i = 0; i < sonar_sim.beam_count; i++, angle += angular_resolution)
-			bearings.push_back(angle);
-
 		// simulate sonar reading
-		base::samples::Sonar sonar;
-		sonar_sim.simulateSonar(bins, sonar, bearings, range);
+		base::samples::Sonar sonar = sonar_sim.simulateSonar(bins, range);
+
+		// set the sonar bearings
+		base::Angle interval = base::Angle::fromRad(sonar_sim.beam_width.getRad() / sonar_sim.beam_count);
+		base::Angle start = base::Angle::fromRad(-sonar_sim.beam_width.getRad() / 2);
+		sonar.setRegularBeamBearings(start, interval);
+
+		// write sonar sample in the output port
+		sonar.validate();
 		_sonar_samples.write(sonar);
 	}
 }
