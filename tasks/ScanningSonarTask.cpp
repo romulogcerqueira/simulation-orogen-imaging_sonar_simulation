@@ -8,8 +8,8 @@ using namespace base::samples::frame;
 
 ScanningSonarTask::ScanningSonarTask(std::string const& name) :
 		ScanningSonarTaskBase(name) {
-	_left_limit.set(base::Angle::fromRad(-M_PI));
-	_right_limit.set(base::Angle::fromRad(M_PI));
+	_left_limit.set(base::Angle::Min());
+	_right_limit.set(base::Angle::Max());
 	_motor_step.set(base::Angle::fromDeg(1.8));
 	_beam_width.set(base::Angle::fromDeg(3.0));
 	_beam_height.set(base::Angle::fromDeg(35.0));
@@ -17,8 +17,8 @@ ScanningSonarTask::ScanningSonarTask(std::string const& name) :
 
 ScanningSonarTask::ScanningSonarTask(std::string const& name, RTT::ExecutionEngine* engine) :
 		ScanningSonarTaskBase(name, engine) {
-	_left_limit.set(base::Angle::fromRad(-M_PI));
-	_right_limit.set(base::Angle::fromRad(M_PI));
+	_left_limit.set(base::Angle::Min());
+	_right_limit.set(base::Angle::Max());
 	_motor_step.set(base::Angle::fromDeg(1.8));
 	_beam_width.set(base::Angle::fromDeg(3.0));
 	_beam_height.set(base::Angle::fromDeg(35.0));
