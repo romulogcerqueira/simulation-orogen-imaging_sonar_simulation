@@ -1,10 +1,10 @@
 --- name:default
 # Opening of the beam along the device's Z direction
 beam_height:
-  rad: 0.6108652381980153
+  rad: 35.deg
 # Opening of the beam orthogonal to the device's Z direction
 beam_width:
-  rad: 0.05235987755982988
+  rad: 3.deg
 # Number of Bins
 bin_count: 500
 # Enable/disable ping pong scanning mode
@@ -16,20 +16,14 @@ gain: 0.5
 height: 600
 # List of models that will be ignored from the camera view
 ignored_models: []
-# Left limit angle
-left_limit:
-  rad: 3.141592653589793
 #
 # Paths to resolve the model:// URIs in the world file.
 model_paths: []
 # Step angle size
 motor_step:
-  rad: 0.031415926535897934
+  rad: 1.8.deg
 # Range of the sonar in meters (1.0 - 150.0)
 range: 50.0
-# Right limit angle
-right_limit:
-  rad: 3.141592653589793
 # set the virtual camera width
 width: 800
 #
