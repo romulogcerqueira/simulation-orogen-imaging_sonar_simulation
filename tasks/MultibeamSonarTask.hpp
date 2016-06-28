@@ -35,7 +35,7 @@ namespace imaging_sonar_simulation{
 
         /** TaskContext constructor for MultibeamSonarTask
          * \param name Name of the task. This name needs to be unique to make it identifiable for nameservices.
-         * \param engine The RTT Execution engine to be used for this task, which serialises the execution of all commands, programs, state machines and incoming events for a task.
+         * \param engine The RTT Execution engine to be used for this task, which serialises the execution of all commands, programs, state machines and incoming events for a task. 
          *
          */
         MultibeamSonarTask(std::string const& name, RTT::ExecutionEngine* engine);

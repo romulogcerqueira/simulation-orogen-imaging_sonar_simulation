@@ -25,63 +25,62 @@ class ScanningSonarTask: public ScanningSonarTaskBase {
 	friend class ScanningSonarTaskBase;
 
 protected:
+    /** The left limit angle of sonar reading */
+    base::Angle left_limit;
 
-	/** The left limit angle of sonar reading */
-	base::Angle left_limit;
+    /** The right limit angle of sonar reading */
+    base::Angle right_limit;
 
-	/** The right limit angle of sonar reading */
-	base::Angle right_limit;
+    /** Motor step angle */
+    base::Angle motor_step;
 
-	/** Motor step angle */
-	base::Angle motor_step;
+    /** Current sonar orientation */
+    base::Angle current_bearing;
 
-	/** Current sonar orientation */
-	base::Angle current_bearing;
+    /** Sonar reading mode (continuous / sector) */
+    bool continuous;
 
-	/** Sonar reading mode (continuous / sector) */
-	bool continuous;
+    /** Rotate direction of sonar head (normal / inverted)  */
+    bool invert;
 
-	/** Rotate direction of sonar head (normal / inverted)  */
-	bool invert;
+    /** Update the sonar position and orientation
+    * @param pose: the auv pose
+    * @return the updated pose of the sonar
+    */
+    base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
 
-	/** Update the sonar position and orientation
-	 * @param pose: the auv pose
-	 * @return the updated pose of the sonar
-	 */
-	base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
+    /** Update the sonar head position
+    */
+    void moveHeadPosition();
 
-	/** Update the sonar head position
-	 */
-	void moveHeadPosition();
+    /** Dynamically update the left limit angle
+    *
+    * @param value: desired left limit angle
+    * @return if the process is finished successfully
+    */
+    virtual bool setLeft_limit(::base::Angle const & value);
 
-	/** Dynamically update the left limit angle
-	 *
-	 * @param value: desired left limit angle
-	 * @return if the process is finished successfully
-	 */
-	 virtual bool setLeft_limit(::base::Angle const & value);
+    /** Dynamically update the right limit angle
+    *
+    * @param value: desired right limit angle
+    * @return if the process is finished successfully
+    */
+    virtual bool setRight_limit(::base::Angle const & value);
 
-	 /** Dynamically update the right limit angle
-	 *
-	 * @param value: desired right limit angle
-	 * @return if the process is finished successfully
-	 */
-	 virtual bool setRight_limit(::base::Angle const & value);
+    /** Dynamically update the motor step angle
+    *
+    * @param value: desired motor step angle
+    * @return if the process is finished successfully
+    */
+    virtual bool setMotor_step(::base::Angle const & value);
 
-	/** Dynamically update the motor step angle
-	 *
-	 * @param value: desired motor step angle
-	 * @return if the process is finished successfully
-	 */
-	 virtual bool setMotor_step(::base::Angle const & value);
-
-	/** Dynamically update the reading mode
-	 *
-	 * @param value: if true, the sonar head will rotate continually
-					 otherwise, it will rotate from left limit to right limit
-	 * @return if the process is finished successfully
-	 */
-	virtual bool setContinuous(bool value);
+    /** Dynamically update the reading mode
+    *
+    * @param value: if true, the sonar head will rotate continually
+    otherwise, it will rotate from left limit to right limit
+    * @return if the process is finished successfully
+    */
+    virtual bool setContinuous(bool value);
 
 public:
 	/** TaskContext constructor for ScanningSonarTask

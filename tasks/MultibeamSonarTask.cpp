@@ -27,57 +27,57 @@ bool MultibeamSonarTask::configureHook() {
 	if (!MultibeamSonarTaskBase::configureHook())
 		return false;
 
-	// check if the properties have valid values
-	if (_beam_count.value() < 64 || _beam_count.value() > 512) {
-		RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
-		return false;
-	}
+    // check if the properties have valid values
+    if (_beam_count.value() < 64 || _beam_count.value() > 512) {
+        RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
+        return false;
+    }
 
-	// set the attributes
-	sonar_sim.beam_count = _beam_count.value();
+    // set the attributes
+    sonar_sim.beam_count = _beam_count.value();
 
-	return true;
+    return true;
 }
 
 bool MultibeamSonarTask::startHook() {
 	if (!MultibeamSonarTaskBase::startHook())
 		return false;
 
-	// generate shader world
-	uint width = 1536;
-	Task::initShader(width, false);
+    // generate shader world
+    uint width = 1536;
+    Task::initShader(width, false);
 
-	return true;
+    return true;
 }
 
 void MultibeamSonarTask::updateHook() {
 	MultibeamSonarTaskBase::updateHook();
 
-	base::samples::RigidBodyState link_pose;
+    base::samples::RigidBodyState link_pose;
 
-	if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
-		// update sonar position
-		Task::updateSonarPose(link_pose);
+    if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
+        // update sonar position
+        Task::updateSonarPose(link_pose);
 
-		// receives the shader image
-		osg::ref_ptr<osg::Image> osg_image = capture.grabImage(normal_depth_map.getNormalDepthMapNode());
+        // receives the shader image
+        osg::ref_ptr<osg::Image> osg_image = capture.grabImage(normal_depth_map.getNormalDepthMapNode());
 
-		// process the shader image
-		std::vector<float> bins;
-		Task::processShader(osg_image, bins);
+        // process the shader image
+        std::vector<float> bins;
+        Task::processShader(osg_image, bins);
 
-		// simulate sonar reading
-		base::samples::Sonar sonar = sonar_sim.simulateSonar(bins, range);
+        // simulate sonar reading
+        base::samples::Sonar sonar = sonar_sim.simulateSonar(bins, range);
 
-		// set the sonar bearings
-		base::Angle interval = base::Angle::fromRad(sonar_sim.beam_width.getRad() / sonar_sim.beam_count);
-		base::Angle start = base::Angle::fromRad(-sonar_sim.beam_width.getRad() / 2);
-		sonar.setRegularBeamBearings(start, interval);
+        // set the sonar bearings
+        base::Angle interval = base::Angle::fromRad(sonar_sim.beam_width.getRad() / sonar_sim.beam_count);
+        base::Angle start = base::Angle::fromRad(-sonar_sim.beam_width.getRad() / 2);
+        sonar.setRegularBeamBearings(start, interval);
 
-		// write sonar sample in the output port
-		sonar.validate();
-		_sonar_samples.write(sonar);
-	}
+        // write sonar sample in the output port
+        sonar.validate();
+        _sonar_samples.write(sonar);
+    }
 }
 
 void MultibeamSonarTask::errorHook() {

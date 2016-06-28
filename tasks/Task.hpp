@@ -11,8 +11,6 @@
 #include <vizkit3d_normal_depth_map/NormalDepthMap.hpp>
 #include <vizkit3d_normal_depth_map/ImageViewerCaptureTool.hpp>
 
-// using namespace gpu_sonar_simulation;
-
 namespace imaging_sonar_simulation{
 
     /*! \class Task
@@ -33,7 +31,6 @@ namespace imaging_sonar_simulation{
     {
 	friend class TaskBase;
     protected:
-
         /** Sonar simulator */
         gpu_sonar_simulation::Sonar sonar_sim;
 
@@ -50,45 +47,45 @@ namespace imaging_sonar_simulation{
         vizkit3d_normal_depth_map::ImageViewerCaptureTool capture;
 
         /**
-         *  Initialize shader.
-         *  @param value: size of width/height of shader image in pixels
-         *  @param isHeight: if true, the value is related with image height
-         *                   otherwise, the vale is related with image width
-         */
+        *  Initialize shader.
+        *  @param value: size of width/height of shader image in pixels
+        *  @param isHeight: if true, the value is related with image height
+        *                   otherwise, the vale is related with image width
+        */
         void initShader(uint value, bool isHeight = true);
 
         /**
-         *  Update sonar pose according to auv pose.
-         *  @param pose: pose of the auv
-         */
+        *  Update sonar pose according to auv pose.
+        *  @param pose: pose of the auv
+        */
         void updateSonarPose(base::samples::RigidBodyState pose);
 
         /**
-         *  Process shader image in bins intensity.
-         *  @param osg_image: the shader image (normal, depth and angle informations) in osg::Image format
-         *  @param bins: the output simulated sonar data (all beams) in float
-         */
+        *  Process shader image in bins intensity.
+        *  @param osg_image: the shader image (normal, depth and angle informations) in osg::Image format
+        *  @param bins: the output simulated sonar data (all beams) in float
+        */
         void processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>& bins);
 
         /** Dynamically update sonar range
-         *
-         * @param value: desired range
-         * @return if the process is finished successfully
-         */
+        *
+        * @param value: desired range
+        * @return if the process is finished successfully
+        */
         virtual bool setRange(double value);
 
         /** Dynamically update sonar gain
-         *
-         * @param value: desired gain
-         * @return if the process is finished successfully
-         */
+        *
+        * @param value: desired gain
+        * @return if the process is finished successfully
+        */
         virtual bool setGain(double value);
 
         /** Dynamically update the number of bins
-         *
-         * @param value: desired number of bins
-         * @return if the process is finished successfully
-         */
+        *
+        * @param value: desired number of bins
+        * @return if the process is finished successfully
+        */
         virtual bool setBin_count(int value);
 
     public:

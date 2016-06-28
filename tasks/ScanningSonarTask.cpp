@@ -35,67 +35,67 @@ bool ScanningSonarTask::configureHook() {
 	if (!ScanningSonarTaskBase::configureHook())
 		return false;
 
-	// check if the properties have valid values
-	if (_motor_step.value().getRad() <= 0 || _motor_step.value() > base::Angle::fromDeg(3.6)) {
-		RTT::log(RTT::Error) << "The step angle value must be positive and less or equal than 3.6 degrees." << RTT::endlog();
-		return false;
-	}
+    // check if the properties have valid values
+    if (_motor_step.value().getRad() <= 0 || _motor_step.value() > base::Angle::fromDeg(3.6)) {
+        RTT::log(RTT::Error) << "The step angle value must be positive and less or equal than 3.6 degrees." << RTT::endlog();
+        return false;
+    }
 
-	// set attributes
-	left_limit = _left_limit.value();
-	right_limit = _right_limit.value();
-	motor_step = _motor_step.value();
-	continuous = _continuous.value();
-	sonar_sim.beam_count = 1;
+    // set attributes
+    left_limit = _left_limit.value();
+    right_limit = _right_limit.value();
+    motor_step = _motor_step.value();
+    continuous = _continuous.value();
+    sonar_sim.beam_count = 1;
 
-	return true;
+    return true;
 }
 
 bool ScanningSonarTask::startHook() {
 	if (!ScanningSonarTaskBase::startHook())
 		return false;
 
-	// generate shader world
-	int height = 500;
-	Task::initShader(height, true);
+    // generate shader world
+    int height = 500;
+    Task::initShader(height, true);
 
-	current_bearing = base::Angle::fromRad(0.0);
-	invert = false;
+    current_bearing = base::Angle::fromRad(0.0);
+    invert = false;
 
-	return true;
+    return true;
 }
 
 void ScanningSonarTask::updateHook() {
 
 	ScanningSonarTaskBase::updateHook();
 
-	base::samples::RigidBodyState link_pose;
+    base::samples::RigidBodyState link_pose;
 
-	if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
-		// update sonar position and orientation
-		base::samples::RigidBodyState sonar_pose = rotatePose(link_pose);
-		Task::updateSonarPose(sonar_pose);
+    if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
+        // update sonar position and orientation
+        base::samples::RigidBodyState sonar_pose = rotatePose(link_pose);
+        Task::updateSonarPose(sonar_pose);
 
-		// receives the shader image
-		osg::ref_ptr<osg::Image> osg_image = capture.grabImage(normal_depth_map.getNormalDepthMapNode());
+        // receives the shader image
+        osg::ref_ptr<osg::Image> osg_image = capture.grabImage(normal_depth_map.getNormalDepthMapNode());
 
-		// process the shader image
-		std::vector<float> bins;
-		Task::processShader(osg_image, bins);
+        // process the shader image
+        std::vector<float> bins;
+        Task::processShader(osg_image, bins);
 
-		// simulate sonar reading
-		base::samples::Sonar sonar = sonar_sim.simulateSonar(bins, range);
+        // simulate sonar reading
+        base::samples::Sonar sonar = sonar_sim.simulateSonar(bins, range);
 
-		// set the sonar bearing
-		sonar.bearings.push_back(current_bearing);
+        // set the sonar bearing
+        sonar.bearings.push_back(current_bearing);
 
-		// write sonar sample in the output port
-		sonar.validate();
-		_sonar_samples.write(sonar);
+        // write sonar sample in the output port
+        sonar.validate();
+        _sonar_samples.write(sonar);
 
-		// move the head position
-		moveHeadPosition();
-	}
+        // move the head position
+        moveHeadPosition();
+    }
 }
 
 void ScanningSonarTask::errorHook() {
@@ -111,60 +111,58 @@ void ScanningSonarTask::cleanupHook() {
 }
 
 base::samples::RigidBodyState ScanningSonarTask::rotatePose(base::samples::RigidBodyState pose) {
-
-	base::samples::RigidBodyState new_pose;
-	new_pose.position = pose.position;
-	new_pose.orientation = pose.orientation * Eigen::AngleAxisd(current_bearing.getRad(), Eigen::Vector3d::UnitZ());
-	return new_pose;
+    base::samples::RigidBodyState new_pose;
+    new_pose.position = pose.position;
+    new_pose.orientation = pose.orientation * Eigen::AngleAxisd(current_bearing.getRad(), Eigen::Vector3d::UnitZ());
+    return new_pose;
 }
 
 void ScanningSonarTask::moveHeadPosition() {
+    if (continuous)
+        current_bearing += motor_step;
 
-	if (continuous)
-		current_bearing += motor_step;
+    else {
+        // scan from the left limit to right limit
+        if (!invert) {
+            current_bearing += motor_step;
+            if (current_bearing > right_limit) {
+                current_bearing = right_limit;
+                invert = true;
+            }
+        }
 
-	else {
-		// scan from the left limit to right limit
-		if (!invert) {
-			current_bearing += motor_step;
-			if (current_bearing > right_limit) {
-				current_bearing = right_limit;
-				invert = true;
-			}
-		}
-
-		// scan from right limit to left limit
-		else {
-			current_bearing -= motor_step;
-			if (current_bearing < left_limit) {
-				current_bearing = left_limit;
-				invert = false;
-			}
-		}
-	}
+        // scan from right limit to left limit
+        else {
+            current_bearing -= motor_step;
+            if (current_bearing < left_limit) {
+                current_bearing = left_limit;
+                invert = false;
+            }
+        }
+    }
 }
 
 bool ScanningSonarTask::setLeft_limit(::base::Angle const & value) {
-	left_limit = value;
-	return (imaging_sonar_simulation::ScanningSonarTaskBase::setLeft_limit(value));
+    left_limit = value;
+    return (imaging_sonar_simulation::ScanningSonarTaskBase::setLeft_limit(value));
 }
 
 bool ScanningSonarTask::setRight_limit(::base::Angle const & value) {
-	right_limit = value;
-	return (imaging_sonar_simulation::ScanningSonarTaskBase::setRight_limit(value));
+    right_limit = value;
+    return (imaging_sonar_simulation::ScanningSonarTaskBase::setRight_limit(value));
 }
 
 bool ScanningSonarTask::setMotor_step(::base::Angle const & value) {
-	if (value.getRad() <= 0 || value > base::Angle::fromRad(3.6)) {
-		RTT::log(RTT::Error) << "The step angle value must be positive and less or equal than 3.6 degrees." << RTT::endlog();
-		return false;
-	}
+    if (value.getRad() <= 0 || value > base::Angle::fromRad(3.6)) {
+        RTT::log(RTT::Error) << "The step angle value must be positive and less or equal than 3.6 degrees." << RTT::endlog();
+        return false;
+    }
 
-	motor_step = value;
-	return (imaging_sonar_simulation::ScanningSonarTaskBase::setMotor_step(value));
+    motor_step = value;
+    return (imaging_sonar_simulation::ScanningSonarTaskBase::setMotor_step(value));
 }
 
 bool ScanningSonarTask::setContinuous(bool value) {
-	continuous = value;
-	return (imaging_sonar_simulation::ScanningSonarTaskBase::setContinuous(value));
+    continuous = value;
+    return (imaging_sonar_simulation::ScanningSonarTaskBase::setContinuous(value));
 }
