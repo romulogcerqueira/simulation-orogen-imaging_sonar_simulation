@@ -24,7 +24,7 @@ task_context "Task" do
     property("range", "double", 50.0).dynamic
 
     # Gain of the sonar (0.0 - 1.0)
-    property("gain", "double", 0.0).dynamic
+    property("gain", "double", 0.5).dynamic
 
     # Number of Bins
     property("bin_count", "int", 500).dynamic
