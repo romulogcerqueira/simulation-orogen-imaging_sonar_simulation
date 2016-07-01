@@ -8,7 +8,7 @@ describe 'imaging_sonar_simulation::MultibeamSonarTask' do
     start 'task', 'imaging_sonar_simulation::MultibeamSonarTask' => 'task'
 
     before do
-        task.apply_conf_file("imaging_sonar_simulation::MultibeamSonarTask.yml",  ['default', 'gemini'] )
+        task.apply_conf_file("imaging_sonar_simulation::MultibeamSonarTask.yml",  ['default'] )
         task.world_file_path = "example.world"
     end
 

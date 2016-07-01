@@ -5,8 +5,6 @@
 
 #include "imaging_sonar_simulation/MultibeamSonarTaskBase.hpp"
 
-#include <gpu_sonar_simulation/MultibeamSonar.hpp>
-
 namespace imaging_sonar_simulation{
 
     /*! \class MultibeamSonarTask
@@ -26,17 +24,7 @@ namespace imaging_sonar_simulation{
     class MultibeamSonarTask : public MultibeamSonarTaskBase
     {
 	friend class MultibeamSonarTaskBase;
-
-    private:
-        gpu_sonar_simulation::MultibeamSonar _msonar;
-        imaging_sonar_simulation::orientation::Type _current_orientation;
-
     protected:
-
-        virtual bool setRange(double value);
-        virtual bool setGain(double value);
-        virtual bool setBin_count(int value);
-        virtual bool setOrientation(::imaging_sonar_simulation::orientation::Type const & value);
 
     public:
         /** TaskContext constructor for MultibeamSonarTask
@@ -113,11 +101,7 @@ namespace imaging_sonar_simulation{
          * before calling start() again.
          */
         void cleanupHook();
-
-        void updateMultibeamSonarPose(base::samples::RigidBodyState pose);
-        base::samples::RigidBodyState rotatePose(base::samples::RigidBodyState pose);
     };
 }
 
 #endif
-

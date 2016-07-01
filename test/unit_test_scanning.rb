@@ -75,12 +75,12 @@ describe 'imaging_sonar_simulation::ScanningSonarTask' do
     end
 
     it 'should fail to configure if motor step angle < 0' do
-        task.step_angle = Types::Base::Angle.new(:rad => -1.0)
+        task.motor_step = Types::Base::Angle.new(:rad => -1.0)
         assert_raises(Orocos::StateTransitionFailed) { task.configure }
     end
 
     it 'should fail to configure if motor step angle > 3.6 degrees' do
-        task.step_angle = Types::Base::Angle.new(:rad => Math::PI)
+        task.motor_step = Types::Base::Angle.new(:rad => Math::PI)
         assert_raises(Orocos::StateTransitionFailed) { task.configure }
     end
 end
