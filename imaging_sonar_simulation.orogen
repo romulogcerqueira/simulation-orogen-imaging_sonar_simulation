@@ -27,7 +27,7 @@ task_context "Task" do
     property("gain", "double", 0.5).dynamic
 
     # Number of Bins
-    property("bin_count", "int", 500).dynamic
+    property("bin_count", "int", 750).dynamic
 
     # Opening of the beam orthogonal to the device's Z direction
     property("beam_width", "base/Angle")
