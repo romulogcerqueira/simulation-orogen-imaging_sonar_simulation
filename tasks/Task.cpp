@@ -143,7 +143,7 @@ bool Task::setGain(double value) {
 
 bool Task::setBin_count(int value) {
     if (value <= 0) {
-        RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
+        RTT::log(RTT::Error) << "The number of bins must be positive." << RTT::endlog();
         return false;
     }
 
