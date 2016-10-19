@@ -56,7 +56,7 @@ bool ScanningSonarTask::startHook() {
 		return false;
 
     // generate shader world
-    int height = 500;
+    int height = 1024;
     Task::initShader(height, true);
 
     current_bearing = base::Angle::fromRad(0.0);

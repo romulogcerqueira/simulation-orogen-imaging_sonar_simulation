@@ -104,8 +104,16 @@ void Task::updateSonarPose(base::samples::RigidBodyState pose) {
 
 void Task::processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>& bins) {
     // receives shader image in opencv format
-    cv::Mat cv_image;
+    cv::Mat cv_image, cv_depth;
     gpu_sonar_simulation::convertOSG2CV(osg_image, cv_image);
+    osg::ref_ptr<osg::Image> osg_depth = capture.getDepthBuffer();
+    gpu_sonar_simulation::convertOSG2CV(osg_depth, cv_depth);
+
+    // replace depth matrix
+    std::vector<cv::Mat> channels;
+    cv::split(cv_image, channels);
+    channels[1] = cv_depth;
+    cv::merge(channels, cv_image);
 
     // decode shader informations to sonar data
     sonar_sim.decodeShader(cv_image, bins);
@@ -116,6 +124,7 @@ void Task::processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>
     // display shader image
     std::auto_ptr<Frame> frame(new Frame());
     cv_image.convertTo(cv_image, CV_8UC3, 255);
+    cv::flip(cv_image, cv_image, 0);
     frame_helper::FrameHelper::copyMatToFrame(cv_image, *frame.get());
     _shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
 }
@@ -143,7 +152,7 @@ bool Task::setGain(double value) {
 
 bool Task::setBin_count(int value) {
     if (value <= 0) {
-        RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
+        RTT::log(RTT::Error) << "The number of bins must be positive." << RTT::endlog();
         return false;
     }
 

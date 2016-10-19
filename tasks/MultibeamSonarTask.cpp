@@ -44,7 +44,7 @@ bool MultibeamSonarTask::startHook() {
 		return false;
 
     // generate shader world
-    uint width = 1536;
+    uint width = 3328;
     Task::initShader(width, false);
 
     return true;
