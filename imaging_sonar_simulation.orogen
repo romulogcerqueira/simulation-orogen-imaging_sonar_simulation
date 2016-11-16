@@ -65,5 +65,5 @@ task_context "MultibeamSonarTask" do
     # Number of Beams
     property("beam_count", "int", 256)
 
-    periodic 0.1
+    port_driven
 end
