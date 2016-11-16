@@ -44,7 +44,7 @@ bool MultibeamSonarTask::startHook() {
 		return false;
 
     // generate shader world
-    uint width = 3328;
+    uint width = sonar_sim.bin_count * 5.12;  // 5.12 pixels are needed for each bin
     Task::setupShader(width, false);
 
     return true;
@@ -90,4 +90,15 @@ void MultibeamSonarTask::stopHook() {
 
 void MultibeamSonarTask::cleanupHook() {
 	MultibeamSonarTaskBase::cleanupHook();
+}
+
+bool MultibeamSonarTask::setBin_count(int value) {
+    if (value <= 0) {
+        RTT::log(RTT::Error) << "The number of bins must be positive." << RTT::endlog();
+        return false;
+    }
+    sonar_sim.bin_count = value;
+    float width = sonar_sim.bin_count * 5.12;  // 5.12 pixels are needed for each bin
+    Task::setupShader(width, false);
+    return (imaging_sonar_simulation::TaskBase::setBin_count(value));
 }

@@ -56,7 +56,7 @@ bool ScanningSonarTask::startHook() {
 		return false;
 
     // generate shader world
-    int height = 1024;
+    int height = sonar_sim.bin_count * 5.12;    // 5.12 pixels are needed for each bin
     Task::setupShader(height, true);
 
     current_bearing = base::Angle::fromRad(0.0);
@@ -165,4 +165,16 @@ bool ScanningSonarTask::setMotor_step(::base::Angle const & value) {
 bool ScanningSonarTask::setContinuous(bool value) {
     continuous = value;
     return (imaging_sonar_simulation::ScanningSonarTaskBase::setContinuous(value));
+}
+
+bool ScanningSonarTask::setBin_count(int value) {
+    if (value <= 0) {
+        RTT::log(RTT::Error) << "The number of bins must be positive." << RTT::endlog();
+        return false;
+    }
+
+    sonar_sim.bin_count = value;
+    float height = sonar_sim.bin_count * 5.12;  // 5.12 pixels are needed for each bin
+    Task::setupShader(height, true);
+    return (imaging_sonar_simulation::TaskBase::setBin_count(value));
 }

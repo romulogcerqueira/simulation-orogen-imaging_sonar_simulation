@@ -81,13 +81,6 @@ namespace imaging_sonar_simulation{
         */
         virtual bool setGain(double value);
 
-        /** Dynamically update the number of bins
-        *
-        * @param value: desired number of bins
-        * @return if the process is finished successfully
-        */
-        virtual bool setBin_count(int value);
-
     public:
         /** TaskContext constructor for Task
          * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.

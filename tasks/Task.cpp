@@ -150,13 +150,3 @@ bool Task::setGain(double value) {
     gain = value;
     return (imaging_sonar_simulation::TaskBase::setGain(value));
 }
-
-bool Task::setBin_count(int value) {
-    if (value <= 0) {
-        RTT::log(RTT::Error) << "The number of bins must be positive." << RTT::endlog();
-        return false;
-    }
-
-    sonar_sim.bin_count = value;
-    return (imaging_sonar_simulation::TaskBase::setBin_count(value));
-}
