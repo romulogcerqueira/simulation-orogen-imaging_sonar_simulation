@@ -73,7 +73,7 @@ void Task::cleanupHook() {
 	TaskBase::cleanupHook();
 }
 
-void Task::initShader(uint value, bool isHeight) {
+void Task::setupShader(uint value, bool isHeight) {
     double const half_fovx = sonar_sim.beam_width.getRad() / 2;
     double const half_fovy = sonar_sim.beam_height.getRad() / 2;
 

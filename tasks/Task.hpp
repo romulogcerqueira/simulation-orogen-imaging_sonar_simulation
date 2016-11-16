@@ -52,7 +52,7 @@ namespace imaging_sonar_simulation{
         *  @param isHeight: if true, the value is related with image height
         *                   otherwise, the vale is related with image width
         */
-        void initShader(uint value, bool isHeight = true);
+        void setupShader(uint value, bool isHeight = true);
 
         /**
         *  Update sonar pose according to auv pose.
