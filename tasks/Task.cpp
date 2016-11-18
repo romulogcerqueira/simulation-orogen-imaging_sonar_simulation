@@ -73,7 +73,7 @@ void Task::cleanupHook() {
 	TaskBase::cleanupHook();
 }
 
-void Task::initShader(uint value, bool isHeight) {
+void Task::setupShader(uint value, bool isHeight) {
     double const half_fovx = sonar_sim.beam_width.getRad() / 2;
     double const half_fovy = sonar_sim.beam_height.getRad() / 2;
 
@@ -126,6 +126,7 @@ void Task::processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>
     cv_image.convertTo(cv_image, CV_8UC3, 255);
     cv::flip(cv_image, cv_image, 0);
     frame_helper::FrameHelper::copyMatToFrame(cv_image, *frame.get());
+    frame->time = base::Time::now();
     _shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
 }
 
@@ -148,14 +149,4 @@ bool Task::setGain(double value) {
 
     gain = value;
     return (imaging_sonar_simulation::TaskBase::setGain(value));
-}
-
-bool Task::setBin_count(int value) {
-    if (value <= 0) {
-        RTT::log(RTT::Error) << "The number of bins must be positive." << RTT::endlog();
-        return false;
-    }
-
-    sonar_sim.bin_count = value;
-    return (imaging_sonar_simulation::TaskBase::setBin_count(value));
 }

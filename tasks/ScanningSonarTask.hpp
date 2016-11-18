@@ -82,6 +82,13 @@ protected:
     */
     virtual bool setContinuous(bool value);
 
+    /** Dynamically update the number of bins
+    *
+    * @param value: desired number of bins
+    * @return if the process is finished successfully
+    */
+    virtual bool setBin_count(int value);
+
 public:
 	/** TaskContext constructor for ScanningSonarTask
 	 * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.

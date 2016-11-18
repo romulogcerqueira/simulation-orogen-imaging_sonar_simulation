@@ -52,7 +52,7 @@ namespace imaging_sonar_simulation{
         *  @param isHeight: if true, the value is related with image height
         *                   otherwise, the vale is related with image width
         */
-        void initShader(uint value, bool isHeight = true);
+        void setupShader(uint value, bool isHeight = true);
 
         /**
         *  Update sonar pose according to auv pose.
@@ -80,13 +80,6 @@ namespace imaging_sonar_simulation{
         * @return if the process is finished successfully
         */
         virtual bool setGain(double value);
-
-        /** Dynamically update the number of bins
-        *
-        * @param value: desired number of bins
-        * @return if the process is finished successfully
-        */
-        virtual bool setBin_count(int value);
 
     public:
         /** TaskContext constructor for Task
