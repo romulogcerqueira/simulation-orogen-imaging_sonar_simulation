@@ -34,7 +34,28 @@ ScanningSonarTask::~ScanningSonarTask() {
 bool ScanningSonarTask::configureHook() {
 	if (!ScanningSonarTaskBase::configureHook())
 		return false;
+    // check if the properties have valid values
+    if (_range.value() <= 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
 
+    if (_gain.value() < 0 || _gain.value() > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+
+    if (_bin_count.value() <= 0 || _bin_count.value() > 1500) {
+        RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
+        return false;
+    }
+
+    if (_beam_width.value().getRad() <= 0 || _beam_height.value().getRad() <= 0) {
+        RTT::log(RTT::Error) << "The sonar opening angles must be positives." << RTT::endlog();
+        return false;
+    }
+
+    
     // check if the properties have valid values
     if (_motor_step.value().getRad() <= 0 || _motor_step.value() > base::Angle::fromDeg(3.6)) {
         RTT::log(RTT::Error) << "The step angle value must be positive and less or equal than 3.6 degrees." << RTT::endlog();
@@ -46,7 +67,13 @@ bool ScanningSonarTask::configureHook() {
     right_limit = _right_limit.value();
     motor_step = _motor_step.value();
     continuous = _continuous.value();
-    sonar_sim.beam_count = 1;
+    
+    osg::ref_ptr<osg::Group> root = vizkit3dWorld->getWidget()->getRootNode();
+    // generate shader world
+    int height = _bin_count.value() * 5.12;    // 5.12 pixels are needed for each bin
+    sonar_sim = new gpu_sonar_simulation::SonarSimulation(_range.value(), _gain.value(), _bin_count.value(),
+            1,_beam_width.value(), _beam_height.value(), 
+            height, true, root);
 
     return true;
 }
@@ -54,10 +81,6 @@ bool ScanningSonarTask::configureHook() {
 bool ScanningSonarTask::startHook() {
 	if (!ScanningSonarTaskBase::startHook())
 		return false;
-
-    // generate shader world
-    int height = sonar_sim.bin_count * 5.12;    // 5.12 pixels are needed for each bin
-    Task::setupShader(height, true);
 
     current_bearing = base::Angle::fromRad(0.0);
     invert = false;
@@ -67,40 +90,25 @@ bool ScanningSonarTask::startHook() {
 
 void ScanningSonarTask::updateHook() {
 
-	ScanningSonarTaskBase::updateHook();
+    ScanningSonarTaskBase::updateHook();
 
     base::samples::RigidBodyState link_pose;
 
-    if (_sonar_pose_cmd.read(link_pose) != RTT::OldData) {
-        // update sonar position and orientation
-        base::samples::RigidBodyState sonar_pose = rotatePose(link_pose);
-        Task::updateSonarPose(sonar_pose);
-
-        // update the attenuation coefficient and apply the underwater absorption signal
-        double attenuation_coeff = normal_depth_map::underwaterSignalAttenuation(
-                                        attenuation_properties.frequency,
-                                        attenuation_properties.temperature.getCelsius(),
-                                        -link_pose.position.z(),
-                                        attenuation_properties.salinity,
-                                        attenuation_properties.acidity);
-        normal_depth_map.setAttenuationCoefficient(attenuation_coeff);
-
-        // receives the shader image
-        osg::ref_ptr<osg::Image> osg_image = capture.grabImage(normal_depth_map.getNormalDepthMapNode());
-
-        // process the shader image
-        std::vector<float> bins;
-        Task::processShader(osg_image, bins);
-
-        // simulate sonar reading
-        base::samples::Sonar sonar = sonar_sim.simulateSonar(bins, range);
+    if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
+        base::samples::Sonar sonar = 
+            sonar_sim->simulateSonarData(sonar_pose.getTransform());
 
         // set the sonar bearing
         sonar.bearings.push_back(current_bearing);
-
         // write sonar sample in the output port
         sonar.validate();
         _sonar_samples.write(sonar);
+
+        //display the shader image
+        std::auto_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
+        *frame = sonar_sim->getLastFrame();
+        frame->time = base::Time::now();
+        _shader_viewer.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
 
         // move the head position
         moveHeadPosition();
@@ -190,8 +198,27 @@ bool ScanningSonarTask::setBin_count(int value) {
         return false;
     }
 
-    sonar_sim.bin_count = value;
-    float height = sonar_sim.bin_count * 5.12;  // 5.12 pixels are needed for each bin
-    Task::setupShader(height, true);
-    return (imaging_sonar_simulation::TaskBase::setBin_count(value));
+    sonar_sim->setSonarBinCount(value);
+    float height = sonar_sim->getSonarBinCount() * 5.12;  // 5.12 pixels are needed for each bin
+    sonar_sim->setupShader(height, true);
+    return (ScanningSonarTaskBase::setBin_count(value));
+}
+
+
+bool ScanningSonarTask::setRange(double value) {
+    if (value <= 0) {
+        RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
+        return false;
+    }
+    sonar_sim->setRange(value);
+    return true;
+}
+
+bool ScanningSonarTask::setGain(double value) {
+    if (value < 0 || value > 1) {
+        RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
+        return false;
+    }
+    sonar_sim->setGain(value);
+    return true;
 }
