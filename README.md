@@ -1,4 +1,4 @@
-# GPU Sonar Simulation
+# Imaging Sonar Simulation
 
 This repository contains the code for GPU sonar simulation based on Custom 3D Shader as presented in the paper:
 
