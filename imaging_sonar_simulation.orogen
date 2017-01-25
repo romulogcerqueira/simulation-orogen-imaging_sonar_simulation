@@ -37,6 +37,8 @@ task_context "Task" do
 
     # Output sonar data (Sonar)
     output_port("sonar_samples", "base::samples::Sonar");
+
+    port_driven
 end
 
 task_context "ScanningSonarTask" do
@@ -64,6 +66,4 @@ task_context "MultibeamSonarTask" do
 
     # Number of Beams
     property("beam_count", "int", 256).dynamic
-
-    port_driven
 end
