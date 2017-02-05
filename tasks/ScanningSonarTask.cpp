@@ -122,21 +122,29 @@ void ScanningSonarTask::moveHeadPosition() {
         current_bearing += motor_step;
 
     else {
-        // scan from the left limit to right limit
+        // clockwise reading
         if (!invert) {
-            current_bearing += motor_step;
-            if (current_bearing > right_limit) {
+            if (left_limit <= right_limit && current_bearing >= right_limit && current_bearing > left_limit) {
                 current_bearing = right_limit;
                 invert = true;
+            } else if (left_limit > right_limit && current_bearing >= right_limit && current_bearing < left_limit) {
+                current_bearing = right_limit;
+                invert = true;
+            } else {
+                current_bearing += motor_step;
             }
         }
 
-        // scan from right limit to left limit
+        // counterclockwise reading
         else {
-            current_bearing -= motor_step;
-            if (current_bearing < left_limit) {
+            if (left_limit <= right_limit && current_bearing <= left_limit && current_bearing < right_limit) {
                 current_bearing = left_limit;
                 invert = false;
+            } else if (left_limit > right_limit && current_bearing <= left_limit && current_bearing > right_limit) {
+                current_bearing = left_limit;
+                invert = false;
+            } else {
+                current_bearing -= motor_step;
             }
         }
     }
