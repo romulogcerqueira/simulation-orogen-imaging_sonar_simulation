@@ -161,7 +161,7 @@ bool ScanningSonarTask::setRight_limit(::base::Angle const & value) {
 }
 
 bool ScanningSonarTask::setMotor_step(::base::Angle const & value) {
-    if (value.getRad() <= 0 || value > base::Angle::fromRad(3.6)) {
+    if (value.getRad() <= 0 || value > base::Angle::fromDeg(3.6)) {
         RTT::log(RTT::Error) << "The step angle value must be positive and less or equal than 3.6 degrees." << RTT::endlog();
         return false;
     }
