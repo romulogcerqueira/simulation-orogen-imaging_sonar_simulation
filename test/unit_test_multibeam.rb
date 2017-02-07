@@ -65,22 +65,22 @@ describe 'imaging_sonar_simulation::MultibeamSonarTask' do
     end
 
     it 'should fail to configure if beam width < 0' do
-        task.beam_width = Types::Base::Angle.new(:rad => -1.0)
+        task.beam_width = Types.base.Angle.new(:rad => -1.0)
         assert_raises(Orocos::StateTransitionFailed) { task.configure }
     end
 
     it 'should fail to configure if beam width = 0' do
-        task.beam_width = Types::Base::Angle.new(:rad => 0.0)
+        task.beam_width = Types.base.Angle.new(:rad => 0.0)
         assert_raises(Orocos::StateTransitionFailed) { task.configure }
     end
 
     it 'should fail to configure if beam height < 0' do
-        task.beam_height = Types::Base::Angle.new(:rad => -1.0)
+        task.beam_height = Types.base.Angle.new(:rad => -1.0)
         assert_raises(Orocos::StateTransitionFailed) { task.configure }
     end
 
     it 'should fail to configure if beam height = 0' do
-        task.beam_height = Types::Base::Angle.new(:rad => 0.0)
+        task.beam_height = Types.base.Angle.new(:rad => 0.0)
         assert_raises(Orocos::StateTransitionFailed) { task.configure }
     end
 end
