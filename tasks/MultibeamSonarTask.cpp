@@ -55,7 +55,7 @@ void MultibeamSonarTask::updateHook() {
 
     base::samples::RigidBodyState link_pose;
 
-    if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
+    if (_sonar_pose_cmd.read(link_pose) != RTT::OldData) {
         // update sonar position
         Task::updateSonarPose(link_pose);
 

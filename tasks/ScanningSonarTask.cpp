@@ -71,7 +71,7 @@ void ScanningSonarTask::updateHook() {
 
     base::samples::RigidBodyState link_pose;
 
-    if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
+    if (_sonar_pose_cmd.read(link_pose) != RTT::OldData) {
         // update sonar position and orientation
         base::samples::RigidBodyState sonar_pose = rotatePose(link_pose);
         Task::updateSonarPose(sonar_pose);
