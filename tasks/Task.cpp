@@ -78,8 +78,8 @@ void Task::setupShader(uint value, bool isHeight) {
     double const half_fovy = sonar_sim.beam_height.getRad() / 2;
 
     // initialize shader (NormalDepthMap and ImageViewerCaptureTool)
-    normal_depth_map = vizkit3d_normal_depth_map::NormalDepthMap(range, half_fovx, half_fovy);
-    capture = vizkit3d_normal_depth_map::ImageViewerCaptureTool(sonar_sim.beam_height.getRad(), sonar_sim.beam_width.getRad(), value, isHeight);
+    normal_depth_map = normal_depth_map::NormalDepthMap(range, half_fovx, half_fovy);
+    capture = normal_depth_map::ImageViewerCaptureTool(sonar_sim.beam_height.getRad(), sonar_sim.beam_width.getRad(), value, isHeight);
     capture.setBackgroundColor(osg::Vec4d(0.0, 0.0, 0.0, 1.0));
     osg::ref_ptr<osg::Group> root = vizkit3dWorld->getWidget()->getRootNode();
     normal_depth_map.addNodeChild(root);

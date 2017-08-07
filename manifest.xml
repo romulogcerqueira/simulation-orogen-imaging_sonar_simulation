@@ -10,6 +10,6 @@
 	<depend package="base/types" />
 	<depend package="base/orogen/types" />
 	<depend package="simulation/gpu_sonar_simulation" />
-	<depend package="gui/vizkit3d_normal_depth_map" />
+	<depend package="simulation/normal_depth_map" />
 	<depend package="gui/orogen/vizkit3d_world" />
 </package>
