@@ -8,8 +8,8 @@
 // Rock includes
 #include <base/samples/RigidBodyState.hpp>
 #include <gpu_sonar_simulation/Sonar.hpp>
-#include <vizkit3d_normal_depth_map/NormalDepthMap.hpp>
-#include <vizkit3d_normal_depth_map/ImageViewerCaptureTool.hpp>
+#include <normal_depth_map/NormalDepthMap.hpp>
+#include <normal_depth_map/ImageViewerCaptureTool.hpp>
 
 namespace imaging_sonar_simulation{
 
@@ -41,10 +41,10 @@ namespace imaging_sonar_simulation{
         double gain;
 
         /** Normal and depth map from an osg scene. */
-        vizkit3d_normal_depth_map::NormalDepthMap normal_depth_map;
+        normal_depth_map::NormalDepthMap normal_depth_map;
 
         /** Capture the osg::Image from a node scene */
-        vizkit3d_normal_depth_map::ImageViewerCaptureTool capture;
+        normal_depth_map::ImageViewerCaptureTool capture;
 
         /**
         *  Initialize shader.
