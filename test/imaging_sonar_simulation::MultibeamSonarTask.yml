@@ -26,3 +26,5 @@ width: 800
 #
 # path to the world_file_path.
 world_file_path: ''
+# Write shader image
+write_shader_image: false
