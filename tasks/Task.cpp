@@ -122,12 +122,14 @@ void Task::processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>
     sonar_sim.applyAdditionalGain(bins, gain);
 
     // display shader image
-    std::auto_ptr<Frame> frame(new Frame());
-    cv_image.convertTo(cv_image, CV_8UC3, 255);
-    cv::flip(cv_image, cv_image, 0);
-    frame_helper::FrameHelper::copyMatToFrame(cv_image, *frame.get());
-    frame->time = base::Time::now();
-    _shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
+    if (_write_shader_image.value()) {
+        std::auto_ptr<Frame> frame(new Frame());
+        cv_image.convertTo(cv_image, CV_8UC3, 255);
+        cv::flip(cv_image, cv_image, 0);
+        frame_helper::FrameHelper::copyMatToFrame(cv_image, *frame.get());
+        frame->time = base::Time::now();
+        _shader_image.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
+    }
 }
 
 bool Task::setRange(double value) {
