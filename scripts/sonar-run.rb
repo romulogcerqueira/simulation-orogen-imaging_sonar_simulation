@@ -4,9 +4,7 @@ require 'vizkit'
 include Orocos
 Orocos.initialize
 
-
-sonar_simulation_path = File.join(ENV['HOME'], 'masters_degree', 'dev', 'sonar_simulation')
-scene = File.join(sonar_simulation_path, 'simulation', 'uwmodels', 'scenes', 'ssiv_bahia', 'ssiv_bahia.world')
+scene = File.join(ENV['AUTOPROJ_CURRENT_ROOT'], 'simulation', 'uwmodels', 'scenes', 'ssiv_bahia', 'ssiv_bahia.world')
 
 Orocos.run 'imaging_sonar_simulation::MultibeamSonarTask' => 'sonar_multibeam' do
     sonar_pose = Types.base.samples.RigidBodyState.new
@@ -27,5 +25,14 @@ Orocos.run 'imaging_sonar_simulation::MultibeamSonarTask' => 'sonar_multibeam' d
 
     timer.start(10)
     sonar_multibeam.start
-    Vizkit.exec
+
+    task_inspector = Vizkit.default_loader.TaskInspector
+    Vizkit.display sonar_multibeam, :widget => task_inspector
+
+    begin
+        Vizkit.exec
+    rescue Interrupt => e
+        sonar_multibeam.stop
+        sonar_multibeam.cleanup
+    end
 end
