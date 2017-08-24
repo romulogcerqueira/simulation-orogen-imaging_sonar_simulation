@@ -19,7 +19,6 @@ Orocos.run 'imaging_sonar_simulation::MultibeamSonarTask' => 'sonar_multibeam' d
 
     timer = Qt::Timer.new
     timer.connect(SIGNAL('timeout()')) do
-        sonar_multibeam.pose_cmd.write sonar_pose
         sonar_multibeam.sonar_pose_cmd.write sonar_pose
     end
 
