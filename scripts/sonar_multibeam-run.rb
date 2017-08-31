@@ -19,7 +19,6 @@ def setup_task(task)
     timer = Qt::Timer.new
     timer.connect(SIGNAL('timeout()')) do
         task.sonar_pose_cmd.write @sonar_pose
-
     end
 
     # Start the task
@@ -42,7 +41,7 @@ def setup_widgets(task)
     end
 
     # Connect the components
-    task.sonar_samples.connect_to sonar_gui, type: :buffer, size: 0
+    task.sonar_samples.connect_to sonar_gui, type: :buffer, size: 1
 
     # Set the task inspector
     task_inspector = Vizkit.default_loader.TaskInspector
@@ -66,15 +65,16 @@ def setup_widgets(task)
 end
 
 Orocos.run 'imaging_sonar_simulation::MultibeamSonarTask' => 'sonar_multibeam' do
-    # Start the orocos task
-    task = TaskContext.get 'sonar_multibeam'
-    setup_task(task)
-
+    # Initial pose
     @sonar_pose = Types.base.samples.RigidBodyState.new
     @sonar_pose.targetFrame = "world"
     @sonar_pose.sourceFrame = "multibeam_sonar"
     @sonar_pose.position = Eigen::Vector3.new(48.24, 103.48, -3.37)
     @sonar_pose.orientation = Eigen::Quaternion.from_euler(Eigen::Vector3.new(1.57, 0.524, 0), 2, 1, 0)
+
+    # Start the orocos task
+    task = TaskContext.get 'sonar_multibeam'
+    setup_task(task)
 
     # Start the Rock widgets
     setup_widgets(task)
