@@ -5,6 +5,7 @@
 // Rock includes
 #include <gpu_sonar_simulation/Utils.hpp>
 #include <frame_helper/FrameHelper.h>
+#include <base/Float.hpp>
 
 using namespace imaging_sonar_simulation;
 using namespace base::samples::frame;
@@ -45,6 +46,19 @@ bool Task::configureHook() {
         return false;
     }
 
+    if (_attenuation_properties.value().sonar_frequency < 0.001
+        || _attenuation_properties.value().sonar_frequency > 1000) {
+        RTT::log(RTT::Error) << "The sonar frequency must be between 1 Hz and 1 MHz." << RTT::endlog();
+        return false;
+    }
+
+    if(_attenuation_properties.value().water_temperature.getCelsius() < -6
+        || _attenuation_properties.value().water_temperature.getCelsius() > 35
+        || base::isNaN(_attenuation_properties.value().water_temperature.getCelsius())) {
+        RTT::log(RTT::Error) << "The water temperature value must be between -6 and 35 Celsius degrees." << RTT::endlog();
+        return false;
+    }
+
     // set the attributes
     range = _range.value();
     gain = _gain.value();
@@ -52,6 +66,7 @@ bool Task::configureHook() {
     sonar_sim.bin_count = _bin_count.value();
     sonar_sim.beam_width = _beam_width.value();
     sonar_sim.beam_height = _beam_height.value();
+    attenuation_properties = _attenuation_properties.value();
 
 	return true;
 }
@@ -116,7 +131,7 @@ void Task::processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>
     cv::merge(channels, cv_image);
 
     // decode shader informations to sonar data
-    sonar_sim.decodeShader(cv_image, bins);
+    sonar_sim.decodeShader(cv_image, bins, _enable_speckle_noise.value());
 
     // apply the additional gain
     sonar_sim.applyAdditionalGain(bins, gain);
@@ -151,4 +166,21 @@ bool Task::setGain(double value) {
 
     gain = value;
     return (imaging_sonar_simulation::TaskBase::setGain(value));
+}
+
+bool Task::setAttenuation_properties(::imaging_sonar_simulation::AcousticAttenuationProperties const & value) {
+    if (value.sonar_frequency < 0.001 || value.sonar_frequency > 1000) {
+        RTT::log(RTT::Error) << "The sonar frequency must be between 1 Hz and 1 MHz." << RTT::endlog();
+        return false;
+    }
+
+    if(_attenuation_properties.value().water_temperature.getCelsius() < -6
+        || _attenuation_properties.value().water_temperature.getCelsius() > 35
+        || base::isNaN(_attenuation_properties.value().water_temperature.getCelsius())) {
+        RTT::log(RTT::Error) << "The water temperature value must be between -6 and 35 Celsius degrees." << RTT::endlog();
+        return false;
+    }
+
+    attenuation_properties = value;
+    return (imaging_sonar_simulation::TaskBase::setAttenuation_properties(value));
 }

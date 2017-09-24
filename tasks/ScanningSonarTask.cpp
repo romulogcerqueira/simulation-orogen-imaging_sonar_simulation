@@ -76,6 +76,13 @@ void ScanningSonarTask::updateHook() {
         base::samples::RigidBodyState sonar_pose = rotatePose(link_pose);
         Task::updateSonarPose(sonar_pose);
 
+        // update the attenuation coefficient and apply the underwater absorption signal
+        double attenuation_coeff = normal_depth_map::underwaterSignalAttenuation(
+                                        attenuation_properties.water_temperature.getCelsius(),
+                                        attenuation_properties.sonar_frequency,
+                                        -link_pose.position.z());
+        normal_depth_map.setAttenuationCoefficient(attenuation_coeff);
+
         // receives the shader image
         osg::ref_ptr<osg::Image> osg_image = capture.grabImage(normal_depth_map.getNormalDepthMapNode());
 
