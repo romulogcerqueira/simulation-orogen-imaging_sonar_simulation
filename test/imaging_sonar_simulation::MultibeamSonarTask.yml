@@ -1,4 +1,9 @@
 --- name:default
+# Underwater acoustic attenuation properties (water temperature and sonar frequency)
+attenuation_properties:
+  water_temperature:
+    kelvin: 293.15
+  sonar_frequency: 700.0
 # Number of Beams
 beam_count: 256
 # Opening of the beam along the device's Z direction
