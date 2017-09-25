@@ -83,4 +83,36 @@ describe 'imaging_sonar_simulation::MultibeamSonarTask' do
         task.beam_height = Types.base.Angle.new(:rad => 0.0)
         assert_raises(Orocos::StateTransitionFailed) { task.configure }
     end
+
+    it 'should fail to configure if sonar frequency < 1 Hz' do
+        new_attenuation = Types.imaging_sonar_simulation.AcousticAttenuationProperties.new
+        new_attenuation.water_temperature = Types.base.Temperature.new(:kelvin => 273.15)
+        new_attenuation.sonar_frequency = 0
+        task.attenuation_properties = new_attenuation
+        assert_raises(Orocos::StateTransitionFailed) { task.configure }
+    end
+
+    it 'should fail to configure if sonar frequency > 1 MHz' do
+        new_attenuation = Types.imaging_sonar_simulation.AcousticAttenuationProperties.new
+        new_attenuation.water_temperature = Types.base.Temperature.new(:kelvin => 273.15)
+        new_attenuation.sonar_frequency = 3000
+        task.attenuation_properties = new_attenuation
+        assert_raises(Orocos::StateTransitionFailed) { task.configure }
+    end
+
+    it 'should fail to configure if water temperature < -6º C' do
+        new_attenuation = Types.imaging_sonar_simulation.AcousticAttenuationProperties.new
+        new_attenuation.water_temperature = Types.base.Temperature.new(:kelvin => 250)
+        new_attenuation.sonar_frequency = 700
+        task.attenuation_properties = new_attenuation
+        assert_raises(Orocos::StateTransitionFailed) { task.configure }
+    end
+
+    it 'should fail to configure if water temperature > 35º C' do
+        new_attenuation = Types.imaging_sonar_simulation.AcousticAttenuationProperties.new
+        new_attenuation.water_temperature = Types.base.Temperature.new(:kelvin => 350)
+        new_attenuation.sonar_frequency = 700
+        task.attenuation_properties = new_attenuation
+        assert_raises(Orocos::StateTransitionFailed) { task.configure }
+    end
 end
