@@ -78,9 +78,11 @@ void ScanningSonarTask::updateHook() {
 
         // update the attenuation coefficient and apply the underwater absorption signal
         double attenuation_coeff = normal_depth_map::underwaterSignalAttenuation(
-                                        attenuation_properties.water_temperature.getCelsius(),
-                                        attenuation_properties.sonar_frequency,
-                                        -link_pose.position.z());
+                                        attenuation_properties.frequency,
+                                        attenuation_properties.temperature.getCelsius(),
+                                        -link_pose.position.z(),
+                                        attenuation_properties.salinity,
+                                        attenuation_properties.acidity);
         normal_depth_map.setAttenuationCoefficient(attenuation_coeff);
 
         // receives the shader image

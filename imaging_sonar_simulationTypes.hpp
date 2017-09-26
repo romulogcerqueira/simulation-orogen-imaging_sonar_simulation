@@ -9,13 +9,16 @@ namespace imaging_sonar_simulation {
 
 // Properties used to calculate the sound attenuation underwater
 struct AcousticAttenuationProperties {
-    base::Temperature water_temperature;    // in Kelvin
-    double sonar_frequency;                 // in kHz
+    double frequency;               // in kHz
+    base::Temperature temperature;  // in Kelvin
+    double salinity;                // in ppt
+    double acidity;                 // in pH
 
-    AcousticAttenuationProperties() {
-        water_temperature = base::Temperature::fromCelsius(20.0);
-        sonar_frequency = 300.0;
-    }
+    AcousticAttenuationProperties()
+        : frequency(300.0)
+        , temperature(base::Temperature::fromCelsius(25.0))
+        , salinity(0)
+        , acidity(8) {};
 };
 
 }

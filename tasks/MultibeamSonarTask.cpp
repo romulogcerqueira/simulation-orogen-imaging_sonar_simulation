@@ -63,9 +63,11 @@ void MultibeamSonarTask::updateHook() {
         double attenuation_coeff = 0;
         if (_enable_attenuation.value()) {
             attenuation_coeff = normal_depth_map::underwaterSignalAttenuation(
-                                        attenuation_properties.water_temperature.getCelsius(),
-                                        attenuation_properties.sonar_frequency,
-                                        -link_pose.position.z());
+                                        attenuation_properties.frequency,
+                                        attenuation_properties.temperature.getCelsius(),
+                                        -link_pose.position.z(),
+                                        attenuation_properties.salinity,
+                                        attenuation_properties.acidity);
         }
         normal_depth_map.setAttenuationCoefficient(attenuation_coeff);
 

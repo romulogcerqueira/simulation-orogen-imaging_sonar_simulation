@@ -46,16 +46,28 @@ bool Task::configureHook() {
         return false;
     }
 
-    if (_attenuation_properties.value().sonar_frequency < 0.001
-        || _attenuation_properties.value().sonar_frequency > 1000) {
-        RTT::log(RTT::Error) << "The sonar frequency must be between 1 Hz and 1 MHz." << RTT::endlog();
+    if (_attenuation_properties.value().frequency < 0.1
+        || _attenuation_properties.value().frequency > 1000) {
+        RTT::log(RTT::Error) << "The sonar frequency must be between 100 Hz and 1 MHz." << RTT::endlog();
         return false;
     }
 
-    if(_attenuation_properties.value().water_temperature.getCelsius() < -6
-        || _attenuation_properties.value().water_temperature.getCelsius() > 35
-        || base::isNaN(_attenuation_properties.value().water_temperature.getCelsius())) {
+    if(_attenuation_properties.value().temperature.getCelsius() < -6
+        || _attenuation_properties.value().temperature.getCelsius() > 35
+        || base::isNaN(_attenuation_properties.value().temperature.getCelsius())) {
         RTT::log(RTT::Error) << "The water temperature value must be between -6 and 35 Celsius degrees." << RTT::endlog();
+        return false;
+    }
+
+    if (_attenuation_properties.value().salinity < 0
+        || _attenuation_properties.value().salinity > 50) {
+        RTT::log(RTT::Error) << "The water salinity must be between 0 (only consider freshwater contribution) and 50 ppt." << RTT::endlog();
+        return false;
+    }
+
+    if (_attenuation_properties.value().acidity < 7.7
+        || _attenuation_properties.value().acidity > 8.3) {
+        RTT::log(RTT::Error) << "The water acidity must have pH between 7.7 and 8.3." << RTT::endlog();
         return false;
     }
 
@@ -138,7 +150,7 @@ void Task::processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>
 
     // display shader image
     if (_write_shader_image.value()) {
-        std::auto_ptr<Frame> frame(new Frame());
+        std::unique_ptr<Frame> frame(new Frame());
         cv_image.convertTo(cv_image, CV_8UC3, 255);
         cv::flip(cv_image, cv_image, 0);
         frame_helper::FrameHelper::copyMatToFrame(cv_image, *frame.get());
@@ -169,15 +181,23 @@ bool Task::setGain(double value) {
 }
 
 bool Task::setAttenuation_properties(::imaging_sonar_simulation::AcousticAttenuationProperties const & value) {
-    if (value.sonar_frequency < 0.001 || value.sonar_frequency > 1000) {
-        RTT::log(RTT::Error) << "The sonar frequency must be between 1 Hz and 1 MHz." << RTT::endlog();
+    if (value.frequency < 0.1 || value.frequency > 1000) {
+        RTT::log(RTT::Error) << "The sonar frequency must be between 100 Hz and 1 MHz." << RTT::endlog();
         return false;
     }
 
-    if(_attenuation_properties.value().water_temperature.getCelsius() < -6
-        || _attenuation_properties.value().water_temperature.getCelsius() > 35
-        || base::isNaN(_attenuation_properties.value().water_temperature.getCelsius())) {
+    if (value.temperature.getCelsius() < -6 || value.temperature.getCelsius() > 35 || base::isNaN(value.temperature.getCelsius())) {
         RTT::log(RTT::Error) << "The water temperature value must be between -6 and 35 Celsius degrees." << RTT::endlog();
+        return false;
+    }
+
+    if (value.salinity < 0 || value.salinity > 50) {
+        RTT::log(RTT::Error) << "The water salinity must be between 0 (only consider freshwater contribution) and 50 ppt." << RTT::endlog();
+        return false;
+    }
+
+    if (value.acidity < 7.7 || value.acidity > 8.3) {
+        RTT::log(RTT::Error) << "The water acidity must have pH between 7.7 and 8.3." << RTT::endlog();
         return false;
     }
 
