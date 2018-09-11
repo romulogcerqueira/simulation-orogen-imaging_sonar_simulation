@@ -40,6 +40,9 @@ namespace imaging_sonar_simulation{
         /** Additional gain value used by sonar simulator (0.0 - 1.0) */
         double gain;
 
+        /** Underwater acoustic attenuation properties */
+        AcousticAttenuationProperties attenuation_properties;
+
         /** Normal and depth map from an osg scene. */
         normal_depth_map::NormalDepthMap normal_depth_map;
 
@@ -80,6 +83,13 @@ namespace imaging_sonar_simulation{
         * @return if the process is finished successfully
         */
         virtual bool setGain(double value);
+
+        /** Dynamically update underwater acoustic attenuation properties
+        *
+        * @param value: desired configuration
+        * @return if the process is finished successfully
+        */
+        virtual bool setAttenuation_properties(::imaging_sonar_simulation::AcousticAttenuationProperties const & value);
 
     public:
         /** TaskContext constructor for Task
