@@ -59,6 +59,9 @@ void MultibeamSonarTask::updateHook() {
         // update sonar position
         Task::updateSonarPose(link_pose);
 
+        // set reverberation effect
+        normal_depth_map.setDrawReverb(_enable_reverberation.value());
+
         // update the attenuation coefficient and apply the underwater absorption signal
         double attenuation_coeff = 0;
         if (_enable_attenuation.value()) {

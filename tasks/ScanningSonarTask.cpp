@@ -76,6 +76,9 @@ void ScanningSonarTask::updateHook() {
         base::samples::RigidBodyState sonar_pose = rotatePose(link_pose);
         Task::updateSonarPose(sonar_pose);
 
+        // set reverberation effect
+        normal_depth_map.setDrawReverb(_enable_reverberation.value());
+
         // update the attenuation coefficient and apply the underwater absorption signal
         double attenuation_coeff = normal_depth_map::underwaterSignalAttenuation(
                                         attenuation_properties.frequency,

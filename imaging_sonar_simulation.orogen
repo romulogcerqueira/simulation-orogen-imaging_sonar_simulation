@@ -39,6 +39,9 @@ task_context "Task" do
     # Enable speckle noise in acoustic image
     property("enable_speckle_noise", "bool", true).dynamic
 
+    # Enable reverberation effect in acoustic image
+    property("enable_reverberation", "bool", true).dynamic
+
     # Write shader image
     property("write_shader_image", "bool", false).dynamic
 
