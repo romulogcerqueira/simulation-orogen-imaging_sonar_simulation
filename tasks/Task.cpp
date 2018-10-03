@@ -85,6 +85,7 @@ bool Task::configureHook() {
 bool Task::startHook() {
 	if (!TaskBase::startHook())
 		return false;
+
 	return true;
 }
 void Task::updateHook() {
@@ -100,13 +101,18 @@ void Task::cleanupHook() {
 	TaskBase::cleanupHook();
 }
 
-void Task::setupShader(uint value, bool isHeight) {
+void Task::setupShader(uint value, bool isHeight)
+{
     // initialize shader (NormalDepthMap and ImageViewerCaptureTool)
     normal_depth_map = normal_depth_map::NormalDepthMap(range);
-    capture = normal_depth_map::ImageViewerCaptureTool(sonar_sim.beam_height.getRad(), sonar_sim.beam_width.getRad(), value, isHeight);
-    capture.setBackgroundColor(osg::Vec4d(0.0, 0.0, 0.0, 1.0));
     osg::ref_ptr<osg::Group> root = vizkit3dWorld->getWidget()->getRootNode();
     normal_depth_map.addNodeChild(root);
+
+    capture = normal_depth_map::ImageViewerCaptureTool( sonar_sim.beam_height.getRad(),
+                                                        sonar_sim.beam_width.getRad(),
+                                                        value,
+                                                        isHeight);
+    capture.setBackgroundColor(osg::Vec4d(0.0, 0.0, 0.0, 1.0));
 }
 
 void Task::updateSonarPose(base::samples::RigidBodyState pose) {
@@ -128,16 +134,8 @@ void Task::updateSonarPose(base::samples::RigidBodyState pose) {
 
 void Task::processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>& bins) {
     // receives shader image in opencv format
-    cv::Mat cv_image, cv_depth;
+    cv::Mat cv_image;
     gpu_sonar_simulation::convertOSG2CV(osg_image, cv_image);
-    osg::ref_ptr<osg::Image> osg_depth = capture.getDepthBuffer();
-    gpu_sonar_simulation::convertOSG2CV(osg_depth, cv_depth);
-
-    // replace depth matrix
-    std::vector<cv::Mat> channels;
-    cv::split(cv_image, channels);
-    channels[1] = cv_depth;
-    cv::merge(channels, cv_image);
 
     // decode shader informations to sonar data
     sonar_sim.decodeShader(cv_image, bins, _enable_speckle_noise.value());
