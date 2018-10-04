@@ -56,7 +56,7 @@ bool ScanningSonarTask::startHook() {
 		return false;
 
     // generate shader world
-    int height = sonar_sim.bin_count * 5.12;    // 5.12 pixels are needed for each bin
+    uint height = sonar_sim.bin_count;
     Task::setupShader(height, true);
 
     current_bearing = base::Angle::fromRad(0.0);
@@ -194,7 +194,6 @@ bool ScanningSonarTask::setBin_count(int value) {
     }
 
     sonar_sim.bin_count = value;
-    float height = sonar_sim.bin_count * 5.12;  // 5.12 pixels are needed for each bin
-    Task::setupShader(height, true);
+    Task::setupShader(sonar_sim.bin_count, true);
     return (imaging_sonar_simulation::TaskBase::setBin_count(value));
 }
