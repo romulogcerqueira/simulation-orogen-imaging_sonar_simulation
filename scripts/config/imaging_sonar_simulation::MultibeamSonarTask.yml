@@ -16,14 +16,10 @@ enable_reverberation: true
 # Enable speckle noise in acoustic image
 enable_speckle_noise: true
 # Gain of the sonar (0.0 - 1.0)
-gain: 0.88
+gain: 0.50
 # Set the virtual camera height
 height: 600
 # Range of the sonar in meters (1.0 - 150.0)
-range: 22.0
-# set the virtual camera width
-width: 800
-# path to the world_file_path.
-world_file_path: ''
+range: 25.0
 # Write shader image
 write_shader_image: false

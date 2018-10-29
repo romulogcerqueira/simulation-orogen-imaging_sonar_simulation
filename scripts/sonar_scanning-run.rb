@@ -68,8 +68,8 @@ Orocos.run 'imaging_sonar_simulation::ScanningSonarTask' => 'sonar_scanning' do
     @sonar_pose = Types.base.samples.RigidBodyState.new
     @sonar_pose.targetFrame = "world"
     @sonar_pose.sourceFrame = "multibeam_sonar"
-    @sonar_pose.position = Eigen::Vector3.new(48.24, 103.48, -3.37)
-    @sonar_pose.orientation = Eigen::Quaternion.from_euler(Eigen::Vector3.new(1.57, 0.524, 0), 2, 1, 0)
+    @sonar_pose.position = Eigen::Vector3.new(41.0, 110.10, -10)
+    @sonar_pose.orientation = Eigen::Quaternion.from_euler(Eigen::Vector3.new(0, 0, 0), 2, 1, 0)
 
     # Start the orocos task
     task = TaskContext.get 'sonar_scanning'
