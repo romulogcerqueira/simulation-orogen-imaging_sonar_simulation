@@ -2,13 +2,14 @@ name "imaging_sonar_simulation"
 
 # include rock drivers
 using_library "gpu_sonar_simulation"
-using_library "vizkit3d_normal_depth_map"
+using_library "normal_depth_map"
 using_library "vizkit3d_world"
 using_library "frame_helper"
 
 using_task_library "vizkit3d_world"
 
 import_types_from "base"
+import_types_from "imaging_sonar_simulationTypes.hpp"
 
 task_context "Task" do
     abstract
@@ -16,9 +17,6 @@ task_context "Task" do
 
     # set the sonar pose using a RigidBodyState structure
     input_port("sonar_pose_cmd", "base::samples::RigidBodyState");
-
-    # Shader Viewer
-    output_port("shader_viewer", ro_ptr("/base/samples/frame/Frame"));
 
     # Range of the sonar in meters (1.0 - 150.0)
     property("range", "double", 50.0).dynamic
@@ -35,8 +33,25 @@ task_context "Task" do
     # Opening of the beam along the device's Z direction
     property("beam_height", "base/Angle")
 
+    # Enable underwater signal attenuation effect
+    property("enable_attenuation", "bool", false).dynamic
+
+    # Enable speckle noise in acoustic image
+    property("enable_speckle_noise", "bool", true).dynamic
+
+    # Write shader image
+    property("write_shader_image", "bool", false).dynamic
+
+    # Underwater acoustic attenuation properties (water temperature and sonar frequency)
+    property("attenuation_properties", "imaging_sonar_simulation/AcousticAttenuationProperties").dynamic
+
     # Output sonar data (Sonar)
     output_port("sonar_samples", "base::samples::Sonar");
+
+    # Shader Image
+    output_port("shader_image", ro_ptr("/base/samples/frame/Frame"));
+
+    port_driven
 end
 
 task_context "ScanningSonarTask" do
@@ -55,7 +70,7 @@ task_context "ScanningSonarTask" do
     # Enable/disable ping pong scanning mode
     property("continuous", "bool", true).dynamic
 
-    periodic 0.1
+    periodic 0.05
 end
 
 task_context "MultibeamSonarTask" do
@@ -64,6 +79,4 @@ task_context "MultibeamSonarTask" do
 
     # Number of Beams
     property("beam_count", "int", 256).dynamic
-
-    port_driven
 end

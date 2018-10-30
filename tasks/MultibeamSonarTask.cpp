@@ -55,9 +55,21 @@ void MultibeamSonarTask::updateHook() {
 
     base::samples::RigidBodyState link_pose;
 
-    if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
+    if (_sonar_pose_cmd.read(link_pose) != RTT::OldData) {
         // update sonar position
         Task::updateSonarPose(link_pose);
+
+        // update the attenuation coefficient and apply the underwater absorption signal
+        double attenuation_coeff = 0;
+        if (_enable_attenuation.value()) {
+            attenuation_coeff = normal_depth_map::underwaterSignalAttenuation(
+                                        attenuation_properties.frequency,
+                                        attenuation_properties.temperature.getCelsius(),
+                                        -link_pose.position.z(),
+                                        attenuation_properties.salinity,
+                                        attenuation_properties.acidity);
+        }
+        normal_depth_map.setAttenuationCoefficient(attenuation_coeff);
 
         // receives the shader image
         osg::ref_ptr<osg::Image> osg_image = capture.grabImage(normal_depth_map.getNormalDepthMapNode());

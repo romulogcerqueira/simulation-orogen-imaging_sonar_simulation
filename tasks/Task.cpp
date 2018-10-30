@@ -5,6 +5,7 @@
 // Rock includes
 #include <gpu_sonar_simulation/Utils.hpp>
 #include <frame_helper/FrameHelper.h>
+#include <base/Float.hpp>
 
 using namespace imaging_sonar_simulation;
 using namespace base::samples::frame;
@@ -45,6 +46,31 @@ bool Task::configureHook() {
         return false;
     }
 
+    if (_attenuation_properties.value().frequency < 0.1
+        || _attenuation_properties.value().frequency > 1000) {
+        RTT::log(RTT::Error) << "The sonar frequency must be between 100 Hz and 1 MHz." << RTT::endlog();
+        return false;
+    }
+
+    if(_attenuation_properties.value().temperature.getCelsius() < -6
+        || _attenuation_properties.value().temperature.getCelsius() > 35
+        || base::isNaN(_attenuation_properties.value().temperature.getCelsius())) {
+        RTT::log(RTT::Error) << "The water temperature value must be between -6 and 35 Celsius degrees." << RTT::endlog();
+        return false;
+    }
+
+    if (_attenuation_properties.value().salinity < 0
+        || _attenuation_properties.value().salinity > 50) {
+        RTT::log(RTT::Error) << "The water salinity must be between 0 (only consider freshwater contribution) and 50 ppt." << RTT::endlog();
+        return false;
+    }
+
+    if (_attenuation_properties.value().acidity < 7.7
+        || _attenuation_properties.value().acidity > 8.3) {
+        RTT::log(RTT::Error) << "The water acidity must have pH between 7.7 and 8.3." << RTT::endlog();
+        return false;
+    }
+
     // set the attributes
     range = _range.value();
     gain = _gain.value();
@@ -52,6 +78,7 @@ bool Task::configureHook() {
     sonar_sim.bin_count = _bin_count.value();
     sonar_sim.beam_width = _beam_width.value();
     sonar_sim.beam_height = _beam_height.value();
+    attenuation_properties = _attenuation_properties.value();
 
 	return true;
 }
@@ -78,8 +105,8 @@ void Task::setupShader(uint value, bool isHeight) {
     double const half_fovy = sonar_sim.beam_height.getRad() / 2;
 
     // initialize shader (NormalDepthMap and ImageViewerCaptureTool)
-    normal_depth_map = vizkit3d_normal_depth_map::NormalDepthMap(range, half_fovx, half_fovy);
-    capture = vizkit3d_normal_depth_map::ImageViewerCaptureTool(sonar_sim.beam_height.getRad(), sonar_sim.beam_width.getRad(), value, isHeight);
+    normal_depth_map = normal_depth_map::NormalDepthMap(range, half_fovx, half_fovy);
+    capture = normal_depth_map::ImageViewerCaptureTool(sonar_sim.beam_height.getRad(), sonar_sim.beam_width.getRad(), value, isHeight);
     capture.setBackgroundColor(osg::Vec4d(0.0, 0.0, 0.0, 1.0));
     osg::ref_ptr<osg::Group> root = vizkit3dWorld->getWidget()->getRootNode();
     normal_depth_map.addNodeChild(root);
@@ -116,18 +143,20 @@ void Task::processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>
     cv::merge(channels, cv_image);
 
     // decode shader informations to sonar data
-    sonar_sim.decodeShader(cv_image, bins);
+    sonar_sim.decodeShader(cv_image, bins, _enable_speckle_noise.value());
 
     // apply the additional gain
     sonar_sim.applyAdditionalGain(bins, gain);
 
     // display shader image
-    std::auto_ptr<Frame> frame(new Frame());
-    cv_image.convertTo(cv_image, CV_8UC3, 255);
-    cv::flip(cv_image, cv_image, 0);
-    frame_helper::FrameHelper::copyMatToFrame(cv_image, *frame.get());
-    frame->time = base::Time::now();
-    _shader_viewer.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
+    if (_write_shader_image.value()) {
+        std::unique_ptr<Frame> frame(new Frame());
+        cv_image.convertTo(cv_image, CV_8UC3, 255);
+        cv::flip(cv_image, cv_image, 0);
+        frame_helper::FrameHelper::copyMatToFrame(cv_image, *frame.get());
+        frame->time = base::Time::now();
+        _shader_image.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
+    }
 }
 
 bool Task::setRange(double value) {
@@ -149,4 +178,29 @@ bool Task::setGain(double value) {
 
     gain = value;
     return (imaging_sonar_simulation::TaskBase::setGain(value));
+}
+
+bool Task::setAttenuation_properties(::imaging_sonar_simulation::AcousticAttenuationProperties const & value) {
+    if (value.frequency < 0.1 || value.frequency > 1000) {
+        RTT::log(RTT::Error) << "The sonar frequency must be between 100 Hz and 1 MHz." << RTT::endlog();
+        return false;
+    }
+
+    if (value.temperature.getCelsius() < -6 || value.temperature.getCelsius() > 35 || base::isNaN(value.temperature.getCelsius())) {
+        RTT::log(RTT::Error) << "The water temperature value must be between -6 and 35 Celsius degrees." << RTT::endlog();
+        return false;
+    }
+
+    if (value.salinity < 0 || value.salinity > 50) {
+        RTT::log(RTT::Error) << "The water salinity must be between 0 (only consider freshwater contribution) and 50 ppt." << RTT::endlog();
+        return false;
+    }
+
+    if (value.acidity < 7.7 || value.acidity > 8.3) {
+        RTT::log(RTT::Error) << "The water acidity must have pH between 7.7 and 8.3." << RTT::endlog();
+        return false;
+    }
+
+    attenuation_properties = value;
+    return (imaging_sonar_simulation::TaskBase::setAttenuation_properties(value));
 }

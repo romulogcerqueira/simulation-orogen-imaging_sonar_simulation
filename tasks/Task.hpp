@@ -8,8 +8,9 @@
 // Rock includes
 #include <base/samples/RigidBodyState.hpp>
 #include <gpu_sonar_simulation/Sonar.hpp>
-#include <vizkit3d_normal_depth_map/NormalDepthMap.hpp>
-#include <vizkit3d_normal_depth_map/ImageViewerCaptureTool.hpp>
+#include <normal_depth_map/NormalDepthMap.hpp>
+#include <normal_depth_map/ImageViewerCaptureTool.hpp>
+#include <normal_depth_map/Tools.hpp>
 
 namespace imaging_sonar_simulation{
 
@@ -40,11 +41,14 @@ namespace imaging_sonar_simulation{
         /** Additional gain value used by sonar simulator (0.0 - 1.0) */
         double gain;
 
+        /** Underwater acoustic attenuation properties */
+        AcousticAttenuationProperties attenuation_properties;
+
         /** Normal and depth map from an osg scene. */
-        vizkit3d_normal_depth_map::NormalDepthMap normal_depth_map;
+        normal_depth_map::NormalDepthMap normal_depth_map;
 
         /** Capture the osg::Image from a node scene */
-        vizkit3d_normal_depth_map::ImageViewerCaptureTool capture;
+        normal_depth_map::ImageViewerCaptureTool capture;
 
         /**
         *  Initialize shader.
@@ -80,6 +84,13 @@ namespace imaging_sonar_simulation{
         * @return if the process is finished successfully
         */
         virtual bool setGain(double value);
+
+        /** Dynamically update underwater acoustic attenuation properties
+        *
+        * @param value: desired configuration
+        * @return if the process is finished successfully
+        */
+        virtual bool setAttenuation_properties(::imaging_sonar_simulation::AcousticAttenuationProperties const & value);
 
     public:
         /** TaskContext constructor for Task
