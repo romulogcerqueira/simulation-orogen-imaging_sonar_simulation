@@ -4,9 +4,6 @@
 #define IMAGING_SONAR_SIMULATION_MULTIBEAMSONARTASK_TASK_HPP
 
 #include "imaging_sonar_simulation/MultibeamSonarTaskBase.hpp"
-#include <base/samples/RigidBodyState.hpp>
-#include <gpu_sonar_simulation/Sonar.hpp>
-#include <gpu_sonar_simulation/SonarSimulation.hpp>
 
 namespace imaging_sonar_simulation{
 
@@ -28,10 +25,6 @@ namespace imaging_sonar_simulation{
     {
 	friend class MultibeamSonarTaskBase;
     protected:
-         /** Sonar simulator */
-         gpu_sonar_simulation::SonarSimulation* sonar_sim;
-
-
         /** Dynamically update the number of bins
         *
         * @param value: desired number of bins
@@ -45,19 +38,6 @@ namespace imaging_sonar_simulation{
         * @return if the process is finished successfully
         */
         virtual bool setBeam_count(int value);
-        /** Dynamically update sonar range
-        *
-        * @param value: desired range
-        * @return if the process is finished successfully
-        */
-        virtual bool setRange(double value);
-
-        /** Dynamically update sonar gain
-        *
-        * @param value: desired gain
-        * @return if the process is finished successfully
-        */
-        virtual bool setGain(double value);
 
     public:
         /** TaskContext constructor for MultibeamSonarTask

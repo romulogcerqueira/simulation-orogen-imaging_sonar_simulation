@@ -30,9 +30,6 @@ class ScanningSonarTask: public ScanningSonarTaskBase {
 
 protected:
 
-     /** Sonar simulator */
-     gpu_sonar_simulation::SonarSimulation* sonar_sim;
-
      /** The left limit angle of sonar reading */
     base::Angle left_limit;
 
@@ -96,19 +93,6 @@ protected:
     * @return if the process is finished successfully
     */
     virtual bool setBin_count(int value);
-    /** Dynamically update sonar range
-    *
-    * @param value: desired range
-    * @return if the process is finished successfully
-    */
-    virtual bool setRange(double value);
-
-    /** Dynamically update sonar gain
-    *
-    * @param value: desired gain
-    * @return if the process is finished successfully
-    */
-    virtual bool setGain(double value);
 
 public:
 
