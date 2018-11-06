@@ -31,7 +31,7 @@ namespace imaging_sonar_simulation{
 	friend class TaskBase;
     protected:
         /** Sonar simulator */
-        gpu_sonar_simulation::SonarSimulation sonar_sim;
+        gpu_sonar_simulation::SonarSimulation* sonar_sim;
 
         /** Range value used by sonar simulator (in meters) */
         double range;
@@ -83,8 +83,6 @@ namespace imaging_sonar_simulation{
         */
         virtual bool setGain(double value);
 
-        virtual bool setBin_count(int value);
-
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
          * component will stay in PreOperational. Otherwise, it goes into
@@ -101,7 +99,7 @@ namespace imaging_sonar_simulation{
          */
         bool configureHook();
 
-        bool configureSonarSimulation( bool isScanning);
+        void configureSonarSimulation( bool isScanning);
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to Running. If it returns false, then the component will

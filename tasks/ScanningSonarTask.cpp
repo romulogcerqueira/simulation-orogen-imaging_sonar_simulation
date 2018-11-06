@@ -47,7 +47,7 @@ bool ScanningSonarTask::configureHook() {
     motor_step = _motor_step.value();
     continuous = _continuous.value();
 
-    sonar_sim.setSonarBeamCount(1);    
+    sonar_sim->setSonarBeamCount(1);    
 
     return true;
 }
@@ -69,16 +69,16 @@ void ScanningSonarTask::updateHook() {
     base::samples::RigidBodyState link_pose;
 
     if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
-        sonar_sim.setAttenuationCoefficient(attenuation_properties.frequency,
+        sonar_sim->setAttenuationCoefficient(attenuation_properties.frequency,
                                         attenuation_properties.temperature.getCelsius(),
                                         -link_pose.position.z(),
                                         attenuation_properties.salinity,
                                         attenuation_properties.acidity);
          
-        sonar_sim.enableSpeckleNoise(_enable_speckle_noise.value());
+        sonar_sim->enableSpeckleNoise(_enable_speckle_noise.value());
         base::samples::RigidBodyState sonar_pose = rotatePose(link_pose);
         base::samples::Sonar sonar = 
-            sonar_sim.simulateSonarData(sonar_pose.getTransform());
+            sonar_sim->simulateSonarData(sonar_pose.getTransform());
 
         // set the sonar bearing
         sonar.bearings.push_back(current_bearing);
@@ -88,7 +88,7 @@ void ScanningSonarTask::updateHook() {
 
         //display the shader image
         std::auto_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
-        *frame = sonar_sim.getLastFrame();
+        *frame = sonar_sim->getLastFrame();
         frame->time = base::Time::now();
         _shader_image.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
 
@@ -180,9 +180,9 @@ bool ScanningSonarTask::setBin_count(int value) {
         return false;
     }
 
-    sonar_sim.setSonarBinCount(value);
-    float height = sonar_sim.getSonarBinCount() * 5.12;  // 5.12 pixels are needed for each bin
-    sonar_sim.setupShader(height, true);
+    sonar_sim->setSonarBinCount(value);
+    float height = sonar_sim->getSonarBinCount() * 5.12;  // 5.12 pixels are needed for each bin
+    sonar_sim->setupShader(height, true);
     return (ScanningSonarTaskBase::setBin_count(value));
 }
 

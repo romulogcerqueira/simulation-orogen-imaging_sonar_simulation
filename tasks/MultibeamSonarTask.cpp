@@ -33,7 +33,7 @@ bool MultibeamSonarTask::configureHook() {
     }
 
     configureSonarSimulation(false);
-    sonar_sim.setSonarBeamCount(_beam_count.value());    
+    sonar_sim->setSonarBeamCount(_beam_count.value());    
 
     return true;
 }
@@ -52,13 +52,13 @@ void MultibeamSonarTask::updateHook() {
 
     if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
 
-        base::samples::Sonar sonar = sonar_sim.simulateSonarData(link_pose.getTransform());
+        base::samples::Sonar sonar = sonar_sim->simulateSonarData(link_pose.getTransform());
 
         // set the sonar bearings
         base::Angle interval = base::Angle::fromRad(
-            sonar_sim.getSonarBeamWidth().getRad() / sonar_sim.getSonarBeamCount());
+            sonar_sim->getSonarBeamWidth().getRad() / sonar_sim->getSonarBeamCount());
         base::Angle start = base::Angle::fromRad(
-            -sonar_sim.getSonarBeamWidth().getRad() / 2);
+            -sonar_sim->getSonarBeamWidth().getRad() / 2);
         sonar.setRegularBeamBearings(start, interval);
 
         // write sonar sample in the output port
@@ -67,7 +67,7 @@ void MultibeamSonarTask::updateHook() {
         
         //display the shader image
         std::auto_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
-        *frame = sonar_sim.getLastFrame();
+        *frame = sonar_sim->getLastFrame();
         frame->time = base::Time::now();
         _shader_image.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
     }
@@ -90,9 +90,9 @@ bool MultibeamSonarTask::setBin_count(int value) {
         return false;
     }
 
-    sonar_sim.setSonarBinCount(value);
-    float width = sonar_sim.getSonarBinCount() * 5.12;  // 5.12 pixels are needed for each bin
-    sonar_sim.setupShader(width, false);
+    sonar_sim->setSonarBinCount(value);
+    float width = sonar_sim->getSonarBinCount() * 5.12;  // 5.12 pixels are needed for each bin
+    sonar_sim->setupShader(width, false);
     return (MultibeamSonarTaskBase::setBin_count(value));
 }
 
@@ -103,6 +103,6 @@ bool MultibeamSonarTask::setBeam_count(int value) {
         RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
         return false;
     }
-    sonar_sim.setSonarBeamCount(value);
+    sonar_sim->setSonarBeamCount(value);
     return (MultibeamSonarTaskBase::setBeam_count(value));
 }

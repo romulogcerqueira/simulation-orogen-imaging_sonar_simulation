@@ -11,11 +11,13 @@ using namespace imaging_sonar_simulation;
 using namespace base::samples::frame;
 
 Task::Task(std::string const& name) :
-		TaskBase(name) {
+		TaskBase(name),
+        sonar_sim(nullptr) {
 }
 
 Task::Task(std::string const& name, RTT::ExecutionEngine* engine) :
-		TaskBase(name, engine) {
+		TaskBase(name, engine),
+        sonar_sim(nullptr) {
 }
 
 Task::~Task() {
@@ -76,16 +78,14 @@ bool Task::configureHook() {
 	return true;
 }
 
-bool Task::configureSonarSimulation(bool isScanning)
+void Task::configureSonarSimulation(bool isScanning)
 {
     osg::ref_ptr<osg::Group> root = vizkit3dWorld->getWidget()->getRootNode();
     // generate shader world
     int value = _bin_count.value() * 5.12;    // 5.12 pixels are needed for each bin
-    sonar_sim.init(_range.value(), _gain.value(), _bin_count.value(),
+    sonar_sim = new gpu_sonar_simulation::SonarSimulation(_range.value(), _gain.value(), _bin_count.value(),
             _beam_width.value(), _beam_height.value(), value, isScanning, root);
     // set the attributes
-
-	return true;
 }
 
 bool Task::startHook() {
@@ -104,6 +104,8 @@ void Task::stopHook() {
 }
 void Task::cleanupHook() {
 	TaskBase::cleanupHook();
+    delete sonar_sim;
+    sonar_sim = nullptr;
 }
 
 bool Task::setRange(double value) {
@@ -111,7 +113,7 @@ bool Task::setRange(double value) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
         return false;
     }
-    sonar_sim.setRange(value);
+    sonar_sim->setRange(value);
     return (imaging_sonar_simulation::TaskBase::setRange(value));
 }
 
@@ -120,7 +122,7 @@ bool Task::setGain(double value) {
         RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
         return false;
     }
-    sonar_sim.setGain(value);
+    sonar_sim->setGain(value);
     return (imaging_sonar_simulation::TaskBase::setGain(value));
 }
 
@@ -147,15 +149,4 @@ bool Task::setAttenuation_properties(::imaging_sonar_simulation::AcousticAttenua
 
     attenuation_properties = value;
     return (imaging_sonar_simulation::TaskBase::setAttenuation_properties(value));
-}
-
-bool Task::setBin_count(int value) {
-    if (value <= 0) {
-        RTT::log(RTT::Error) << "The number of bins must be positive." << RTT::endlog();
-        return false;
-    }
-    sonar_sim.setSonarBinCount(value);
-    float width = sonar_sim.getSonarBinCount()* 5.12;  // 5.12 pixels are needed for each bin
-    sonar_sim.setupShader(width, false);
-    return TaskBase::setBin_count(value);
 }
