@@ -73,7 +73,7 @@ task_context "ScanningSonarTask" do
     # Enable/disable ping pong scanning mode
     property("continuous", "bool", true).dynamic
 
-    periodic 0.05
+    port_driven
 end
 
 task_context "MultibeamSonarTask" do
