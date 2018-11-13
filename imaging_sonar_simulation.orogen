@@ -34,7 +34,7 @@ task_context "Task" do
     property("beam_height", "base/Angle")
 
     # Enable underwater signal attenuation effect
-    property("enable_attenuation", "bool", false).dynamic
+    property("enable_attenuation", "bool", true).dynamic
 
     # Enable speckle noise in acoustic image
     property("enable_speckle_noise", "bool", true).dynamic
