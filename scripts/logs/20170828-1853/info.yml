@@ -1,7 +1,0 @@
----
-- time: 20170828-1853
-  cmdline: 'sonar_multibeam-run.rb '
-  robot_name: default
-  robot_type: default
-  app_name: scripts
-  app_dir: "/home/romulo/sonar_simulation/simulation/orogen/imaging_sonar_simulation/scripts"
