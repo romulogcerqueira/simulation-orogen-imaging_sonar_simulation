@@ -181,7 +181,7 @@ bool ScanningSonarTask::setBin_count(int value) {
     }
 
     sonar_sim->setSonarBinCount(value);
-    float height = sonar_sim->getSonarBinCount() * 5.12;  // 5.12 pixels are needed for each bin
+    float height = sonar_sim->getSonarBinCount() * resolution_constant;
     sonar_sim->setupShader(height, true);
     return (ScanningSonarTaskBase::setBin_count(value));
 }

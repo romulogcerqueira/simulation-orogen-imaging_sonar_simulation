@@ -91,7 +91,7 @@ bool MultibeamSonarTask::setBin_count(int value) {
     }
 
     sonar_sim->setSonarBinCount(value);
-    float width = sonar_sim->getSonarBinCount() * 5.12;  // 5.12 pixels are needed for each bin
+    float width = sonar_sim->getSonarBinCount() * resolution_constant; 
     sonar_sim->setupShader(width, false);
     return (MultibeamSonarTaskBase::setBin_count(value));
 }

@@ -10,6 +10,7 @@
 using namespace imaging_sonar_simulation;
 using namespace base::samples::frame;
 
+
 Task::Task(std::string const& name) :
 		TaskBase(name),
         sonar_sim(nullptr) {
@@ -82,7 +83,7 @@ void Task::configureSonarSimulation(bool isScanning)
 {
     osg::ref_ptr<osg::Group> root = vizkit3dWorld->getWidget()->getRootNode();
     // generate shader world
-    int value = _bin_count.value() * 5.12;    // 5.12 pixels are needed for each bin
+    int value = _bin_count.value() * resolution_constant;
     sonar_sim = new gpu_sonar_simulation::SonarSimulation(_range.value(), _gain.value(), _bin_count.value(),
             _beam_width.value(), _beam_height.value(), value, isScanning, root);
     // set the attributes
@@ -103,9 +104,9 @@ void Task::stopHook() {
 	TaskBase::stopHook();
 }
 void Task::cleanupHook() {
-	TaskBase::cleanupHook();
     delete sonar_sim;
     sonar_sim = nullptr;
+	TaskBase::cleanupHook();
 }
 
 bool Task::setRange(double value) {
