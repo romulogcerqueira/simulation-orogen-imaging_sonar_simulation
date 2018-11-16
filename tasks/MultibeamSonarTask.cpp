@@ -66,7 +66,7 @@ void MultibeamSonarTask::updateHook() {
         _sonar_samples.write(sonar);
         
         //display the shader image
-        std::auto_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
+        std::unique_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
         *frame = sonar_sim->getLastFrame();
         frame->time = base::Time::now();
         _shader_image.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
