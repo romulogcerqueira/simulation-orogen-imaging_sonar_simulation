@@ -10,12 +10,15 @@
 using namespace imaging_sonar_simulation;
 using namespace base::samples::frame;
 
+
 Task::Task(std::string const& name) :
-		TaskBase(name) {
+		TaskBase(name),
+        sonar_sim(nullptr) {
 }
 
 Task::Task(std::string const& name, RTT::ExecutionEngine* engine) :
-		TaskBase(name, engine) {
+		TaskBase(name, engine),
+        sonar_sim(nullptr) {
 }
 
 Task::~Task() {
@@ -70,18 +73,22 @@ bool Task::configureHook() {
         RTT::log(RTT::Error) << "The water acidity must have pH between 7.7 and 8.3." << RTT::endlog();
         return false;
     }
-
     // set the attributes
-    range = _range.value();
-    gain = _gain.value();
-    normal_depth_map.setMaxRange(_range.value());
-    sonar_sim.bin_count = _bin_count.value();
-    sonar_sim.beam_width = _beam_width.value();
-    sonar_sim.beam_height = _beam_height.value();
     attenuation_properties = _attenuation_properties.value();
 
 	return true;
 }
+
+void Task::configureSonarSimulation(bool isScanning)
+{
+    osg::ref_ptr<osg::Group> root = vizkit3dWorld->getWidget()->getRootNode();
+    // generate shader world
+    int value = _bin_count.value() * resolution_constant;
+    sonar_sim = new gpu_sonar_simulation::SonarSimulation(_range.value(), _gain.value(), _bin_count.value(),
+            _beam_width.value(), _beam_height.value(), value, isScanning, root);
+    // set the attributes
+}
+
 bool Task::startHook() {
 	if (!TaskBase::startHook())
 		return false;
@@ -97,66 +104,9 @@ void Task::stopHook() {
 	TaskBase::stopHook();
 }
 void Task::cleanupHook() {
+    delete sonar_sim;
+    sonar_sim = nullptr;
 	TaskBase::cleanupHook();
-}
-
-void Task::setupShader(uint value, bool isHeight) {
-    double const half_fovx = sonar_sim.beam_width.getRad() / 2;
-    double const half_fovy = sonar_sim.beam_height.getRad() / 2;
-
-    // initialize shader (NormalDepthMap and ImageViewerCaptureTool)
-    normal_depth_map = normal_depth_map::NormalDepthMap(range, half_fovx, half_fovy);
-    capture = normal_depth_map::ImageViewerCaptureTool(sonar_sim.beam_height.getRad(), sonar_sim.beam_width.getRad(), value, isHeight);
-    capture.setBackgroundColor(osg::Vec4d(0.0, 0.0, 0.0, 1.0));
-    osg::ref_ptr<osg::Group> root = vizkit3dWorld->getWidget()->getRootNode();
-    normal_depth_map.addNodeChild(root);
-}
-
-void Task::updateSonarPose(base::samples::RigidBodyState pose) {
-    // convert OSG (Z-forward) to RoCK coordinate system (X-forward)
-    osg::Matrixd rock_coordinate_matrix = osg::Matrixd::rotate( M_PI_2, osg::Vec3(0, 0, 1)) * osg::Matrixd::rotate(-M_PI_2, osg::Vec3(1, 0, 0));
-
-    // transformation matrixes multiplication
-    osg::Matrixd matrix;
-    matrix.setTrans(osg::Vec3(pose.position.x(), pose.position.y(), pose.position.z()));
-    matrix.setRotate(osg::Quat(pose.orientation.x(), pose.orientation.y(), pose.orientation.z(), pose.orientation.w()));
-    matrix.invert(matrix);
-
-    // correct coordinate system and apply geometric transformations
-    osg::Matrixd m = matrix * rock_coordinate_matrix;
-    osg::Vec3 eye, center, up;
-    m.getLookAt(eye, center, up);
-    capture.setCameraPosition(eye, center, up);
-}
-
-void Task::processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>& bins) {
-    // receives shader image in opencv format
-    cv::Mat cv_image, cv_depth;
-    gpu_sonar_simulation::convertOSG2CV(osg_image, cv_image);
-    osg::ref_ptr<osg::Image> osg_depth = capture.getDepthBuffer();
-    gpu_sonar_simulation::convertOSG2CV(osg_depth, cv_depth);
-
-    // replace depth matrix
-    std::vector<cv::Mat> channels;
-    cv::split(cv_image, channels);
-    channels[1] = cv_depth;
-    cv::merge(channels, cv_image);
-
-    // decode shader informations to sonar data
-    sonar_sim.decodeShader(cv_image, bins, _enable_speckle_noise.value());
-
-    // apply the additional gain
-    sonar_sim.applyAdditionalGain(bins, gain);
-
-    // display shader image
-    if (_write_shader_image.value()) {
-        std::unique_ptr<Frame> frame(new Frame());
-        cv_image.convertTo(cv_image, CV_8UC3, 255);
-        cv::flip(cv_image, cv_image, 0);
-        frame_helper::FrameHelper::copyMatToFrame(cv_image, *frame.get());
-        frame->time = base::Time::now();
-        _shader_image.write(RTT::extras::ReadOnlyPointer<Frame>(frame.release()));
-    }
 }
 
 bool Task::setRange(double value) {
@@ -164,9 +114,7 @@ bool Task::setRange(double value) {
         RTT::log(RTT::Error) << "The range must be positive." << RTT::endlog();
         return false;
     }
-
-    range = value;
-    normal_depth_map.setMaxRange(value);
+    sonar_sim->setRange(value);
     return (imaging_sonar_simulation::TaskBase::setRange(value));
 }
 
@@ -175,8 +123,7 @@ bool Task::setGain(double value) {
         RTT::log(RTT::Error) << "The gain must be between 0.0 and 1.0." << RTT::endlog();
         return false;
     }
-
-    gain = value;
+    sonar_sim->setGain(value);
     return (imaging_sonar_simulation::TaskBase::setGain(value));
 }
 

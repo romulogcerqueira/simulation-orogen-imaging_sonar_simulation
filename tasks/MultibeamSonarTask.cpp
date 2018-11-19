@@ -24,17 +24,16 @@ MultibeamSonarTask::~MultibeamSonarTask() {
 // documentation about them.
 
 bool MultibeamSonarTask::configureHook() {
-	if (!MultibeamSonarTaskBase::configureHook())
+    if (!MultibeamSonarTaskBase::configureHook())
 		return false;
-
     // check if the properties have valid values
     if (_beam_count.value() < 64 || _beam_count.value() > 512) {
         RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
         return false;
     }
 
-    // set the attributes
-    sonar_sim.beam_count = _beam_count.value();
+    configureSonarSimulation(false);
+    sonar_sim->setSonarBeamCount(_beam_count.value());    
 
     return true;
 }
@@ -43,11 +42,7 @@ bool MultibeamSonarTask::startHook() {
 	if (!MultibeamSonarTaskBase::startHook())
 		return false;
 
-    // generate shader world
-    uint width = sonar_sim.bin_count * 5.12;  // 5.12 pixels are needed for each bin
-    Task::setupShader(width, false);
-
-    return true;
+        return true;
 }
 
 void MultibeamSonarTask::updateHook() {
@@ -55,40 +50,26 @@ void MultibeamSonarTask::updateHook() {
 
     base::samples::RigidBodyState link_pose;
 
-    if (_sonar_pose_cmd.read(link_pose) != RTT::OldData) {
-        // update sonar position
-        Task::updateSonarPose(link_pose);
+    if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
 
-        // update the attenuation coefficient and apply the underwater absorption signal
-        double attenuation_coeff = 0;
-        if (_enable_attenuation.value()) {
-            attenuation_coeff = normal_depth_map::underwaterSignalAttenuation(
-                                        attenuation_properties.frequency,
-                                        attenuation_properties.temperature.getCelsius(),
-                                        -link_pose.position.z(),
-                                        attenuation_properties.salinity,
-                                        attenuation_properties.acidity);
-        }
-        normal_depth_map.setAttenuationCoefficient(attenuation_coeff);
-
-        // receives the shader image
-        osg::ref_ptr<osg::Image> osg_image = capture.grabImage(normal_depth_map.getNormalDepthMapNode());
-
-        // process the shader image
-        std::vector<float> bins;
-        Task::processShader(osg_image, bins);
-
-        // simulate sonar reading
-        base::samples::Sonar sonar = sonar_sim.simulateSonar(bins, range);
+        base::samples::Sonar sonar = sonar_sim->simulateSonarData(link_pose.getTransform());
 
         // set the sonar bearings
-        base::Angle interval = base::Angle::fromRad(sonar_sim.beam_width.getRad() / sonar_sim.beam_count);
-        base::Angle start = base::Angle::fromRad(-sonar_sim.beam_width.getRad() / 2);
+        base::Angle interval = base::Angle::fromRad(
+            sonar_sim->getSonarBeamWidth().getRad() / sonar_sim->getSonarBeamCount());
+        base::Angle start = base::Angle::fromRad(
+            -sonar_sim->getSonarBeamWidth().getRad() / 2);
         sonar.setRegularBeamBearings(start, interval);
 
         // write sonar sample in the output port
         sonar.validate();
         _sonar_samples.write(sonar);
+        
+        //display the shader image
+        std::unique_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
+        *frame = sonar_sim->getLastFrame();
+        frame->time = base::Time::now();
+        _shader_image.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
     }
 }
 
@@ -103,23 +84,25 @@ void MultibeamSonarTask::stopHook() {
 void MultibeamSonarTask::cleanupHook() {
 	MultibeamSonarTaskBase::cleanupHook();
 }
-
 bool MultibeamSonarTask::setBin_count(int value) {
     if (value <= 0) {
         RTT::log(RTT::Error) << "The number of bins must be positive." << RTT::endlog();
         return false;
     }
-    sonar_sim.bin_count = value;
-    float width = sonar_sim.bin_count * 5.12;  // 5.12 pixels are needed for each bin
-    Task::setupShader(width, false);
-    return (imaging_sonar_simulation::TaskBase::setBin_count(value));
+
+    sonar_sim->setSonarBinCount(value);
+    float width = sonar_sim->getSonarBinCount() * resolution_constant; 
+    sonar_sim->setupShader(width, false);
+    return (MultibeamSonarTaskBase::setBin_count(value));
 }
+
+
 
 bool MultibeamSonarTask::setBeam_count(int value) {
     if (value < 64 || value > 512) {
         RTT::log(RTT::Error) << "The number of beams must be between 64 and 512." << RTT::endlog();
         return false;
     }
-    sonar_sim.beam_count = value;
-    return (imaging_sonar_simulation::TaskBase::setBin_count(value));
+    sonar_sim->setSonarBeamCount(value);
+    return (MultibeamSonarTaskBase::setBeam_count(value));
 }
