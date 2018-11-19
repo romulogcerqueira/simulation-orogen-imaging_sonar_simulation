@@ -34,19 +34,20 @@ ScanningSonarTask::~ScanningSonarTask() {
 bool ScanningSonarTask::configureHook() {
 	if (!ScanningSonarTaskBase::configureHook())
 		return false;
-
     // check if the properties have valid values
     if (_motor_step.value().getRad() <= 0 || _motor_step.value() > base::Angle::fromDeg(3.6)) {
         RTT::log(RTT::Error) << "The step angle value must be positive and less or equal than 3.6 degrees." << RTT::endlog();
         return false;
     }
 
+    configureSonarSimulation(true);
     // set attributes
     left_limit = _left_limit.value();
     right_limit = _right_limit.value();
     motor_step = _motor_step.value();
     continuous = _continuous.value();
-    sonar_sim.beam_count = 1;
+
+    sonar_sim->setSonarBeamCount(1);
 
     return true;
 }
@@ -54,10 +55,6 @@ bool ScanningSonarTask::configureHook() {
 bool ScanningSonarTask::startHook() {
 	if (!ScanningSonarTaskBase::startHook())
 		return false;
-
-    // generate shader world
-    uint height = sonar_sim.bin_count * 5.12;
-    Task::setupShader(height, true);
 
     current_bearing = base::Angle::fromRad(0.0);
     invert = false;
@@ -67,43 +64,38 @@ bool ScanningSonarTask::startHook() {
 
 void ScanningSonarTask::updateHook() {
 
-	ScanningSonarTaskBase::updateHook();
+    ScanningSonarTaskBase::updateHook();
 
     base::samples::RigidBodyState link_pose;
 
-    if (_sonar_pose_cmd.read(link_pose) != RTT::OldData) {
-        // update sonar position and orientation
+    if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
+        // set underwater acoustic effects
+        sonar_sim->enableReverb(_enable_reverberation.value());
+        sonar_sim->enableSpeckleNoise(_enable_speckle_noise.value());
+        sonar_sim->setAttenuationCoefficient(attenuation_properties.frequency,
+                                             attenuation_properties.temperature.getCelsius(),
+                                             -link_pose.position.z(),
+                                             attenuation_properties.salinity,
+                                             attenuation_properties.acidity,
+                                             _enable_attenuation.value());
+
         base::samples::RigidBodyState sonar_pose = rotatePose(link_pose);
-        Task::updateSonarPose(sonar_pose);
-
-        // set reverberation effect
-        normal_depth_map.setDrawReverb(_enable_reverberation.value());
-
-        // update the attenuation coefficient and apply the underwater absorption signal
-        double attenuation_coeff = normal_depth_map::underwaterSignalAttenuation(
-                                        attenuation_properties.frequency,
-                                        attenuation_properties.temperature.getCelsius(),
-                                        -link_pose.position.z(),
-                                        attenuation_properties.salinity,
-                                        attenuation_properties.acidity);
-        normal_depth_map.setAttenuationCoefficient(attenuation_coeff);
-
-        // receives the shader image
-        osg::ref_ptr<osg::Image> osg_image = capture.grabImage(normal_depth_map.getNormalDepthMapNode());
-
-        // process the shader image
-        std::vector<float> bins;
-        Task::processShader(osg_image, bins);
-
-        // simulate sonar reading
-        base::samples::Sonar sonar = sonar_sim.simulateSonar(bins, range);
+        base::samples::Sonar sonar =
+            sonar_sim->simulateSonarData(sonar_pose.getTransform());
 
         // set the sonar bearing
         sonar.bearings.push_back(current_bearing);
-
         // write sonar sample in the output port
         sonar.validate();
         _sonar_samples.write(sonar);
+
+        // display the shader image
+        if (_write_shader_image.value()) {
+            std::unique_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
+            *frame = sonar_sim->getLastFrame();
+            frame->time = base::Time::now();
+            _shader_image.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
+        }
 
         // move the head position
         moveHeadPosition();
@@ -193,7 +185,9 @@ bool ScanningSonarTask::setBin_count(int value) {
         return false;
     }
 
-    sonar_sim.bin_count = value;
-    Task::setupShader(sonar_sim.bin_count * 5.12, true);
-    return (imaging_sonar_simulation::TaskBase::setBin_count(value));
+    sonar_sim->setSonarBinCount(value);
+    float height = sonar_sim->getSonarBinCount() * resolution_constant;
+    sonar_sim->setupShader(height, true);
+    return (ScanningSonarTaskBase::setBin_count(value));
 }
+

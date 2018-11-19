@@ -4,6 +4,10 @@
 #define IMAGING_SONAR_SIMULATION_SCANNINGSONARTASK_TASK_HPP
 
 #include "imaging_sonar_simulation/ScanningSonarTaskBase.hpp"
+// Rock includes
+#include <base/samples/RigidBodyState.hpp>
+#include <gpu_sonar_simulation/Sonar.hpp>
+#include <gpu_sonar_simulation/SonarSimulation.hpp>
 
 namespace imaging_sonar_simulation {
 
@@ -25,7 +29,8 @@ class ScanningSonarTask: public ScanningSonarTaskBase {
 	friend class ScanningSonarTaskBase;
 
 protected:
-    /** The left limit angle of sonar reading */
+
+     /** The left limit angle of sonar reading */
     base::Angle left_limit;
 
     /** The right limit angle of sonar reading */
@@ -90,6 +95,7 @@ protected:
     virtual bool setBin_count(int value);
 
 public:
+
 	/** TaskContext constructor for ScanningSonarTask
 	 * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.
 	 * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.

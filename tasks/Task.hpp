@@ -6,13 +6,13 @@
 #include "imaging_sonar_simulation/TaskBase.hpp"
 
 // Rock includes
-#include <base/samples/RigidBodyState.hpp>
 #include <gpu_sonar_simulation/Sonar.hpp>
-#include <normal_depth_map/NormalDepthMap.hpp>
-#include <normal_depth_map/ImageViewerCaptureTool.hpp>
+#include <gpu_sonar_simulation/SonarSimulation.hpp>
+#include <base/samples/RigidBodyState.hpp>
 
 namespace imaging_sonar_simulation{
 
+    static constexpr float resolution_constant = 5.12;
     /*! \class Task
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
      * Essential interfaces are operations, data flow ports and properties. These interfaces have been defined using the oroGen specification.
@@ -32,7 +32,7 @@ namespace imaging_sonar_simulation{
 	friend class TaskBase;
     protected:
         /** Sonar simulator */
-        gpu_sonar_simulation::Sonar sonar_sim;
+        gpu_sonar_simulation::SonarSimulation* sonar_sim;
 
         /** Range value used by sonar simulator (in meters) */
         double range;
@@ -43,53 +43,6 @@ namespace imaging_sonar_simulation{
         /** Underwater acoustic attenuation properties */
         AcousticAttenuationProperties attenuation_properties;
 
-        /** Normal and depth map from an osg scene. */
-        normal_depth_map::NormalDepthMap normal_depth_map;
-
-        /** Capture the osg::Image from a node scene */
-        normal_depth_map::ImageViewerCaptureTool capture;
-
-        /**
-        *  Initialize shader.
-        *  @param value: size of width/height of shader image in pixels
-        *  @param isHeight: if true, the value is related with image height
-        *                   otherwise, the vale is related with image width
-        */
-        void setupShader(uint value, bool isHeight = true);
-
-        /**
-        *  Update sonar pose according to auv pose.
-        *  @param pose: pose of the auv
-        */
-        void updateSonarPose(base::samples::RigidBodyState pose);
-
-        /**
-        *  Process shader image in bins intensity.
-        *  @param osg_image: the shader image (normal, depth and angle informations) in osg::Image format
-        *  @param bins: the output simulated sonar data (all beams) in float
-        */
-        void processShader(osg::ref_ptr<osg::Image>& osg_image, std::vector<float>& bins);
-
-        /** Dynamically update sonar range
-        *
-        * @param value: desired range
-        * @return if the process is finished successfully
-        */
-        virtual bool setRange(double value);
-
-        /** Dynamically update sonar gain
-        *
-        * @param value: desired gain
-        * @return if the process is finished successfully
-        */
-        virtual bool setGain(double value);
-
-        /** Dynamically update underwater acoustic attenuation properties
-        *
-        * @param value: desired configuration
-        * @return if the process is finished successfully
-        */
-        virtual bool setAttenuation_properties(::imaging_sonar_simulation::AcousticAttenuationProperties const & value);
 
     public:
         /** TaskContext constructor for Task
@@ -107,7 +60,29 @@ namespace imaging_sonar_simulation{
 
         /** Default deconstructor of Task
          */
-	~Task();
+        ~Task();
+
+        /** Dynamically update underwater acoustic attenuation properties
+        *
+        * @param value: desired configuration
+        * @return if the process is finished successfully
+        */
+        virtual bool setAttenuation_properties(
+            ::imaging_sonar_simulation::AcousticAttenuationProperties const & value);
+
+        /** Dynamically update sonar range
+        *
+        * @param value: desired range
+        * @return if the process is finished successfully
+        */
+        virtual bool setRange(double value);
+
+        /** Dynamically update sonar gain
+        *
+        * @param value: desired gain
+        * @return if the process is finished successfully
+        */
+        virtual bool setGain(double value);
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -124,6 +99,8 @@ namespace imaging_sonar_simulation{
          \endverbatim
          */
         bool configureHook();
+
+        void configureSonarSimulation( bool isScanning);
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to Running. If it returns false, then the component will

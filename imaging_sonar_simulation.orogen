@@ -58,9 +58,7 @@ task_context "Task" do
 end
 
 task_context "ScanningSonarTask" do
-
     subclasses "imaging_sonar_simulation::Task"
-
     # Left limit angle
     property("left_limit", "base/Angle").dynamic
 
@@ -77,9 +75,10 @@ task_context "ScanningSonarTask" do
 end
 
 task_context "MultibeamSonarTask" do
-
     subclasses "imaging_sonar_simulation::Task"
 
     # Number of Beams
     property("beam_count", "int", 256).dynamic
+    
+    port_driven
 end
