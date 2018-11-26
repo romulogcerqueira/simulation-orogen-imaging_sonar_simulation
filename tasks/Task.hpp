@@ -61,15 +61,15 @@ namespace imaging_sonar_simulation{
         /** Default deconstructor of Task
          */
         ~Task();
-        
+
         /** Dynamically update underwater acoustic attenuation properties
         *
         * @param value: desired configuration
         * @return if the process is finished successfully
         */
-        virtual bool setAttenuation_properties( 
+        virtual bool setAttenuation_properties(
             ::imaging_sonar_simulation::AcousticAttenuationProperties const & value);
-        
+
         /** Dynamically update sonar range
         *
         * @param value: desired range

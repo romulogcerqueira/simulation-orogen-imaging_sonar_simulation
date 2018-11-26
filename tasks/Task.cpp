@@ -92,6 +92,7 @@ void Task::configureSonarSimulation(bool isScanning)
 bool Task::startHook() {
 	if (!TaskBase::startHook())
 		return false;
+
 	return true;
 }
 void Task::updateHook() {

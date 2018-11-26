@@ -33,7 +33,7 @@ bool MultibeamSonarTask::configureHook() {
     }
 
     configureSonarSimulation(false);
-    sonar_sim->setSonarBeamCount(_beam_count.value());    
+    sonar_sim->setSonarBeamCount(_beam_count.value());
 
     return true;
 }
@@ -42,7 +42,7 @@ bool MultibeamSonarTask::startHook() {
 	if (!MultibeamSonarTaskBase::startHook())
 		return false;
 
-        return true;
+    return true;
 }
 
 void MultibeamSonarTask::updateHook() {
@@ -51,6 +51,15 @@ void MultibeamSonarTask::updateHook() {
     base::samples::RigidBodyState link_pose;
 
     if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
+        // set underwater acoustic effects
+        sonar_sim->enableReverb(_enable_reverberation.value());
+        sonar_sim->enableSpeckleNoise(_enable_speckle_noise.value());
+        sonar_sim->setAttenuationCoefficient(attenuation_properties.frequency,
+                                                attenuation_properties.temperature.getCelsius(),
+                                                -link_pose.position.z(),
+                                                attenuation_properties.salinity,
+                                                attenuation_properties.acidity,
+                                                _enable_attenuation.value());
 
         base::samples::Sonar sonar = sonar_sim->simulateSonarData(link_pose.getTransform());
 
@@ -64,12 +73,14 @@ void MultibeamSonarTask::updateHook() {
         // write sonar sample in the output port
         sonar.validate();
         _sonar_samples.write(sonar);
-        
+
         //display the shader image
-        std::unique_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
-        *frame = sonar_sim->getLastFrame();
-        frame->time = base::Time::now();
-        _shader_image.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
+        if (_write_shader_image.value()) {
+            std::unique_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
+            *frame = sonar_sim->getLastFrame();
+            frame->time = base::Time::now();
+            _shader_image.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
+        }
     }
 }
 
@@ -91,12 +102,10 @@ bool MultibeamSonarTask::setBin_count(int value) {
     }
 
     sonar_sim->setSonarBinCount(value);
-    float width = sonar_sim->getSonarBinCount() * resolution_constant; 
+    float width = sonar_sim->getSonarBinCount() * resolution_constant;
     sonar_sim->setupShader(width, false);
     return (MultibeamSonarTaskBase::setBin_count(value));
 }
-
-
 
 bool MultibeamSonarTask::setBeam_count(int value) {
     if (value < 64 || value > 512) {

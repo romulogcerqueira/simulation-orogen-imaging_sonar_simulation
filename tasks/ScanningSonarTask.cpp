@@ -47,7 +47,7 @@ bool ScanningSonarTask::configureHook() {
     motor_step = _motor_step.value();
     continuous = _continuous.value();
 
-    sonar_sim->setSonarBeamCount(1);    
+    sonar_sim->setSonarBeamCount(1);
 
     return true;
 }
@@ -69,15 +69,18 @@ void ScanningSonarTask::updateHook() {
     base::samples::RigidBodyState link_pose;
 
     if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
-        sonar_sim->setAttenuationCoefficient(attenuation_properties.frequency,
-                                        attenuation_properties.temperature.getCelsius(),
-                                        -link_pose.position.z(),
-                                        attenuation_properties.salinity,
-                                        attenuation_properties.acidity);
-         
+        // set underwater acoustic effects
+        sonar_sim->enableReverb(_enable_reverberation.value());
         sonar_sim->enableSpeckleNoise(_enable_speckle_noise.value());
+        sonar_sim->setAttenuationCoefficient(attenuation_properties.frequency,
+                                             attenuation_properties.temperature.getCelsius(),
+                                             -link_pose.position.z(),
+                                             attenuation_properties.salinity,
+                                             attenuation_properties.acidity,
+                                             _enable_attenuation.value());
+
         base::samples::RigidBodyState sonar_pose = rotatePose(link_pose);
-        base::samples::Sonar sonar = 
+        base::samples::Sonar sonar =
             sonar_sim->simulateSonarData(sonar_pose.getTransform());
 
         // set the sonar bearing
@@ -86,11 +89,13 @@ void ScanningSonarTask::updateHook() {
         sonar.validate();
         _sonar_samples.write(sonar);
 
-        //display the shader image
-        std::unique_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
-        *frame = sonar_sim->getLastFrame();
-        frame->time = base::Time::now();
-        _shader_image.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
+        // display the shader image
+        if (_write_shader_image.value()) {
+            std::unique_ptr<base::samples::frame::Frame> frame(new base::samples::frame::Frame());
+            *frame = sonar_sim->getLastFrame();
+            frame->time = base::Time::now();
+            _shader_image.write(RTT::extras::ReadOnlyPointer<base::samples::frame::Frame>(frame.release()));
+        }
 
         // move the head position
         moveHeadPosition();
