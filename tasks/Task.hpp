@@ -12,6 +12,7 @@
 
 namespace imaging_sonar_simulation{
 
+    // static constexpr float resolution_constant = 10.24;
     static constexpr float resolution_constant = 5.12;
     /*! \class Task
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.

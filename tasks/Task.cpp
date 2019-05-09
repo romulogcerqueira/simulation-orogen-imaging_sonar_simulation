@@ -39,7 +39,7 @@ bool Task::configureHook() {
         return false;
     }
 
-    if (_bin_count.value() <= 0 || _bin_count.value() > 1500) {
+    if (_bin_count.value() <= 0 || _bin_count.value() > 3000) {
         RTT::log(RTT::Error) << "The number of bins must be positive and less than 1500." << RTT::endlog();
         return false;
     }
@@ -83,7 +83,8 @@ void Task::configureSonarSimulation(bool isScanning)
 {
     osg::ref_ptr<osg::Group> root = vizkit3dWorld->getWidget()->getRootNode();
     // generate shader world
-    int value = _bin_count.value() * resolution_constant;
+    int value = _bin_count.value();
+    if (!isScanning)    value *= resolution_constant;
     sonar_sim = new gpu_sonar_simulation::SonarSimulation(_range.value(), _gain.value(), _bin_count.value(),
             _beam_width.value(), _beam_height.value(), value, isScanning, root);
     // set the attributes
