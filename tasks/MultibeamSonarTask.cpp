@@ -50,7 +50,7 @@ void MultibeamSonarTask::updateHook() {
 
     base::samples::RigidBodyState link_pose;
 
-    if (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
+    while (_sonar_pose_cmd.read(link_pose) == RTT::NewData) {
         // set underwater acoustic effects
         sonar_sim->enableReverb(_enable_reverberation.value());
         sonar_sim->enableSpeckleNoise(_enable_speckle_noise.value());
