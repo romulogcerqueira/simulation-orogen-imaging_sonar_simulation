@@ -54,7 +54,7 @@ task_context "Task" do
     # Shader Image
     output_port("shader_image", ro_ptr("/base/samples/frame/Frame"));
 
-    port_driven
+    port_driven 'sonar_pose_cmd'
 end
 
 task_context "ScanningSonarTask" do
@@ -70,8 +70,6 @@ task_context "ScanningSonarTask" do
 
     # Enable/disable ping pong scanning mode
     property("continuous", "bool", true).dynamic
-
-    port_driven
 end
 
 task_context "MultibeamSonarTask" do
@@ -79,6 +77,4 @@ task_context "MultibeamSonarTask" do
 
     # Number of Beams
     property("beam_count", "int", 256).dynamic
-    
-    port_driven
 end
